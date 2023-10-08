@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native'
 import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
-import { autocompleteAddress } from '../utilities/geoapify'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
 import { selectPictureFromGallery } from '../utilities/camera'
 import {
@@ -19,9 +18,9 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import PictureInput from '../components/PictureInput'
 import Button from '../components/Button'
 import TextArea from '../components/TextArea'
-import AddressAutocompleteTile from '../components/AddressAutocompleteTile'
+import LocationSelector from '../components/LocationSelector'
 import Screen from '../components/Screen'
-import { View, FlatList, Image, Alert, StyleSheet } from 'react-native'
+import { View, Image, Alert, StyleSheet } from 'react-native'
 import { Subhead } from 'react-native-ios-kit'
 import { Text, IconButton, Divider, TouchableRipple } from 'react-native-paper'
 
@@ -133,55 +132,6 @@ const signUpWithGoogleAccount = async (
   )
 
   return session
-}
-
-const AddressInput = ({ onSelect }) => {
-  const [searchedText, setSearchedText] = useState("")
-
-  const handleUpdateSearch = (newSearchedText) => {
-    setSearchedText(_ => newSearchedText)
-
-    getAddressesMutation.mutate({
-      searchedText
-    })
-  }
-
-  const getAddressesMutation = useMutation(
-    ({ searchedText }) => autocompleteAddress(searchedText)
-  )
-
-  return (
-    <View style={{ justifyContent: "center", alignItems: "center", width: "100%" }}>
-      <TextField
-        value={searchedText}
-        onChangeText={handleUpdateSearch}
-        placeholder="Dirección"
-      />
-
-      <View style={{ height: 250, width: "100%" }}>
-        {
-          getAddressesMutation.isLoading ?
-          <LoadingSpinner inScreen /> :
-          (
-            <View style={{ borderWidth: 1, borderColor: "black" }}>
-              <FlatList
-                data={getAddressesMutation.data}
-                keyExtractor={(address) => address.place_id}
-                renderItem={({ item }) => {
-                  return (
-                    <AddressAutocompleteTile
-                      address={item}
-                      onSelect={onSelect}
-                    /> 
-                  )
-                }}
-              />
-            </View>
-          )
-        }
-      </View>
-    </View>
-  )
 }
 
 const LocationSection = ({ location, onSelect }) => {

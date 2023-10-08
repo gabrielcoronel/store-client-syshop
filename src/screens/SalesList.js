@@ -8,28 +8,28 @@ import Screen from '../components/Screen'
 import { View } from 'react-native'
 import { Title2 } from 'react-native-ios-kit'
 
-const fetchPurchases = async (customerId) => {
+const fetchSales = async (storeId) => {
     const payload = {
-        customer_id: customerId
+        store_id: storeId
     }
-    const purchases = await requestServer(
-        "/sales_service/get_customer_purchases",
+    const sales = await requestServer(
+        "/sales_service/get_store_sales",
         payload
     )
 
-    return purchases
+    return sales
 }
 
 export default () => {
     const [session, _] = useSession()
 
-    const purchasesQuery = useQuery({
-      queryKey: ["customerPurchases"],
-      queryFn: () => fetchPurchases(session.data.customerId),
+    const salesQuery = useQuery({
+      queryKey: ["storeSales"],
+      queryFn: () => fetchSales(session.data.storeId),
       disabled: session.isLoading
     })
 
-    if (purchasesQuery.isLoading || session.isLoading) {
+    if (salesQuery.isLoading || session.isLoading) {
         return (
             <LoadingSpinner inScreen />
         )
@@ -39,15 +39,15 @@ export default () => {
       <Screen>
         <View style={{ flex: 1, gap: 20 }}>
           <Title2>
-            Tus compras
+            Tus ventas
           </Title2>
 
           <ScrollView
-              data={purchasesQuery.data}
-              keyExtractor={(purchase) => purchase.sale_id}
+              data={salesQuery.data}
+              keyExtractor={(sale) => sale.sale_id}
               renderItem={({ item }) => <SaleTile sale={item} />}
               emptyIcon="basket"
-              emptyMessage="No has comprado nada"
+              emptyMessage="No has vendido nada"
           />
         </View>
       </Screen>

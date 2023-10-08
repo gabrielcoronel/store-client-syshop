@@ -28,10 +28,11 @@ import PictureSearchResults from './src/screens/PictureSearchResults'
 import PostView from './src/screens/PostView'
 import EditProfile from './src/screens/EditProfile'
 import LikedPosts from './src/screens/LikedPosts'
-import PurchasesList from './src/screens/PurchasesList'
+import SalesList from './src/screens/SalesList'
 import ProfileView from './src/screens/ProfileView'
 import StoreView from './src/screens/StoreView'
 import Order from './src/screens/Order'
+import EditLocation from './src/screens/EditLocation'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -256,9 +257,9 @@ const Main = () => {
                       </Stack.Screen>
 
                       <Stack.Screen
-                        name="PurchasesList"
+                        name="SalesList"
                       >
-                        {() => <PurchasesList />}
+                        {() => <SalesList />}
                       </Stack.Screen>
 
                       <Stack.Screen
@@ -277,6 +278,12 @@ const Main = () => {
                         name="Order"
                       >
                         {() => <Order />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="EditLocation"
+                      >
+                        {() => <EditLocation />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   </NavigationContainer>

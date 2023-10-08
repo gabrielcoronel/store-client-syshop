@@ -287,6 +287,10 @@ export default () => {
     event.preventDefault()
   })
 
+  const navigateToEditLocation = () => {
+    navigation.navigate("EditLocation")
+  }
+
   const customerQuery = useQuery({
     queryKey: ["customerSettings"],
     queryFn: () => fetchCustomer(session.data.customerId),
@@ -312,12 +316,17 @@ export default () => {
         />
 
         <RowItem
-          title="Tus compras"
-          onPress={() => navigation.navigate("PurchasesList")}
+          title="Tus ventas"
+          onPress={() => navigation.navigate("SalesList")}
         />
       </TableView>
 
       <TableView header="Cuenta">
+        <RowItem
+          title="Editar domicilio"
+          onPress={navigateToEditLocation}
+        />
+
         <View>
           {
             customerQuery.data.account_type === "PlainAccount" ?
