@@ -38,9 +38,9 @@ export default () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text style={styles.title}>¡Empieza a comprar!</Text>
+        <Text style={styles.title}>¡Empieza a vender!</Text>
         <Text style={styles.subtitle}>
-          ¡Inicia sesión o regístrate para encontrar el artículo que buscas y comprarlo en cuestión de minutos!
+          ¡Inicia sesión o regístrate para vender los árticulos de tu emprendimiento en cuestión de minutos!
         </Text>
       </View>
 

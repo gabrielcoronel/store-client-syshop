@@ -4,19 +4,26 @@ import { useNavigation } from '@react-navigation/native'
 import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
+import { autocompleteAddress } from '../utilities/geoapify'
+import { formatBase64String, formatLocation } from '../utilities/formatting'
+import { selectPictureFromGallery } from '../utilities/camera'
 import {
   makeNotEmptyChecker,
   checkEmail,
   checkPhoneNumber
 } from '../utilities/validators'
+import uuid from 'react-native-uuid'
 import TextField from '../components/TextField'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PictureInput from '../components/PictureInput'
 import Button from '../components/Button'
+import TextArea from '../components/TextArea'
+import AddressAutocompleteTile from '../components/AddressAutocompleteTile'
 import Screen from '../components/Screen'
-import { View, Alert, StyleSheet } from 'react-native'
-import { Text, Divider } from 'react-native-paper'
+import { View, FlatList, Image, Alert, StyleSheet } from 'react-native'
+import { Subhead } from 'react-native-ios-kit'
+import { Text, IconButton, Divider, TouchableRipple } from 'react-native-paper'
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +33,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 16,
     paddingBottom: 16
+  },
+  locationSection: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+    width: "100%"
   },
   inputsContainer: {
     flex: 1,
@@ -55,7 +68,11 @@ const styles = StyleSheet.create({
   }
 })
 
-const signUpWithPlainAccount = async (userInformation) => {
+const signUpWithPlainAccount = async (
+  userInformation,
+  multimedia,
+  address
+) => {
   const payload = {
     ...userInformation
   }
@@ -74,7 +91,7 @@ const signUpWithPlainAccount = async (userInformation) => {
   }
 
   const session = await requestServer(
-    "/customers_service/sign_up_customer_with_plain_account",
+    "/stores_service/sign_up_store_with_plain_account",
     payload,
     handleError
   )
@@ -82,7 +99,12 @@ const signUpWithPlainAccount = async (userInformation) => {
   return session
 }
 
-const signUpWithGoogleAccount = async (userInformation, googleUniqueIdentifier) => {
+const signUpWithGoogleAccount = async (
+  userInformation,
+  googleUniqueIdentifier,
+  multimedia,
+  address
+) => {
   delete userInformation["email"]
   delete userInformation["password"]
 
@@ -105,12 +127,161 @@ const signUpWithGoogleAccount = async (userInformation, googleUniqueIdentifier) 
   }
 
   const session = await requestServer(
-    "/customers_service/sign_up_customer_with_google_account",
+    "/stores_service/sign_up_store_with_google_account",
     payload,
     handleError
   )
 
   return session
+}
+
+const AddressInput = ({ onSelect }) => {
+  const [searchedText, setSearchedText] = useState("")
+
+  const handleUpdateSearch = (newSearchedText) => {
+    setSearchedText(_ => newSearchedText)
+
+    getAddressesMutation.mutate({
+      searchedText
+    })
+  }
+
+  const getAddressesMutation = useMutation(
+    ({ searchedText }) => autocompleteAddress(searchedText)
+  )
+
+  return (
+    <View style={{ justifyContent: "center", alignItems: "center", width: "100%" }}>
+      <TextField
+        value={searchedText}
+        onChangeText={handleUpdateSearch}
+        placeholder="Dirección"
+      />
+
+      <View style={{ height: 250, width: "100%" }}>
+        {
+          getAddressesMutation.isLoading ?
+          <LoadingSpinner inScreen /> :
+          (
+            <View style={{ borderWidth: 1, borderColor: "black" }}>
+              <FlatList
+                data={getAddressesMutation.data}
+                keyExtractor={(address) => address.place_id}
+                renderItem={({ item }) => {
+                  return (
+                    <AddressAutocompleteTile
+                      address={item}
+                      onSelect={onSelect}
+                    /> 
+                  )
+                }}
+              />
+            </View>
+          )
+        }
+      </View>
+    </View>
+  )
+}
+
+const LocationSection = ({ location, onSelect }) => {
+  const handleSelect = (address) => {
+    const location = {
+      place_name: address.name,
+      street_address: address.address_line1,
+      city: address.city,
+      state: address.state ?? address.province,
+      zip_code: address.postcode,
+    }
+
+    onSelect(location)
+  }
+
+  return (
+    <View style={styles.locationSection}>
+      <Text style={styles.subtitle}>
+        Especifica el domicilio de tu emprendimiento
+      </Text>
+
+      <Subhead>
+        {
+          location !== null ?
+          formatLocation(location) :
+          null
+        }
+      </Subhead>
+
+      <AddressInput
+        onSelect={handleSelect}
+      />
+    </View>
+  )
+}
+
+const MultimediaTile = ({ multimediaItem, onPress }) => {
+  const uri = formatBase64String(multimediaItem)
+
+  return (
+    <TouchableRipple
+      onPress={onPress}
+    >
+      <Image
+        source={{
+          uri,
+          height: 75,
+          width: 75
+        }}
+      />
+    </TouchableRipple>
+  )
+}
+
+const MultimediaSection = ({ multimedia, setMultimedia }) => {
+  const handleAddMultimedia = async () => {
+    const newPicture = await selectPictureFromGallery()
+
+    if (newPicture === null) {
+      return
+    }
+
+    const newMultimedia = [newPicture, ...multimedia]
+
+    setMultimedia(newMultimedia)
+  }
+
+  const handleDeleteMultimedia = (multimediaItem) => {
+    const newMultimedia = multimedia.filter((i) => i !== multimediaItem)
+
+    setMultimedia(newMultimedia)
+  }
+
+  const multimediaTiles = multimedia.map((item) => {
+    return (
+      <MultimediaTile
+        key={uuid.v4()}
+        multimediaItem={item}
+        onPress={() => handleDeleteMultimedia(item)}
+      />
+    )
+  })
+
+  return (
+    <View>
+      <Text style={styles.subtitle}>
+        Añade imágenes de tu tienda
+      </Text>
+
+      <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 5 }}>
+        <IconButton
+          icon="plus"
+          size={50}
+          onPress={handleAddMultimedia}
+        />
+
+        {multimediaTiles}
+      </View>
+    </View>
+  )
 }
 
 export default () => {
@@ -121,9 +292,11 @@ export default () => {
   const [useUrlPicture, setUseUrlPicture] = useState(false)
   const [googleUniqueIdentifier, setGoogleUniqueIdentifier] = useState(null)
   const [picture, setPicture] = useState("")
+  const [location, setLocation] = useState(null)
+  const [multimedia, setMultimedia] = useState([])
 
   const handleSignUp = () => {
-    if (!form.validate()) {
+    if (!form.validate() || location === null) {
       Alert.alert(
         "Información incompleta",
         "Ingresa la información necesaria para registrarte"
@@ -135,11 +308,15 @@ export default () => {
     if (signingUpWithPlainAccount) {
       signUpWithPlainAccountMutation.mutate({
         picture,
+        location,
+        multimedia,
         ...form.fields
       })
     } else {
       signUpWithGoogleAccountMutation.mutate({
         googleUniqueIdentifier,
+        location,
+        multimedia,
         picture,
         ...form.fields
       })
@@ -152,11 +329,6 @@ export default () => {
   }
 
   const fillUpFormWithGoogleData = (userInformation) => {
-    const [firstSurname, secondSurname] = userInformation.family_name.split(" ", 2)
-    console.log(userInformation)
-
-    form.setField("second_surname")(secondSurname)
-    form.setField("first_surname")(firstSurname)
     form.setField("name")(userInformation.given_name)
     form.setField("email")("google@gmail.com")
     form.setField("password")("Google")
@@ -170,28 +342,41 @@ export default () => {
   const form = useForm(
     {
       name: "",
-      first_surname: "",
-      second_surname: "",
+      description: "",
       phone_number: "",
       email: "",
       password: ""
     },
     {
       name: makeNotEmptyChecker("Nombre vacío"),
-      first_surname: makeNotEmptyChecker("Primer apellido vacío"),
-      second_surname: makeNotEmptyChecker("Segundo apellido vacío"),
+      description: () => null,
       phone_number: checkPhoneNumber,
       email: checkEmail,
       password: makeNotEmptyChecker("Contraseña vacía")
     }
   )
-  console.log(form)
   const signUpWithPlainAccountMutation = useMutation(
-    (userInformation) => signUpWithPlainAccount(userInformation)
+    ({
+      multimedia,
+      address,
+      ...userInformation
+    }) => signUpWithPlainAccount(
+      userInformation,
+      multimedia,
+      location
+    )
   )
   const signUpWithGoogleAccountMutation = useMutation(
-    ({ googleUniqueIdentifier, ...userInformation }) => signUpWithGoogleAccount(
-      userInformation, googleUniqueIdentifier
+    ({
+      googleUniqueIdentifier,
+      multimedia,
+      address,
+      ...userInformation
+    }) => signUpWithGoogleAccount(
+      userInformation,
+      googleUniqueIdentifier,
+      multimedia,
+      location
     )
   )
 
@@ -226,7 +411,7 @@ export default () => {
       </Text>
 
       <Text style={styles.subtitle}>
-        Ingresa tus datos personales
+        Ingresa los datos de tu emprendimiento
       </Text>
 
       <PictureInput
@@ -243,18 +428,11 @@ export default () => {
           placeholder="Nombre"
         />
 
-        <TextField
-          value={form.getField("first_surname")}
-          onChangeText={form.setField("first_surname")}
-          error={form.getError("first_surname")}
-          placeholder="Primer apellido"
-        />
-
-        <TextField
-          value={form.getField("second_surname")}
-          onChangeText={form.setField("second_surname")}
-          error={form.getError("second_surname")}
-          placeholder="Segundo apellido"
+        <TextArea
+          value={form.getField("description")}
+          onChangeText={form.setField("description")}
+          error={form.getError("description")}
+          placeholder="Descripción"
         />
 
         <TextField
@@ -288,6 +466,22 @@ export default () => {
           null
         }
       </View>
+
+      <Divider style={{ width: "90%" }} />
+
+      <LocationSection
+        location={location}
+        onSelect={setLocation}
+      />
+
+      <Divider style={{ width: "90%" }} />
+
+      <MultimediaSection
+        multimedia={multimedia}
+        setMultimedia={setMultimedia}
+      />
+
+      <Divider style={{ width: "90%" }} />
 
       <Button
         onPress={handleSignUp}

@@ -6,11 +6,11 @@ import { autocompleteAddress } from '../utilities/geoapify'
 import { requestServer } from '../utilities/requests'
 import SearchInput from '../components/SearchInput'
 import LoadingSpinner from '../components/LoadingSpinner'
+import AddressAutocompleteTile from '../components/AddressAutocompleteTile'
 import Button from '../components/Button'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { withTheme } from 'react-native-ios-kit'
-import { TouchableRipple, List } from 'react-native-paper'
+import { List } from 'react-native-paper'
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -39,43 +39,6 @@ const addLocation = async (geoapifyAddress, customerId) => {
     payload
   )
 }
-
-const _AddressAutocompleteTile = ({ isSelected, address, onSelect, theme }) => {
-  return (
-    <TouchableRipple
-      onPress={() => onSelect(address)}
-    >
-      <List.Item
-        style={
-          isSelected ?
-          {
-            backgroundColor: theme.primaryColor,
-          } :
-          null
-        }
-        titleStyle={
-          isSelected ?
-          {
-            color: "white"
-          } :
-          null
-        }
-        descriptionStyle={
-          isSelected ?
-          {
-            color: "white"
-          } :
-          null
-        }
-        key={address.place_id}
-        title={address.formatted}
-        left={(props) => <List.Icon {...props} icon="map-marker" />}
-      />
-    </TouchableRipple>
-  )
-}
-
-const AddressAutocompleteTile = withTheme(_AddressAutocompleteTile)
 
 const AddressAutocompleteInput = ({ selectedAddress, onSelect }) => {
   const [searchedText, setSearchedText] = useState("")

@@ -14,25 +14,13 @@ const styles = StyleSheet.create({
 })
 
 export default ({ ...textInputProps }) => {
-  const [height, setHeight] = useState(undefined)
-
-  const handleHeightChange = (event) => {
-    const newHeight = event.nativeEvent.contentSize.height
-
-    if (newHeight < 120) {
-      setHeight(newHeight)
-    }
-  }
-
   return (
     <TextInput
       {...textInputProps}
       style={{
         ...styles.textInput,
-        height
       }}
       multiline
-      onContentSizeChange={handleHeightChange}
     />
   )
 }
