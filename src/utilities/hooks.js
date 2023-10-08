@@ -12,10 +12,10 @@ export const useForm = (initialValues, errorHandlers) => {
 
   const setField = (name) => {
     const setter = (value) => {
-      setFieldsState({
-        ...fieldsState,
+      setFieldsState((f) => ({
+        ...f,
         [name]: value
-      })
+      }))
     }
 
     return setter
@@ -30,10 +30,10 @@ export const useForm = (initialValues, errorHandlers) => {
       const value = fieldsState[name]
       const error = errorHandlers[name](value)
 
-      setErrorsState({
-        ...errorsState,
+      setErrorsState((e) => ({
+        ...e,
         [name]: error
-      })
+      }))
 
       if (error !== null) {
         isValid = false

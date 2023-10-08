@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { View } from 'react-native'
@@ -8,24 +7,24 @@ import DeliveryTile from '../components/DeliveryTile'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Screen from '../components/Screen'
 
-const fetchActiveDeliveries = async (customerId) => {
+const fetchActiveDeliveries = async (storeId) => {
   const payload = {
-    customer_id: customerId
+    store_id: storeId
   }
   const activeDeliveries = await requestServer(
-    "/deliveries_service/get_customer_active_deliveries",
+    "/deliveries_service/get_store_active_deliveries",
     payload
   )
 
   return activeDeliveries
 }
 
-const fetchInactiveDeliveries = async (customerId) => {
+const fetchInactiveDeliveries = async (storeId) => {
   const payload = {
-    customer_id: customerId
+    store_id: storeId
   }
   const inactiveDeliveries = await requestServer(
-    "/deliveries_service/get_customer_inactive_deliveries",
+    "/deliveries_service/get_store_inactive_deliveries",
     payload
   )
 
@@ -38,6 +37,7 @@ const DeliveriesListItems = ({ deliveries }) => {
       <DeliveryTile
         key={delivery.delivery_id}
         delivery={delivery}
+        activable
       />
     )
   })
@@ -50,21 +50,16 @@ const DeliveriesListItems = ({ deliveries }) => {
 }
 
 export default () => {
-  const navigation = useNavigation()
   const [session, _] = useSession()
-
-  navigation.addListener("beforeRemove", (event) => {
-    event.preventDefault()
-  })
 
   const activeDeliveriesQuery = useQuery({
     queryKey: ["activeDeliveries"],
-    queryFn: () => fetchActiveDeliveries(session.data.customerId),
+    queryFn: () => fetchActiveDeliveries(session.data.storeId),
     disabled: session.isLoading
   })
   const inactiveDeliveriesQuery = useQuery({
     queryKey: ["inactiveDeliveries"],
-    queryFn: () => fetchInactiveDeliveries(session.data.customerId),
+    queryFn: () => fetchInactiveDeliveries(session.data.storeId),
     disabled: session.isLoading
   })
 
@@ -77,12 +72,12 @@ export default () => {
   return (
     <Screen>
       <Text variant="titleLarge">
-        Entregas que esperas
+        Tus entregas
       </Text>
 
       <List.Section>
         <List.Subheader>
-          Entregas activas
+          Entregas inactivas
         </List.Subheader>
 
         {
@@ -98,7 +93,10 @@ export default () => {
         {
           inactiveDeliveriesQuery.isLoading ?
           <LoadingSpinner /> :
-          <DeliveriesListItems deliveries={inactiveDeliveriesQuery.data} />
+          <DeliveriesListItems
+            activable
+            deliveries={inactiveDeliveriesQuery.data}
+          />
         }
       </List.Section>
     </Screen>

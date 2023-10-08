@@ -153,6 +153,7 @@ export default () => {
 
   const fillUpFormWithGoogleData = (userInformation) => {
     const [firstSurname, secondSurname] = userInformation.family_name.split(" ", 2)
+    console.log(userInformation)
 
     form.setField("second_surname")(secondSurname)
     form.setField("first_surname")(firstSurname)
@@ -184,6 +185,7 @@ export default () => {
       password: makeNotEmptyChecker("Contraseña vacía")
     }
   )
+  console.log(form)
   const signUpWithPlainAccountMutation = useMutation(
     (userInformation) => signUpWithPlainAccount(userInformation)
   )
@@ -210,7 +212,7 @@ export default () => {
     if (signUpData !== null) {
       setSession({
         token: signUpData.token,
-        customerId: signUpData.user_id
+        storeId: signUpData.user_id
       })
 
       navigation.navigate("Home")

@@ -152,7 +152,7 @@ export default () => {
     if (signInData !== null) {
       setSession({
         token: signInData.token,
-        customerId: signInData.user_id
+        storeId: signInData.user_id
       })
 
       navigation.navigate("Home")
