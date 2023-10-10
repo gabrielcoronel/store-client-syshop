@@ -4,7 +4,7 @@ import { requestServer } from '../utilities/requests'
 import LoadingSpinner from "../components/LoadingSpinner"
 import ScrollView from "../components/ScrollView"
 import PostTile from "../components/PostTile"
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import { View } from 'react-native'
 import { Title2 } from 'react-native-ios-kit'
 
@@ -36,7 +36,7 @@ export default () => {
     }
 
     return (
-      <Screen>
+      <Padder>
         <View style={{ flex: 1, gap: 20 }}>
           <Title2>
             Tus me gusta
@@ -50,6 +50,6 @@ export default () => {
               emptyMessage="No te gusta ninguna publicación"
           />
         </View>
-      </Screen>
+      </Padder>
     )
 }

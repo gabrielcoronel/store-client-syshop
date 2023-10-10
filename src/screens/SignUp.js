@@ -4,14 +4,12 @@ import { useNavigation } from '@react-navigation/native'
 import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
-import { formatBase64String, formatLocation } from '../utilities/formatting'
-import { selectPictureFromGallery } from '../utilities/camera'
+import { formatLocation } from '../utilities/formatting'
 import {
   makeNotEmptyChecker,
   checkEmail,
   checkPhoneNumber
 } from '../utilities/validators'
-import uuid from 'react-native-uuid'
 import TextField from '../components/TextField'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -19,19 +17,18 @@ import PictureInput from '../components/PictureInput'
 import Button from '../components/Button'
 import TextArea from '../components/TextArea'
 import LocationSelector from '../components/LocationSelector'
-import Screen from '../components/Screen'
-import { View, Image, Alert, StyleSheet } from 'react-native'
+import MultimediaAdder from '../components/MultimediaAdder'
+import Padder from '../components/Padder'
+import Scroller from '../components/Scroller'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { View, Alert, StyleSheet } from 'react-native'
 import { Subhead } from 'react-native-ios-kit'
-import { Text, IconButton, Divider, TouchableRipple } from 'react-native-paper'
+import { Text, Divider } from 'react-native-paper'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     gap: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 16,
-    paddingBottom: 16
+    alignItems: "center"
   },
   locationSection: {
     justifyContent: "space-between",
@@ -39,9 +36,15 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "100%"
   },
+  multimediaSection: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    width: "100%"
+  },
   inputsContainer: {
-    flex: 1,
-    gap: 1,
+    gap: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -135,18 +138,6 @@ const signUpWithGoogleAccount = async (
 }
 
 const LocationSection = ({ location, onSelect }) => {
-  const handleSelect = (address) => {
-    const location = {
-      place_name: address.name,
-      street_address: address.address_line1,
-      city: address.city,
-      state: address.state ?? address.province,
-      zip_code: address.postcode,
-    }
-
-    onSelect(location)
-  }
-
   return (
     <View style={styles.locationSection}>
       <Text style={styles.subtitle}>
@@ -161,75 +152,24 @@ const LocationSection = ({ location, onSelect }) => {
         }
       </Subhead>
 
-      <AddressInput
-        onSelect={handleSelect}
+      <LocationSelector
+        onSelect={onSelect}
       />
     </View>
   )
 }
 
-const MultimediaTile = ({ multimediaItem, onPress }) => {
-  const uri = formatBase64String(multimediaItem)
-
-  return (
-    <TouchableRipple
-      onPress={onPress}
-    >
-      <Image
-        source={{
-          uri,
-          height: 75,
-          width: 75
-        }}
-      />
-    </TouchableRipple>
-  )
-}
-
 const MultimediaSection = ({ multimedia, setMultimedia }) => {
-  const handleAddMultimedia = async () => {
-    const newPicture = await selectPictureFromGallery()
-
-    if (newPicture === null) {
-      return
-    }
-
-    const newMultimedia = [newPicture, ...multimedia]
-
-    setMultimedia(newMultimedia)
-  }
-
-  const handleDeleteMultimedia = (multimediaItem) => {
-    const newMultimedia = multimedia.filter((i) => i !== multimediaItem)
-
-    setMultimedia(newMultimedia)
-  }
-
-  const multimediaTiles = multimedia.map((item) => {
-    return (
-      <MultimediaTile
-        key={uuid.v4()}
-        multimediaItem={item}
-        onPress={() => handleDeleteMultimedia(item)}
-      />
-    )
-  })
-
   return (
-    <View>
+    <View style={styles.multimediaSection}>
       <Text style={styles.subtitle}>
         Añade imágenes de tu tienda
       </Text>
 
-      <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 5 }}>
-        <IconButton
-          icon="plus"
-          size={50}
-          onPress={handleAddMultimedia}
-        />
-
-        {multimediaTiles}
-      </View>
+      <MultimediaAdder
+        multimedia={multimedia}
+        setMultimedia={setMultimedia}
+      />
     </View>
   )
 }
@@ -355,106 +295,110 @@ export default () => {
   }, [signUpData])
 
   return (
-    <Screen style={styles.container}>
-      <Text style={styles.title}>
-        Registrarse
-      </Text>
+    <Scroller>
+      <KeyboardAwareScrollView>
+        <Padder style={styles.container}>
+          <Text style={styles.title}>
+            Registrarse
+          </Text>
 
-      <Text style={styles.subtitle}>
-        Ingresa los datos de tu emprendimiento
-      </Text>
+          <Text style={styles.subtitle}>
+            Ingresa los datos de tu emprendimiento
+          </Text>
 
-      <PictureInput
-        picture={picture}
-        onChangePicture={handleChangePicture}
-        useUrl={useUrlPicture}
-      />
+          <PictureInput
+            picture={picture}
+            onChangePicture={handleChangePicture}
+            useUrl={useUrlPicture}
+          />
 
-      <View style={styles.inputsContainer}>
-        <TextField
-          value={form.getField("name")}
-          onChangeText={form.setField("name")}
-          error={form.getError("name")}
-          placeholder="Nombre"
-        />
+          <View style={styles.inputsContainer}>
+            <TextField
+              value={form.getField("name")}
+              onChangeText={form.setField("name")}
+              error={form.getError("name")}
+              placeholder="Nombre"
+            />
 
-        <TextArea
-          value={form.getField("description")}
-          onChangeText={form.setField("description")}
-          error={form.getError("description")}
-          placeholder="Descripción"
-        />
+            <TextArea
+              value={form.getField("description")}
+              onChangeText={form.setField("description")}
+              error={form.getError("description")}
+              placeholder="Descripción"
+            />
 
-        <TextField
-          value={form.getField("phone_number")}
-          onChangeText={form.setField("phone_number")}
-          error={form.getError("phone_number")}
-          placeholder="Número telefónico"
-          keyboardType="numeric"
-        />
+            <TextField
+              value={form.getField("phone_number")}
+              onChangeText={form.setField("phone_number")}
+              error={form.getError("phone_number")}
+              placeholder="Número telefónico"
+              keyboardType="numeric"
+            />
 
-        {
-          signingUpWithPlainAccount ?
-          (
-            <View style={styles.inputsContainer}>
-              <TextField
-                value={form.getField("email")}
-                onChangeText={form.setField("email")}
-                error={form.getError("email")}
-                placeholder="Correo electrónico"
-              />
+            {
+              signingUpWithPlainAccount ?
+              (
+                <View style={styles.inputsContainer}>
+                  <TextField
+                    value={form.getField("email")}
+                    onChangeText={form.setField("email")}
+                    error={form.getError("email")}
+                    placeholder="Correo electrónico"
+                  />
 
-              <TextField
-                value={form.getField("password")}
-                onChangeText={form.setField("password")}
-                error={form.getError("password")}
-                placeholder="Contraseña"
-                secureTextEntry
-              />
-            </View>
-          ) :
-          null
-        }
-      </View>
+                  <TextField
+                    value={form.getField("password")}
+                    onChangeText={form.setField("password")}
+                    error={form.getError("password")}
+                    placeholder="Contraseña"
+                    secureTextEntry
+                  />
+                </View>
+              ) :
+              null
+            }
+          </View>
 
-      <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%" }} />
 
-      <LocationSection
-        location={location}
-        onSelect={setLocation}
-      />
+          <LocationSection
+            location={location}
+            onSelect={setLocation}
+          />
 
-      <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%" }} />
 
-      <MultimediaSection
-        multimedia={multimedia}
-        setMultimedia={setMultimedia}
-      />
+          <MultimediaSection
+            multimedia={multimedia}
+            setMultimedia={setMultimedia}
+          />
 
-      <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%" }} />
 
-      <Button
-        onPress={handleSignUp}
-        disabled={isSignUpLoading}
-        style={{ width: "70%" }}
-      >
-        {
-          isSignUpLoading ?
-          <LoadingSpinner /> :
-          "Registrarse"
-        }
-      </Button>
+          <Button
+            onPress={handleSignUp}
+            disabled={isSignUpLoading}
+            style={{ width: "70%" }}
+          >
+            {
+              isSignUpLoading ?
+              <LoadingSpinner /> :
+              "Registrarse"
+            }
+          </Button>
 
-      <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%" }} />
 
-      <Text style={styles.thirdText}>
-        También puedes registrarte con
-      </Text>
+          <Text style={styles.thirdText}>
+            También puedes registrarte con
+          </Text>
 
-      <GoogleSignInButton
-        text="Registrate con Google"
-        onSignIn={fillUpFormWithGoogleData}
-      />
-    </Screen>
+          <GoogleSignInButton
+            text="Registrate con Google"
+            onSignIn={fillUpFormWithGoogleData}
+          />
+        </Padder>
+      </KeyboardAwareScrollView>
+    </Scroller>
   )
 }

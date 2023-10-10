@@ -4,7 +4,7 @@ import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
 import ScrollView from '../components/ScrollView'
-import VirtualizedView from '../components/VirtualizedView'
+import Scroller from '../components/Scroller'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PostTile from '../components/PostTile'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -147,7 +147,7 @@ const PostsList = () => {
 
 export default () => {
   return (
-    <VirtualizedView>
+    <Scroller>
       <SafeAreaView>
         <StoreView />
 
@@ -155,6 +155,6 @@ export default () => {
 
         <PostsList />
       </SafeAreaView>
-    </VirtualizedView>
+    </Scroller>
   )
 }

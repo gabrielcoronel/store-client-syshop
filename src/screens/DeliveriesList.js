@@ -5,7 +5,8 @@ import { View } from 'react-native'
 import { List, Text } from 'react-native-paper'
 import DeliveryTile from '../components/DeliveryTile'
 import LoadingSpinner from '../components/LoadingSpinner'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
+import Scroller from '../components/Scroller'
 
 const fetchActiveDeliveries = async (storeId) => {
   const payload = {
@@ -70,35 +71,37 @@ export default () => {
   }
 
   return (
-    <Screen>
-      <Text variant="titleLarge">
-        Tus entregas
-      </Text>
+    <Scroller>
+      <Padder>
+        <Text variant="titleLarge">
+          Tus entregas
+        </Text>
 
-      <List.Section>
-        <List.Subheader>
-          Entregas inactivas
-        </List.Subheader>
+        <List.Section>
+          <List.Subheader>
+            Entregas inactivas
+          </List.Subheader>
 
-        {
-          activeDeliveriesQuery.isLoading ?
-          <LoadingSpinner /> :
-          <DeliveriesListItems deliveries={activeDeliveriesQuery.data} />
-        }
+          {
+            activeDeliveriesQuery.isLoading ?
+            <LoadingSpinner /> :
+            <DeliveriesListItems deliveries={activeDeliveriesQuery.data} />
+          }
 
-        <List.Subheader>
-          Entregas inactivas
-        </List.Subheader>
+          <List.Subheader>
+            Entregas inactivas
+          </List.Subheader>
 
-        {
-          inactiveDeliveriesQuery.isLoading ?
-          <LoadingSpinner /> :
-          <DeliveriesListItems
-            activable
-            deliveries={inactiveDeliveriesQuery.data}
-          />
-        }
-      </List.Section>
-    </Screen>
+          {
+            inactiveDeliveriesQuery.isLoading ?
+            <LoadingSpinner /> :
+            <DeliveriesListItems
+              activable
+              deliveries={inactiveDeliveriesQuery.data}
+            />
+          }
+        </List.Section>
+      </Padder>
+    </Scroller>
   )
 }

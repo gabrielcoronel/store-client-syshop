@@ -9,8 +9,7 @@ import TextField from '../components/TextField'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Button from '../components/Button'
-import Screen from '../components/Screen'
-import { Alert, StyleSheet } from 'react-native'
+import { View, Alert, StyleSheet } from 'react-native'
 import { Text, Divider } from 'react-native-paper'
 
 const styles = StyleSheet.create({
@@ -160,7 +159,7 @@ export default () => {
   }, [signInData])
 
   return (
-    <Screen style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>
         Bienvenido
       </Text>
@@ -211,6 +210,6 @@ export default () => {
           disabled={isSignInLoading}
         />
       }
-    </Screen>
+    </View>
   )
 }

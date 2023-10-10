@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { TextInput, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   textInput: {
-    padding: 20,
+    padding: 15,
     width: 275,
     borderColor: "silver",
     borderWidth: 1,

@@ -7,7 +7,7 @@ import ScrollView from '../components/ScrollView'
 import PostTile from '../components/PostTile'
 import SearchBar from '../components/SearchBar'
 import LoadingSpinner from '../components/LoadingSpinner'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import { Fragment } from 'react'
 import {
   Portal,
@@ -21,6 +21,11 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     top: Dimensions.get("screen").height * 0.75,
+    left: Dimensions.get("screen").width * 0.8
+  },
+  fab2: {
+    position: "absolute",
+    top: Dimensions.get("screen").height * 0.65,
     left: Dimensions.get("screen").width * 0.8
   },
   searchBarModal: {
@@ -103,9 +108,13 @@ export default () => {
     })
   }
 
+  const navigateToCreatePost = () => {
+    navigation.navigate("CreatePost")
+  }
+
   return (
     <Fragment>
-      <Screen>
+      <Padder>
         <PostsList />
 
         <Portal>
@@ -123,7 +132,13 @@ export default () => {
             </Surface>
           </Modal>
         </Portal>
-      </Screen>
+      </Padder>
+
+      <FAB
+        icon="plus"
+        onPress={navigateToCreatePost}
+        style={styles.fab2}
+      />
 
       <FAB
         icon="magnify"

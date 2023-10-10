@@ -21,9 +21,15 @@ export default ({ error, ...textInputProps }) => {
         style={styles.textInput}
       />
 
-      <HelperText type="error" visibler={(error !== null) && (error !== undefined)}>
-        {error}
-      </HelperText>
+      {
+        (error !== null) && (error !== undefined) ?
+        (
+          <HelperText type="error" visible={(error !== null) && (error !== undefined)}>
+            {error}
+          </HelperText>
+        ) :
+        null
+      }
     </View>
   )
 }

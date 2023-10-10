@@ -4,7 +4,7 @@ import { requestServer } from '../utilities/requests'
 import ScrollView from '../components/ScrollView'
 import LoadingSpinner from '../components/LoadingSpinner'
 import SaleTile from '../components/SaleTile'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import { View } from 'react-native'
 import { Title2 } from 'react-native-ios-kit'
 
@@ -36,7 +36,7 @@ export default () => {
     }
 
     return (
-      <Screen>
+      <Padder>
         <View style={{ flex: 1, gap: 20 }}>
           <Title2>
             Tus ventas
@@ -50,6 +50,6 @@ export default () => {
               emptyMessage="No has vendido nada"
           />
         </View>
-      </Screen>
+      </Padder>
     )
 }

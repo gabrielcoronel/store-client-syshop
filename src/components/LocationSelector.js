@@ -47,28 +47,26 @@ export default ({ onSelect }) => {
         placeholder="Dirección"
       />
 
-      <View style={{ height: 250, width: "100%" }}>
-        {
-          getAddressesMutation.isLoading ?
-          <LoadingSpinner inScreen /> :
-          (
-            <View style={{ borderWidth: 1, borderColor: "black" }}>
-              <FlatList
-                data={getAddressesMutation.data}
-                keyExtractor={(address) => address.place_id}
-                renderItem={({ item }) => {
-                  return (
-                    <AddressAutocompleteTile
-                      address={item}
-                      onSelect={handleSelect}
-                    /> 
-                  )
-                }}
-              />
-            </View>
-          )
-        }
-      </View>
+      {
+        getAddressesMutation.isLoading ?
+        <LoadingSpinner /> :
+        (
+          <View style={{ width: "100%" }}>
+            <FlatList
+              data={getAddressesMutation.data}
+              keyExtractor={(address) => address.place_id}
+              renderItem={({ item }) => {
+                return (
+                  <AddressAutocompleteTile
+                    address={item}
+                    onSelect={handleSelect}
+                  /> 
+                )
+              }}
+            />
+          </View>
+        )
+      }
     </View>
   )
 }

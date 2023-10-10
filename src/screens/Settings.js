@@ -6,7 +6,7 @@ import { useSession } from '../context'
 import { checkEmail, makeNotEmptyChecker } from '../utilities/validators'
 import { requestServer } from '../utilities/requests'
 import LoadingSpinner from '../components/LoadingSpinner'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import Dialog from 'react-native-dialog'
 import { View } from 'react-native'
 import { RowItem, TableView } from 'react-native-ios-kit'
@@ -304,7 +304,7 @@ export default () => {
   }
 
   return (
-    <Screen>
+    <Padder>
       <Text variant="titleLarge">
         Configuración
       </Text>
@@ -377,6 +377,6 @@ export default () => {
         isVisible={isDeleteAccountDialogVisible}
         onDismiss={() => setIsDeleteAccountDialogVisible(false)}
       />
-    </Screen>
+    </Padder>
   )
 }

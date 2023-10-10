@@ -11,7 +11,8 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import CommentTile from '../components/CommentTile'
 import LikeButton from '../components/LikeButton'
 import Button from '../components/Button'
-import Screen from '../components/Screen'
+import Scroller from '../components/Scroller'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { ImageSlider } from 'react-native-image-slider-banner'
 import { withTheme, Title2, Title3, Body, Caption1 } from 'react-native-ios-kit'
 import { View, StyleSheet } from 'react-native'
@@ -308,12 +309,14 @@ export default () => {
   const ThemedPostView = withTheme(PostView)
 
   return (
-    <Screen>
-      <ThemedPostView postId={postId} />
+    <Scroller>
+      <SafeAreaView>
+        <ThemedPostView postId={postId} />
 
-      <Divider />
+        <Divider />
 
-      <CommentsScrollView postId={postId} />
-    </Screen>
+        <CommentsScrollView postId={postId} />
+      </SafeAreaView>
+    </Scroller>
   )
 }

@@ -5,7 +5,7 @@ import { requestServer } from '../utilities/requests'
 import ScrollView from '../components/ScrollView'
 import ChatTile from '../components/ChatTile'
 import LoadingSpinner from '../components/LoadingSpinner'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import { Text } from 'react-native-paper'
 
 const fetchChats = async (customerId) => {
@@ -41,7 +41,7 @@ export default () => {
   }
 
   return (
-    <Screen>
+    <Padder>
       <Text variant="titleLarge">
         Tus mensajes
       </Text>
@@ -53,6 +53,6 @@ export default () => {
         emptyIcon="chat"
         emptyMessage="No has hablado con nadie"
       />
-    </Screen>
+    </Padder>
   )
 }

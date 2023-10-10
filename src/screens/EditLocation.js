@@ -5,7 +5,7 @@ import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import LocationSelector from '../components/LocationSelector'
 import Button from '../components/Button'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import { Alert } from 'react-native'
 import { Title2 } from 'react-native-ios-kit'
 
@@ -50,7 +50,7 @@ export default () => {
   )
 
   return (
-    <Screen>
+    <Padder>
       <Title2>
         Selecciona un nuevo domicilio
       </Title2>
@@ -65,6 +65,6 @@ export default () => {
       >
         Confirmar
       </Button>
-    </Screen>
+    </Padder>
   )
 }

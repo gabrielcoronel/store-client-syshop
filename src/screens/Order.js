@@ -7,7 +7,7 @@ import { requestServer } from '../utilities/requests'
 import { formatBase64String } from '../utilities/formatting'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Button from '../components/Button'
-import Screen from '../components/Screen'
+import Padder from '../components/Padder'
 import { Alert, Image, StyleSheet, Dimensions } from 'react-native'
 import { TableView, InfoRow, Stepper, Title2 } from 'react-native-ios-kit'
 
@@ -122,7 +122,7 @@ export default () => {
 
 
     return (
-      <Screen style={styles.container}>
+      <Padder style={styles.container}>
         <Title2>
           Comprando '{postQuery.data.title}'
         </Title2>
@@ -165,6 +165,6 @@ export default () => {
             "Comprar"
           }
         </Button>
-      </Screen>
+      </Padder>
     )
 }
