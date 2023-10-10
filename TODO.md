@@ -1,5 +1,8 @@
 # Mañana Martes
++ [ ] Aplicar layouts a EditProfile
++ [ ] Aplicar estilos a EditLocation
 + [ ] Hacer las tareas de la aplicación de compradores
++ [ ] Poner a Kevin a bretear
 
 # Kevin
 + [ ] Aplicar tipografías

@@ -6,8 +6,17 @@ import { requestServer } from '../utilities/requests'
 import LocationSelector from '../components/LocationSelector'
 import Button from '../components/Button'
 import Padder from '../components/Padder'
-import { Alert } from 'react-native'
+import { Alert, StyleSheet } from 'react-native'
 import { Title2 } from 'react-native-ios-kit'
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 30
+  }
+})
 
 const updateLocation = async (location, storeId) => {
   const payload = {
@@ -51,20 +60,23 @@ export default () => {
 
   return (
     <Padder>
-      <Title2>
-        Selecciona un nuevo domicilio
-      </Title2>
+      <View style={styles.container}>
+        <Title2>
+          Selecciona un nuevo domicilio
+        </Title2>
 
-      <LocationSelector
-        onSelect={setLocation}
-      />
+        <LocationSelector
+          onSelect={setLocation}
+        />
 
-      <Button
-        disabled={location === null}
-        onPress={handleUpdateLocation}
-      >
-        Confirmar
-      </Button>
+        <Button
+          style={{ width: "80%" }}
+          disabled={location === null}
+          onPress={handleUpdateLocation}
+        >
+          Confirmar
+        </Button>
+      </View>
     </Padder>
   )
 }

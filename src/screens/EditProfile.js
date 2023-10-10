@@ -13,7 +13,8 @@ import MultimediaAdder from '../components/MultimediaAdder'
 import Button from '../components/Button'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
-import { View, Alert, StyleSheet } from 'react-native'
+import { View, Text, Alert, StyleSheet } from 'react-native'
+import { Divider } from 'react-native-paper'
 
 const styles = StyleSheet.create({
   container: {
@@ -22,6 +23,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 20
+  },
+  multimediaSection: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    width: "100%"
+  },
+  title: {
+    fontSize: 35,
+    color: "#344340",
+    fontWeight: "bold",
+    display: "flex",
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 20,
+    color: "gray",
+    display: "flex",
+    textAlign: "center",
   }
 })
 
@@ -47,6 +68,21 @@ const updateStore = async (storeId, newStore, picture, multimedia) => {
   const _ = await requestServer(
     "/stores_service/update_store",
     payload
+  )
+}
+
+const MultimediaSection = ({ multimedia, setMultimedia }) => {
+  return (
+    <View style={styles.multimediaSection}>
+      <Text style={styles.subtitle}>
+        Edita las fotografías relacionadas a tu emprendimiento
+      </Text>
+
+      <MultimediaAdder
+        multimedia={multimedia}
+        setMultimedia={setMultimedia}
+      />
+    </View>
   )
 }
 
@@ -131,6 +167,10 @@ export default () => {
   return (
     <Scroller>
       <Padder style={styles.container}>
+        <Text style={styles.title}>
+          Edita el perfil de emprendimiento
+        </Text>
+
         <PictureInput
           picture={picture}
           onChangePicture={setPicture}
@@ -160,7 +200,9 @@ export default () => {
           />
         </View>
 
-        <MultimediaAdder
+        <Divider style={{ width: "90%" }}/>
+
+        <MultimediaSection
           multimedia={multimedia}
           setMultimedia={setMultimedia}
         />        

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
@@ -58,11 +58,11 @@ const styles = StyleSheet.create({
     gap: 10
   },
   multimediaSection: {
-    padding: 35,
+    padding: 20,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 15,
+    gap: 20,
     width: "100%"
   }
 })
@@ -73,7 +73,6 @@ const createPost = async (
   multimedia,
   generalInformation
 ) => {
-  console.log("createPost", storeId)
   const payload = {
     store_id: storeId,
     categories,
@@ -204,6 +203,7 @@ const MultimediaSection = ({ multimedia, setMultimedia }) => {
 
 export default () => {
   const navigation = useNavigation()
+  const queryClient = useQueryClient()
   const [session, _] = useSession()
 
   const [categories, setCategories] = useState([])
@@ -215,6 +215,10 @@ export default () => {
       "Tu publicación se ha realizado con éxito"
     )
 
+    queryClient.refetchQueries({
+      queryKey: ["createdPosts"]
+    })
+
     navigation.goBack()
   }
 
@@ -222,8 +226,6 @@ export default () => {
     if (!form.validate()) {
       return
     }
-
-    console.log("SESSION DATA", session.data.storeId)
 
     createPostMutation.mutate({
       storeId: session.data.storeId,
@@ -290,12 +292,10 @@ export default () => {
 
               <Divider style={{ width: "90%" }} />
 
-              <View>
-                <MultimediaSection
-                  multimedia={multimedia}
-                  setMultimedia={setMultimedia}
-                />
-              </View>
+              <MultimediaSection
+                multimedia={multimedia}
+                setMultimedia={setMultimedia}
+              />
 
               <Divider style={{ width: "90%" }} />
 

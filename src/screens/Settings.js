@@ -202,6 +202,8 @@ const CloseSessionDialog = ({ isVisible, onDismiss }) => {
   const handleCloseSession = () => {
     setSession(null)
 
+    onDismiss()
+
     navigation.navigate("Welcome")
   }
 
@@ -310,11 +312,6 @@ export default () => {
       </Text>
 
       <TableView header="Historial">
-        <RowItem
-          title="Publicaciones que te gustan"
-          onPress={() => navigation.navigate("LikedPosts")}
-        />
-
         <RowItem
           title="Tus ventas"
           onPress={() => navigation.navigate("SalesList")}
