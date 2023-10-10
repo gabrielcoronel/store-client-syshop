@@ -13,10 +13,9 @@ import { Body, Caption1, Title2 } from 'react-native-ios-kit'
 import { Appbar, Divider } from 'react-native-paper'
 import { ImageSlider } from 'react-native-image-slider-banner'
 
-const fetchStore = async (storeId, customerId) => {
+const fetchStore = async (storeId) => {
   const payload = {
-    store_id: storeId,
-    customer_id: customerId
+    store_id: storeId
   }
   const store = await requestServer(
     "/stores_service/get_store_by_id",
@@ -26,10 +25,9 @@ const fetchStore = async (storeId, customerId) => {
   return store
 }
 
-const fetchStorePosts = async (storeId, customerId) => {
+const fetchStorePosts = async (storeId) => {
   const payload = {
-    store_id: storeId,
-    customer_id: customerId
+    store_id: storeId
   }
   const posts = await requestServer(
     "/posts_service/get_store_posts",
@@ -49,7 +47,7 @@ const StoreView = () => {
 
   const storeQuery = useQuery({
     queryKey: ["storeProfileView"],
-    queryFn: () => fetchStore(session.data.storeId, session.data.storeId),
+    queryFn: () => fetchStore(session.data.storeId),
     disabled: session.isLoading
   })
 
@@ -117,7 +115,7 @@ const PostsList = () => {
 
   const storePostsQuery = useQuery({
     queryKey: ["storePostsProfileView"],
-    queryFn: () => fetchStorePosts(session.data.storeId, session.data.storeId)
+    queryFn: () => fetchStorePosts(session.data.storeId)
   })
 
   if (storePostsQuery.isLoading || session.isLoading) {

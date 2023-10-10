@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
 import { default as startPhoneCall } from 'react-native-phone-call'
 import ScrollView from '../components/ScrollView'
-import VirtualizedView from '../components/VirtualizedView'
+import Scroller from '../components/Scroller'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PostTile from '../components/PostTile'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -15,10 +14,9 @@ import { Body, Caption1, Title2 } from 'react-native-ios-kit'
 import { Appbar, Divider } from 'react-native-paper'
 import { ImageSlider } from 'react-native-image-slider-banner'
 
-const fetchStore = async (storeId, customerId) => {
+const fetchStore = async (storeId) => {
   const payload = {
-    store_id: storeId,
-    customer_id: customerId
+    store_id: storeId
   }
   const store = await requestServer(
     "/stores_service/get_store_by_id",
@@ -28,10 +26,9 @@ const fetchStore = async (storeId, customerId) => {
   return store
 }
 
-const fetchStorePosts = async (storeId, customerId) => {
+const fetchStorePosts = async (storeId) => {
   const payload = {
-    store_id: storeId,
-    customer_id: customerId
+    store_id: storeId
   }
   const posts = await requestServer(
     "/posts_service/get_store_posts",
@@ -41,10 +38,10 @@ const fetchStorePosts = async (storeId, customerId) => {
   return posts
 }
 
-const fetchChat = async (customerId, storeId) => {
+const fetchChat = async (senderId, receiverId) => {
   const payload = {
-    sender_id: customerId,
-    receiver_id: storeId
+    sender_id: senderId,
+    receiver_id: receiverId
   }
   const optionChat = await requestServer(
     "/chat_service/get_chat_by_sender_and_receiver",
@@ -54,42 +51,9 @@ const fetchChat = async (customerId, storeId) => {
   return optionChat
 }
 
-const followStore = async (storeId, customerId) => {
-  const payload = {
-    store_id: storeId,
-    customer_id: customerId
-  }
-  const _ = await requestServer(
-    "/stores_service/follow_store",
-    payload
-  )
-}
-
-const StoreView = ({ storeId, customerId }) => {
+const StoreView = ({ storeId }) => {
   const navigation = useNavigation()
-  const queryClient = useQueryClient()
   const [session, _] = useSession()
-
-  const [isFollowing, setIsFollowing] = useState(null)
-
-  const handleQuerySuccess = (data) => {
-    setIsFollowing(data.does_customer_follow_store)
-  }
-
-  const handleFollow = () => {
-    followStoreMutation.mutate({
-      storeId,
-      customerId
-    })
-
-    setIsFollowing(!isFollowing)
-  }
-
-  const handleFollowSuccess = (_) => {
-    queryClient.refetchQueries({
-      queryKey: ["feedPosts"]
-    })
-  }
 
   const navigateToChat = async () => {
     const optionalChat = await fetchChat(session.data.storeId, storeId)
@@ -125,16 +89,10 @@ const StoreView = ({ storeId, customerId }) => {
 
   const storeQuery = useQuery({
     queryKey: ["store"],
-    queryFn: () => fetchStore(storeId, session.data.storeId),
+    queryFn: () => fetchStore(storeId),
     onSuccess: handleQuerySuccess,
     disabled: session.isLoading
   })
-  const followStoreMutation = useMutation(
-    ({ storeId, customerId }) => followStore(storeId, customerId),
-    {
-      onSuccess: handleFollowSuccess
-    }
-  )
 
   if (storeQuery.isLoading) {
     return (
@@ -172,12 +130,6 @@ const StoreView = ({ storeId, customerId }) => {
           icon="chat"
           onPress={navigateToChat}
         />
-
-        <Appbar.Action
-          disabled={isFollowing === null}
-          icon={isFollowing ? "check" : "plus"}
-          onPress={handleFollow}
-        />
       </Appbar.Header>
 
       <ImageSlider
@@ -206,10 +158,10 @@ const StoreView = ({ storeId, customerId }) => {
   )
 }
 
-const PostsList = ({ storeId, customerId }) => {
+const PostsList = ({ storeId }) => {
   const storePostsQuery = useQuery({
     queryKey: ["storePosts"],
-    queryFn: () => fetchStorePosts(storeId, customerId)
+    queryFn: () => fetchStorePosts(storeId)
   })
 
   if (storePostsQuery.isLoading) {
@@ -250,20 +202,18 @@ export default () => {
   }
 
   return (
-    <VirtualizedView>
+    <Scroller>
       <SafeAreaView>
         <StoreView
           storeId={storeId}
-          customerId={session.data.storeId}
         />
 
         <Divider />
 
         <PostsList
           storeId={storeId}
-          customerId={session.data.storeId}
         />
       </SafeAreaView>
-    </VirtualizedView>
+    </Scroller>
   )
 }

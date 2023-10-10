@@ -9,7 +9,6 @@ import TextArea from '../components/TextArea'
 import ScrollView from '../components/ScrollView'
 import LoadingSpinner from '../components/LoadingSpinner'
 import CommentTile from '../components/CommentTile'
-import LikeButton from '../components/LikeButton'
 import Scroller from '../components/Scroller'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ImageSlider } from 'react-native-image-slider-banner'
@@ -54,10 +53,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const fetchPost = async (postId, customerId) => {
+const fetchPost = async (postId) => {
   const payload = {
-    post_id: postId,
-    customer_id: customerId
+    post_id: postId
   }
   const post = await requestServer(
     "/posts_service/get_post_by_id",
@@ -79,10 +77,10 @@ const fetchPostComments = async (postId) => {
   return comments
 }
 
-const addPostComment = async (postId, customerId, text) => {
+const addPostComment = async (postId, storeId, text) => {
   const payload = {
     post_id: postId,
-    user_id: customerId,
+    user_id: storeId,
     text
   }
   const _ = await requestServer(
@@ -107,7 +105,7 @@ const formatPostAmount = (amount) => {
   return formatted
 }
 
-const CommentInput = ({ postId, customerId }) => {
+const CommentInput = ({ postId, storeId }) => {
   const queryClient = useQueryClient()
 
   const [text, setText] = useState("")
@@ -115,13 +113,13 @@ const CommentInput = ({ postId, customerId }) => {
   const handleCommentSubmit = async () => {
     addCommentMutation.mutate({
       postId,
-      customerId,
+      storeId,
       text
     })
   }
 
   const addCommentMutation = useMutation(
-    ({ postId, customerId, text }) => addPostComment(postId, customerId, text),
+    ({ postId, storeId, text }) => addPostComment(postId, storeId, text),
     {
       onSuccess: () => queryClient.refetchQueries({
         queryKey: ["postComments"]
@@ -168,7 +166,7 @@ const CommentsScrollView = ({ postId }) => {
   return (
     <View>
       <CommentInput
-        customerId={session.data.storeId}
+        storeId={session.data.storeId}
         postId={postId}
       />
 
@@ -185,21 +183,19 @@ const CommentsScrollView = ({ postId }) => {
 
 const PostView = ({ postId, theme }) => {
   const navigation = useNavigation()
-  const [session, _] = useSession()
 
   const navigateToStoreView = () => {
     navigation.navigate("StoreView", {
-      storeId: post.store_id
+      storeId: postQuery.data.store_id
     })
   }
 
   const postQuery = useQuery({
     queryKey: ["post"],
-    queryFn: () => fetchPost(postId, session.data.storeId),
-    disabled: session.isLoading
+    queryFn: () => fetchPost(postId)
   })
 
-  if (postQuery.isLoading || session.isLoading) {
+  if (postQuery.isLoading) {
     return (
       <LoadingSpinner inScreen />
     )
@@ -268,11 +264,6 @@ const PostView = ({ postId, theme }) => {
           <View style={styles.categoriesChipsView}>
             {categoriesChips}
           </View>
-
-          <LikeButton
-            postId={post.post_id}
-            doesCustomerLikePost={post.does_customer_like_post}
-          />
         </View>
       </View>
     </View>

@@ -24,26 +24,27 @@ const styles = StyleSheet.create({
   }
 })
 
-const fetchCustomer = async (customerId) => {
+const fetchCustomer = async (storeId) => {
   const payload = {
-    customer_id: customerId
+    store_id: storeId
   }
-  const customer = await requestServer(
-    "/customers_service/get_customer_by_id",
+  const store = await requestServer(
+    "/stores_service/get_store_by_id",
     payload
   )
 
-  return customer
+  return store
 }
 
-const updateCustomer = async (customerId, newCustomer, picture) => {
+const updateCustomer = async (storeId, newStore, picture, multimedia) => {
   const payload = {
-    customer_id: customerId,
+    store_id: storeId,
     picture,
-    ...newCustomer
+    multimedia,
+    ...newStore
   }
   const _ = await requestServer(
-    "/customers_service/update_customer",
+    "/stores_service/update_store",
     payload
   )
 }
@@ -56,7 +57,7 @@ export default () => {
   const [picture, setPicture] = useState(null)
 
   const handleSuccess = () => {
-    queryClient.refetchQueries({ queryKey: ["customer"] })
+    queryClient.refetchQueries({ queryKey: ["storeProfileView"] })
 
     Alert.alert(
       "Éxito",
@@ -86,9 +87,10 @@ export default () => {
     }
 
     updateCustomerMutation.mutate({
-      customerId: session.data.storeId,
+      storeId: session.data.storeId,
       fields: form.fields,
-      picture
+      picture,
+      multimedia
     })
   }
 
@@ -106,21 +108,21 @@ export default () => {
       phone_number: checkPhoneNumber
     }
   )
-  const customerQuery = useQuery({
-    queryKey: ["customerToEdit"],
+  const storeQuery = useQuery({
+    queryKey: ["storeToEdit"],
     queryFn: () => fetchCustomer(session.data.storeId),
     onSuccess: (data) => fillFormFields(data),
     disabled: session.isLoading
   })
   const updateCustomerMutation = useMutation(
-    ({ customerId, fields, picture }) => updateCustomer(
-      customerId, fields, picture
+    ({ storeId, fields, picture }) => updateCustomer(
+      storeId, fields, picture, multimedia
     ), {
       onSuccess: handleSuccess
     }
   )
 
-  if (customerQuery.isLoading || session.isLoading) {
+  if (storeQuery.isLoading || session.isLoading) {
     return (
       <LoadingSpinner inScreen />
     )

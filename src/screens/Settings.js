@@ -36,21 +36,21 @@ const changePassword = async (storeId, oldPassword, newPassword) => {
   )
 }
 
-const fetchCustomer = async (customerId) => {
+const fetchStore = async (storeId) => {
   const payload = {
-    customer_id: customerId
+    store_id: storeId
   }
-  const customer = await requestServer(
-    "/customers_service/get_customer_by_id",
+  const store = await requestServer(
+    "/stores_service/get_store_by_id",
     payload
   )
 
-  return customer
+  return store
 }
 
-const deleteCustomer = async (customerId) => {
+const deleteStore = async (storeId) => {
   const payload = {
-    user_id: customerId
+    user_id: storeId
   }
   const _ = await requestServer(
     "/users_service/delete_user",
@@ -69,9 +69,9 @@ const ChangeEmailDialog = ({ isVisible, onDismiss }) => {
     changeEmailMutation.mutate(form.fields)
   }
 
-  const customerQuery = useQuery({
-    queryKey: ["customerChangeEmail"],
-    queryFn: () => fetchCustomer(session.data.storeId),
+  const storeQuery = useQuery({
+    queryKey: ["storeChangeEmail"],
+    queryFn: () => fetchStore(session.data.storeId),
     onSuccess: fillFormFields,
     disabled: session.isLoading
   })
@@ -93,7 +93,7 @@ const ChangeEmailDialog = ({ isVisible, onDismiss }) => {
     onDismiss()
   }
 
-  if (isVisible && (customerQuery.isLoading || changeEmailMutation.isLoading)) {
+  if (isVisible && (storeQuery.isLoading || changeEmailMutation.isLoading)) {
     return (
       <LoadingSpinner inScreen />
     )
@@ -239,13 +239,13 @@ const DeleteAccountDialog = ({ isVisible, onDismiss }) => {
   }
 
   const handleDeleteAccount = () => {
-    deleteCustomerMutation.mutate({ customerId: session.data.storeId })
+    deleteStoreMutation.mutate({ storeId: session.data.storeId })
 
     navigation.navigate("Welcome")
   }
 
-  const deleteCustomerMutation = useMutation(
-    ({ customerId }) => deleteCustomer(customerId),
+  const deleteStoreMutation = useMutation(
+    ({ storeId }) => deleteStore(storeId),
     {
       onSuccess: handleSuccess
     }
@@ -291,13 +291,13 @@ export default () => {
     navigation.navigate("EditLocation")
   }
 
-  const customerQuery = useQuery({
-    queryKey: ["customerSettings"],
-    queryFn: () => fetchCustomer(session.data.storeId),
+  const storeQuery = useQuery({
+    queryKey: ["storeSettings"],
+    queryFn: () => fetchStore(session.data.storeId),
     disabled: session.isLoading
   })
 
-  if (customerQuery.isLoading) {
+  if (storeQuery.isLoading) {
     return (
       <LoadingSpinner inScreen />
     )
@@ -329,7 +329,7 @@ export default () => {
 
         <View>
           {
-            customerQuery.data.account_type === "PlainAccount" ?
+            storeQuery.data.account_type === "PlainAccount" ?
             (
               <View>
                 <RowItem

@@ -28,10 +28,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const fetchPosts = async (picture, customerId) => {
+const fetchPosts = async (picture) => {
   const payload = {
-    picture,
-    customer_id: customerId
+    picture
   }
   const posts = await requestServer(
     "/posts_service/search_posts_by_image",
@@ -61,11 +60,9 @@ const PictureDisplay = ({ picture }) => {
 }
 
 const PostsList = ({ picture }) => {
-  const [session, _] = useSession()
-
   const postsQuery = useQuery({
     queryKey: ["picturePostResults"],
-    queryFn: () => fetchPosts(picture, session.data.storeId)
+    queryFn: () => fetchPosts(picture)
   })
 
   if (postsQuery.isLoading) {
