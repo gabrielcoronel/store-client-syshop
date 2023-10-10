@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
-import LikeButton from './LikeButton'
 import { View, Image } from 'react-native'
 import { Card } from '@ui-kitten/components'
 import { Headline, Subhead, Caption1 } from 'react-native-ios-kit'
@@ -115,12 +114,7 @@ export default ({ post }) => {
           icon="store"
           onPress={navigateToStoreView}
         />
-
-        <LikeButton
-          postId={post.post_id}
-          doesCustomerLikePost={post.does_customer_like_post}
-        />
-    </View>
+      </View>
     </Card>
   )
 }

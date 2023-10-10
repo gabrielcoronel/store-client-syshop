@@ -12,9 +12,9 @@ import { View } from 'react-native'
 import { RowItem, TableView } from 'react-native-ios-kit'
 import { Text } from 'react-native-paper'
 
-const changeEmail = async (customerId, email, password) => {
+const changeEmail = async (storeId, email, password) => {
   const payload = {
-    user_id: customerId,
+    user_id: storeId,
     email,
     password
   }
@@ -24,9 +24,9 @@ const changeEmail = async (customerId, email, password) => {
   )
 }
 
-const changePassword = async (customerId, oldPassword, newPassword) => {
+const changePassword = async (storeId, oldPassword, newPassword) => {
   const payload = {
-    user_id: customerId,
+    user_id: storeId,
     old_password: oldPassword,
     new_password: newPassword
   }
@@ -71,12 +71,12 @@ const ChangeEmailDialog = ({ isVisible, onDismiss }) => {
 
   const customerQuery = useQuery({
     queryKey: ["customerChangeEmail"],
-    queryFn: () => fetchCustomer(session.data.customerId),
+    queryFn: () => fetchCustomer(session.data.storeId),
     onSuccess: fillFormFields,
     disabled: session.isLoading
   })
   const changeEmailMutation = useMutation(
-    ({ email, password }) => changeEmail(session.data.customerId, email, password)
+    ({ email, password }) => changeEmail(session.data.storeId, email, password)
   )
   const form = useForm(
     {
@@ -139,7 +139,7 @@ const ChangePasswordDialog = ({ isVisible, onDismiss }) => {
   }
 
   const changePasswordMutation = useMutation(
-    ({ oldPassword, newPassword }) => changePassword(session.data.customerId, oldPassword, newPassword)
+    ({ oldPassword, newPassword }) => changePassword(session.data.storeId, oldPassword, newPassword)
   )
   const form = useForm(
     {
@@ -239,7 +239,7 @@ const DeleteAccountDialog = ({ isVisible, onDismiss }) => {
   }
 
   const handleDeleteAccount = () => {
-    deleteCustomerMutation.mutate({ customerId: session.data.customerId })
+    deleteCustomerMutation.mutate({ customerId: session.data.storeId })
 
     navigation.navigate("Welcome")
   }
@@ -293,7 +293,7 @@ export default () => {
 
   const customerQuery = useQuery({
     queryKey: ["customerSettings"],
-    queryFn: () => fetchCustomer(session.data.customerId),
+    queryFn: () => fetchCustomer(session.data.storeId),
     disabled: session.isLoading
   })
 

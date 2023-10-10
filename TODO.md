@@ -1,8 +1,8 @@
-# Sábado (hoy)
-+ [ ] Pelearme con el chat
-
-# Domingo
-+ [ ] Arreglar el error de los inputs
+# Mañana Martes
++ [ ] Hacer EditProfile
++ [ ] Pensar en como adaptar las consultas del backend ante la ausencia de un customerId
++ [ ] Testear todo
++ [ ] Hacer las tareas de la aplicación de compradores
 
 # Kevin
 + [ ] Aplicar tipografías

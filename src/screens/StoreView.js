@@ -92,7 +92,7 @@ const StoreView = ({ storeId, customerId }) => {
   }
 
   const navigateToChat = async () => {
-    const optionalChat = await fetchChat(session.data.customerId, storeId)
+    const optionalChat = await fetchChat(session.data.storeId, storeId)
 
     const chatId = optionalChat?.chat_id
 
@@ -125,7 +125,7 @@ const StoreView = ({ storeId, customerId }) => {
 
   const storeQuery = useQuery({
     queryKey: ["store"],
-    queryFn: () => fetchStore(storeId, session.data.customerId),
+    queryFn: () => fetchStore(storeId, session.data.storeId),
     onSuccess: handleQuerySuccess,
     disabled: session.isLoading
   })
@@ -254,14 +254,14 @@ export default () => {
       <SafeAreaView>
         <StoreView
           storeId={storeId}
-          customerId={session.data.customerId}
+          customerId={session.data.storeId}
         />
 
         <Divider />
 
         <PostsList
           storeId={storeId}
-          customerId={session.data.customerId}
+          customerId={session.data.storeId}
         />
       </SafeAreaView>
     </VirtualizedView>

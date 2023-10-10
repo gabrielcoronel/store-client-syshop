@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
   }
 })
 
-const fetchPosts = async (customerId) => {
+const fetchPosts = async (storeId) => {
   const payload = {
-    customer_id: customerId
+    store_id: storeId
   }
   const posts = await requestServer(
-    "/posts_service/get_posts_from_customer_following_stores",
+    "/posts_service/get_store_posts",
     payload
   )
 
@@ -57,8 +57,8 @@ const PostsList = () => {
   const [session, _] = useSession()
 
   const postsQuery = useQuery({
-    queryKey: ["feedPosts"],
-    queryFn: () => fetchPosts(session.data.customerId),
+    queryKey: ["createdPosts"],
+    queryFn: () => fetchPosts(session.data.storeId),
     disabled: session.isLoading
   })
 
@@ -75,7 +75,7 @@ const PostsList = () => {
         keyExtractor={(post) => post.post_id}
         renderItem={({ item }) => <PostTile post={item} />}
         emptyIcon="basket-plus"
-        emptyMessage="Sigue a algunas tiendas para ver contenido que te pueda interesar"
+        emptyMessage="No has realizado ninguna publicación"
       />
     </View>
   )

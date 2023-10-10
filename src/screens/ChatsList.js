@@ -8,9 +8,9 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
 import { Text } from 'react-native-paper'
 
-const fetchChats = async (customerId) => {
+const fetchChats = async (storeId) => {
   const payload = {
-    user_id: customerId
+    user_id: storeId
   }
   const chats = await requestServer(
     "/chat_service/get_user_chats",
@@ -30,7 +30,7 @@ export default () => {
 
   const chatsQuery = useQuery({
     queryKey: ["listOfChats"],
-    queryFn: () => fetchChats(session.data.customerId),
+    queryFn: () => fetchChats(session.data.storeId),
     disabled: session.isLoading
   })
 

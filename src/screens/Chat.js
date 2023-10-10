@@ -143,7 +143,7 @@ export default () => {
 
     addMessageMutation.mutate({
       message,
-      customerId: session.data.customerId,
+      senderId: session.data.storeId,
       receiverId: chat.user.user_id
     })
 
@@ -164,7 +164,7 @@ export default () => {
 
     addMessageMutation.mutate({
       message,
-      customerId: session.data.customerId,
+      senderId: session.data.storeId,
       receiverId: chat.user.user_id
     })
 
@@ -173,7 +173,7 @@ export default () => {
       image: formatBase64String(picture),
       createdAt: new Date(),
       user: {
-        _id: session.data.customerId,
+        _id: session.data.storeId,
       }
     }
 
@@ -199,9 +199,9 @@ export default () => {
     enabled: chat.chat_id !== undefined
   })
   const addMessageMutation = useMutation(
-    ({ message, customerId, receiverId }) => addMessage(
+    ({ message, senderId, receiverId }) => addMessage(
       message,
-      customerId,
+      senderId,
       receiverId
     ),
     {
@@ -226,7 +226,7 @@ export default () => {
         messages={messages}
         onSend={handleTextMessageSend}
         user={{
-          _id: session.data.customerId
+          _id: session.data.storeId
         }}
 
         placeholder='Mensaje...'

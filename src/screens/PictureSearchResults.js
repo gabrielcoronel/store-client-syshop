@@ -65,7 +65,7 @@ const PostsList = ({ picture }) => {
 
   const postsQuery = useQuery({
     queryKey: ["picturePostResults"],
-    queryFn: () => fetchPosts(picture, session.data.customerId)
+    queryFn: () => fetchPosts(picture, session.data.storeId)
   })
 
   if (postsQuery.isLoading) {

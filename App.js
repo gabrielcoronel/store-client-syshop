@@ -21,8 +21,6 @@ import Chat from './src/screens/Chat'
 import Welcome from './src/screens/Welcome'
 import SignIn from './src/screens/SignIn'
 import SignUp from './src/screens/SignUp'
-import ChooseLocation from './src/screens/ChooseLocation'
-import AddLocation from './src/screens/AddLocation'
 import SearchResults from './src/screens/SearchResults'
 import PictureSearchResults from './src/screens/PictureSearchResults'
 import PostView from './src/screens/PostView'
@@ -31,7 +29,6 @@ import LikedPosts from './src/screens/LikedPosts'
 import SalesList from './src/screens/SalesList'
 import ProfileView from './src/screens/ProfileView'
 import StoreView from './src/screens/StoreView'
-import Order from './src/screens/Order'
 import EditLocation from './src/screens/EditLocation'
 import CreatePost from './src/screens/CreatePost'
 
@@ -216,18 +213,6 @@ const Main = () => {
                       </Stack.Screen>
 
                       <Stack.Screen
-                        name="ChooseLocation"
-                      >
-                        {() => <ChooseLocation />}
-                      </Stack.Screen>
-
-                      <Stack.Screen
-                        name="AddLocation"
-                      >
-                        {() => <AddLocation />}
-                      </Stack.Screen>
-
-                      <Stack.Screen
                         name="SearchResults"
                       >
                         {() => <SearchResults />}
@@ -273,12 +258,6 @@ const Main = () => {
                         name="StoreView"
                       >
                         {() => <StoreView />}
-                      </Stack.Screen>
-
-                      <Stack.Screen
-                        name="Order"
-                      >
-                        {() => <Order />}
                       </Stack.Screen>
 
                       <Stack.Screen

@@ -86,7 +86,7 @@ export default () => {
     }
 
     updateCustomerMutation.mutate({
-      customerId: session.data.customerId,
+      customerId: session.data.storeId,
       fields: form.fields,
       picture
     })
@@ -108,7 +108,7 @@ export default () => {
   )
   const customerQuery = useQuery({
     queryKey: ["customerToEdit"],
-    queryFn: () => fetchCustomer(session.data.customerId),
+    queryFn: () => fetchCustomer(session.data.storeId),
     onSuccess: (data) => fillFormFields(data),
     disabled: session.isLoading
   })

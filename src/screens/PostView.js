@@ -10,7 +10,6 @@ import ScrollView from '../components/ScrollView'
 import LoadingSpinner from '../components/LoadingSpinner'
 import CommentTile from '../components/CommentTile'
 import LikeButton from '../components/LikeButton'
-import Button from '../components/Button'
 import Scroller from '../components/Scroller'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ImageSlider } from 'react-native-image-slider-banner'
@@ -45,12 +44,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "40%",
     gap: 8
-  },
-  buyButtonWrapper: {
-    flexDirection: "row",
-    justifyContent: "center",
-    width: "100%",
-    padding: 8
   },
   commentInputView: {
     flexDirection: "row",
@@ -175,7 +168,7 @@ const CommentsScrollView = ({ postId }) => {
   return (
     <View>
       <CommentInput
-        customerId={session.data.customerId}
+        customerId={session.data.storeId}
         postId={postId}
       />
 
@@ -200,15 +193,9 @@ const PostView = ({ postId, theme }) => {
     })
   }
 
-  const navigateToOrder = () => {
-    navigation.navigate("Order", {
-      postId: post.post_id
-    })
-  }
-
   const postQuery = useQuery({
     queryKey: ["post"],
-    queryFn: () => fetchPost(postId, session.data.customerId),
+    queryFn: () => fetchPost(postId, session.data.storeId),
     disabled: session.isLoading
   })
 
@@ -286,15 +273,6 @@ const PostView = ({ postId, theme }) => {
             postId={post.post_id}
             doesCustomerLikePost={post.does_customer_like_post}
           />
-        </View>
-
-        <View style={styles.buyButtonWrapper}>
-          <Button
-            onPress={navigateToOrder}
-            style={{ width: "100%" }}
-          >
-            Comprar (₡{post.price})
-          </Button>
         </View>
       </View>
     </View>
