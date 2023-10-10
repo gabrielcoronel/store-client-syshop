@@ -90,7 +90,6 @@ const StoreView = ({ storeId }) => {
   const storeQuery = useQuery({
     queryKey: ["store"],
     queryFn: () => fetchStore(storeId),
-    onSuccess: handleQuerySuccess,
     disabled: session.isLoading
   })
 

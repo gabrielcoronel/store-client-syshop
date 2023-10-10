@@ -1,6 +1,4 @@
 # Mañana Martes
-+ [ ] Hacer EditProfile
-+ [ ] Testear todo
 + [ ] Hacer las tareas de la aplicación de compradores
 
 # Kevin

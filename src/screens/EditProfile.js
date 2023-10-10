@@ -6,13 +6,14 @@ import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
 import { makeNotEmptyChecker, checkPhoneNumber } from '../utilities/validators'
 import TextField from '../components/TextField'
+import TextArea from '../components/TextArea'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PictureInput from '../components/PictureInput'
+import MultimediaAdder from '../components/MultimediaAdder'
 import Button from '../components/Button'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
-import { Alert, StyleSheet } from 'react-native'
-import { Text } from 'react-native-paper'
+import { View, Alert, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const fetchCustomer = async (storeId) => {
+const fetchStore = async (storeId) => {
   const payload = {
     store_id: storeId
   }
@@ -36,7 +37,7 @@ const fetchCustomer = async (storeId) => {
   return store
 }
 
-const updateCustomer = async (storeId, newStore, picture, multimedia) => {
+const updateStore = async (storeId, newStore, picture, multimedia) => {
   const payload = {
     store_id: storeId,
     picture,
@@ -55,6 +56,7 @@ export default () => {
   const [session, _] = useSession()
 
   const [picture, setPicture] = useState(null)
+  const [multimedia, setMultimedia] = useState([])
 
   const handleSuccess = () => {
     queryClient.refetchQueries({ queryKey: ["storeProfileView"] })
@@ -69,11 +71,11 @@ export default () => {
 
   const fillFormFields = (data) => {
     form.setField("name")(data.name)
-    form.setField("first_surname")(data.first_surname)
-    form.setField("second_surname")(data.second_surname)
+    form.setField("description")(data.description)
     form.setField("phone_number")(data.phone_number)
 
     setPicture(data.picture)
+    setMultimedia(data.multimedia)
   }
 
   const handleUpdate = () => {
@@ -86,7 +88,7 @@ export default () => {
       return
     }
 
-    updateCustomerMutation.mutate({
+    updateStoreMutation.mutate({
       storeId: session.data.storeId,
       fields: form.fields,
       picture,
@@ -97,25 +99,23 @@ export default () => {
   const form = useForm(
     {
       name: null,
-      first_surname: null,
-      second_surname: null,
+      description: null,
       phone_number: null
     },
     {
       name: makeNotEmptyChecker("Nombre vacío"),
-      first_surname: makeNotEmptyChecker("Primer apellido vacío"),
-      second_surname: makeNotEmptyChecker("Segundo apellido vacío"),
+      description: () => null,
       phone_number: checkPhoneNumber
     }
   )
   const storeQuery = useQuery({
     queryKey: ["storeToEdit"],
-    queryFn: () => fetchCustomer(session.data.storeId),
+    queryFn: () => fetchStore(session.data.storeId),
     onSuccess: (data) => fillFormFields(data),
     disabled: session.isLoading
   })
-  const updateCustomerMutation = useMutation(
-    ({ storeId, fields, picture }) => updateCustomer(
+  const updateStoreMutation = useMutation(
+    ({ storeId, fields, picture, multimedia }) => updateStore(
       storeId, fields, picture, multimedia
     ), {
       onSuccess: handleSuccess
@@ -131,49 +131,46 @@ export default () => {
   return (
     <Scroller>
       <Padder style={styles.container}>
-        <Text variant="titleLarge">
-          Configuración
-        </Text>
-
         <PictureInput
           picture={picture}
           onChangePicture={setPicture}
         />
 
-        <TextField
-          value={form.getField("name")}
-          onChangeText={form.setField("name")}
-          error={form.getError("name")}
-          placeholder="Nombre"
-        />
+        <View style={styles.inputsContainer}>
+          <TextField
+            value={form.getField("name")}
+            onChangeText={form.setField("name")}
+            error={form.getError("name")}
+            placeholder="Nombre"
+          />
 
-        <TextField
-          value={form.getField("first_surname")}
-          onChangeText={form.setField("first_surname")}
-          error={form.getError("first_surname")}
-          placeholder="Primer apellido"
-        />
+          <TextArea
+            value={form.getField("description")}
+            onChangeText={form.setField("description")}
+            error={form.getError("description")}
+            placeholder="Descripción"
+          />
 
-        <TextField
-          value={form.getField("second_surname")}
-          onChangeText={form.setField("second_surname")}
-          error={form.getError("second_surname")}
-          placeholder="Segundo apellido"
-        />
+          <TextField
+            value={form.getField("phone_number")}
+            onChangeText={form.setField("phone_number")}
+            error={form.getError("phone_number")}
+            placeholder="Número telefónico"
+            keyboardType="numeric"
+          />
+        </View>
 
-        <TextField
-          value={form.getField("phone_number")}
-          onChangeText={form.setField("phone_number")}
-          error={form.getError("phone_number")}
-          placeholder="Número telefónico"
-        />
+        <MultimediaAdder
+          multimedia={multimedia}
+          setMultimedia={setMultimedia}
+        />        
 
         <Button
           onPress={handleUpdate}
-          disabled={updateCustomerMutation.isLoading}
+          disabled={updateStoreMutation.isLoading}
         >
           {
-            updateCustomerMutation.isLoading ?
+            updateStoreMutation.isLoading ?
             <LoadingSpinner /> :
             "Confirmar"
           }

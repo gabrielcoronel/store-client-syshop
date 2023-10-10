@@ -73,10 +73,12 @@ const styles = StyleSheet.create({
 const signUpWithPlainAccount = async (
   userInformation,
   multimedia,
-  address
+  location
 ) => {
   const payload = {
-    ...userInformation
+    ...userInformation,
+    multimedia,
+    location
   }
 
   const handleError = (data) => {
@@ -105,13 +107,15 @@ const signUpWithGoogleAccount = async (
   userInformation,
   googleUniqueIdentifier,
   multimedia,
-  address
+  location
 ) => {
   delete userInformation["email"]
   delete userInformation["password"]
 
   const payload = {
     ...userInformation,
+    multimedia,
+    location,
     google_unique_identifier: googleUniqueIdentifier
   }
 
@@ -248,7 +252,7 @@ export default () => {
   const signUpWithPlainAccountMutation = useMutation(
     ({
       multimedia,
-      address,
+      location,
       ...userInformation
     }) => signUpWithPlainAccount(
       userInformation,
@@ -260,7 +264,7 @@ export default () => {
     ({
       googleUniqueIdentifier,
       multimedia,
-      address,
+      location,
       ...userInformation
     }) => signUpWithGoogleAccount(
       userInformation,

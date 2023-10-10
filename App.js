@@ -25,7 +25,6 @@ import SearchResults from './src/screens/SearchResults'
 import PictureSearchResults from './src/screens/PictureSearchResults'
 import PostView from './src/screens/PostView'
 import EditProfile from './src/screens/EditProfile'
-import LikedPosts from './src/screens/LikedPosts'
 import SalesList from './src/screens/SalesList'
 import ProfileView from './src/screens/ProfileView'
 import StoreView from './src/screens/StoreView'
@@ -234,12 +233,6 @@ const Main = () => {
                         name="EditProfile"
                       >
                         {() => <EditProfile />}
-                      </Stack.Screen>
-
-                      <Stack.Screen
-                        name="LikedPosts"
-                      >
-                        {() => <LikedPosts />}
                       </Stack.Screen>
 
                       <Stack.Screen

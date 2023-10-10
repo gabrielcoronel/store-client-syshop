@@ -70,10 +70,12 @@ const styles = StyleSheet.create({
 const createPost = async (
   storeId,
   categories,
+  multimedia,
   generalInformation
 ) => {
+  console.log("createPost", storeId)
   const payload = {
-    storeId,
+    store_id: storeId,
     categories,
     multimedia,
     ...generalInformation
@@ -221,6 +223,8 @@ export default () => {
       return
     }
 
+    console.log("SESSION DATA", session.data.storeId)
+
     createPostMutation.mutate({
       storeId: session.data.storeId,
       categories,
@@ -263,11 +267,6 @@ export default () => {
       onSuccess: handleCreatePostSuccess
     }
   )
-
-  // DEBUGGING
-  console.log(categories)
-  console.log(multimedia)
-  console.log(form)
 
   return (
     <Scroller>
