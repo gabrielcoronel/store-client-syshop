@@ -301,6 +301,7 @@ export default () => {
 
               <Button
                 onPress={handleSubmit}
+                style={{ width: "70%" }}
               >
                 {
                   createPostMutation.isLoading ?

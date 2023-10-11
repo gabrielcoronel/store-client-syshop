@@ -6,7 +6,7 @@ import { requestServer } from '../utilities/requests'
 import LocationSelector from '../components/LocationSelector'
 import Button from '../components/Button'
 import Padder from '../components/Padder'
-import { Alert, StyleSheet } from 'react-native'
+import { View, Alert, StyleSheet } from 'react-native'
 import { Title2 } from 'react-native-ios-kit'
 
 const styles = StyleSheet.create({

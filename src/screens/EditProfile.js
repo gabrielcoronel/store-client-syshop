@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20
   },
+  inputsContainer: {
+    gap: 15,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   multimediaSection: {
     flexDirection: "column",
     justifyContent: "center",
@@ -210,6 +215,7 @@ export default () => {
         <Button
           onPress={handleUpdate}
           disabled={updateStoreMutation.isLoading}
+          style={{ width: "70%" }}
         >
           {
             updateStoreMutation.isLoading ?

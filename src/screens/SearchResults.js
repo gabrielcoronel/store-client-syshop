@@ -9,6 +9,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import SearchInput from '../components/SearchInput'
 import Slider from '../components/Slider'
 import Empty from '../components/Empty'
+import Padder from '../components/Padder'
 import SegmentedControl from '@react-native-community/segmented-control'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
@@ -20,8 +21,6 @@ import { Title2, Caption1 } from 'react-native-ios-kit'
 import { Chip, Divider } from 'react-native-paper'
 
 const styles = StyleSheet.create({
-    searchFiltersPropertyView: {
-    },
     horizontalScrollView: {
         gap: 10
     },
@@ -303,30 +302,32 @@ export default () => {
           disabled
         />
 
-        <SearchedCategoriesScrollView
-            categoriesNames={categoriesNames}
-        />
-
-        <View style={{ flex: 1, gap: 16 }}>
-          <Title2>
-              Tiendas
-          </Title2>
-
-          <StoresResultsScrollView
-              searchedText={text}
-          />
-
-          <Divider />
-
-          <Title2>
-              Publicaciones
-          </Title2>
-
-          <PostsResults
-              searchedText={text}
+        <Padder>
+          <SearchedCategoriesScrollView
               categoriesNames={categoriesNames}
           />
-        </View>
+
+          <View style={{ flex: 1, gap: 16 }}>
+            <Title2>
+                Tiendas
+            </Title2>
+
+            <StoresResultsScrollView
+                searchedText={text}
+            />
+
+            <Divider />
+
+            <Title2>
+                Publicaciones
+            </Title2>
+
+            <PostsResults
+                searchedText={text}
+                categoriesNames={categoriesNames}
+            />
+          </View>
+        </Padder>
       </SafeAreaView>
     )
 }

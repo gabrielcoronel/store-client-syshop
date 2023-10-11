@@ -9,6 +9,7 @@ import TextField from '../components/TextField'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Button from '../components/Button'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, Alert, StyleSheet } from 'react-native'
 import { Text, Divider } from 'react-native-paper'
 
@@ -159,57 +160,59 @@ export default () => {
   }, [signInData])
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        Bienvenido
-      </Text>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>
+          Bienvenido
+        </Text>
 
-      <Text style={styles.subtitle}>
-        ¡Inicia sesión para comenzar!
-      </Text>
+        <Text style={styles.subtitle}>
+          ¡Inicia sesión para comenzar!
+        </Text>
 
-      <TextField
-        value={form.getField("email")}
-        onChangeText={form.setField("email")}
-        error={form.getError("email")}
-        placeholder="Correo electrónico"
-      />
-
-      <TextField
-        value={form.getField("password")}
-        onChangeText={form.setField("password")}
-        error={form.getError("password")}
-        placeholder="Contraseña"
-        secureTextEntry
-      />
-
-      <Button
-        style={{ width: "80%" }}
-        onPress={handleSignInWithPlainAccount}
-        disabled={isSignInLoading}
-      >
-        {
-          signInWithPlainAccountMutation.isLoading ?
-          <LoadingSpinner /> :
-          "Iniciar sesión"
-        }
-      </Button>
-
-      <Divider style={{ width: "90%" }} />
-
-      <Text style={styles.thirdText}>
-        O también
-      </Text>
-
-      {
-        signInWithGoogleAccountMutation.isLoading ?
-        <LoadingSpinner /> :
-        <GoogleSignInButton
-          text="Continúa con Google"
-          onSignIn={handleSignInWithGoogleAccount}
-          disabled={isSignInLoading}
+        <TextField
+          value={form.getField("email")}
+          onChangeText={form.setField("email")}
+          error={form.getError("email")}
+          placeholder="Correo electrónico"
         />
-      }
-    </View>
+
+        <TextField
+          value={form.getField("password")}
+          onChangeText={form.setField("password")}
+          error={form.getError("password")}
+          placeholder="Contraseña"
+          secureTextEntry
+        />
+
+        <Button
+          style={{ width: "80%" }}
+          onPress={handleSignInWithPlainAccount}
+          disabled={isSignInLoading}
+        >
+          {
+            signInWithPlainAccountMutation.isLoading ?
+            <LoadingSpinner /> :
+            "Iniciar sesión"
+          }
+        </Button>
+
+        <Divider style={{ width: "90%" }} />
+
+        <Text style={styles.thirdText}>
+          O también
+        </Text>
+
+        {
+          signInWithGoogleAccountMutation.isLoading ?
+          <LoadingSpinner /> :
+          <GoogleSignInButton
+            text="Continúa con Google"
+            onSignIn={handleSignInWithGoogleAccount}
+            disabled={isSignInLoading}
+          />
+        }
+      </View>
+    </KeyboardAwareScrollView>
   )
 }
