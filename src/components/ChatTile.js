@@ -18,6 +18,7 @@ const UserChatPicture = ({ user }) => {
   return (
     <Avatar.Image
       source={{ uri: formatBase64String(user.picture) }}
+      size={50}
     />
   )
 }

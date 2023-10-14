@@ -162,7 +162,7 @@ const SearchedCategoriesScrollView = ({ categoriesNames }) => {
     const categoriesNamesChips = categoriesNames.map((categoryName) => {
         return (
             <Chip
-                icon="shape"
+                icon="pound"
                 key={categoryName}
             >
               {categoryName}

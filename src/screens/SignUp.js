@@ -15,20 +15,23 @@ import GoogleSignInButton from '../components/GoogleSignInButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PictureInput from '../components/PictureInput'
 import Button from '../components/Button'
-import TextArea from '../components/TextArea'
 import LocationSelector from '../components/LocationSelector'
 import MultimediaAdder from '../components/MultimediaAdder'
+import Title from '../components/Title'
+import Subtitle from '../components/Subtitle'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, Alert, StyleSheet } from 'react-native'
 import { Subhead } from 'react-native-ios-kit'
 import { Text, Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
     gap: 20,
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: configuration.BACKGROUND_COLOR
   },
   locationSection: {
     justifyContent: "space-between",
@@ -47,26 +50,6 @@ const styles = StyleSheet.create({
     gap: 15,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 35,
-    color: "#344340",
-    fontWeight: "bold",
-    display: "flex",
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 20,
-    color: "gray",
-    display: "flex",
-    textAlign: "center",
-  },
-  thirdText: {
-    fontSize: 18,
-    color: "#344340",
-    fontWeight: "bold",
-    display: "flex",
-    textAlign: "center",
   }
 })
 
@@ -144,9 +127,9 @@ const signUpWithGoogleAccount = async (
 const LocationSection = ({ location, onSelect }) => {
   return (
     <View style={styles.locationSection}>
-      <Text style={styles.subtitle}>
+      <Subtitle>
         Especifica el domicilio de tu emprendimiento
-      </Text>
+      </Subtitle>
 
       <Subhead>
         {
@@ -166,9 +149,9 @@ const LocationSection = ({ location, onSelect }) => {
 const MultimediaSection = ({ multimedia, setMultimedia }) => {
   return (
     <View style={styles.multimediaSection}>
-      <Text style={styles.subtitle}>
+      <Subtitle>
         Añade imágenes de tu tienda
-      </Text>
+      </Subtitle>
 
       <MultimediaAdder
         multimedia={multimedia}
@@ -185,7 +168,7 @@ export default () => {
   const [signingUpWithPlainAccount, setSigninUpWithPlainAccount] = useState(true)
   const [useUrlPicture, setUseUrlPicture] = useState(false)
   const [googleUniqueIdentifier, setGoogleUniqueIdentifier] = useState(null)
-  const [picture, setPicture] = useState("")
+  const [picture, setPicture] = useState(null)
   const [location, setLocation] = useState(null)
   const [multimedia, setMultimedia] = useState([])
 
@@ -302,15 +285,16 @@ export default () => {
     <Scroller>
       <KeyboardAwareScrollView>
         <Padder style={styles.container}>
-          <Text style={styles.title}>
+          <Title>
             Registrarse
-          </Text>
+          </Title>
 
-          <Text style={styles.subtitle}>
+          <Subtitle>
             Ingresa los datos de tu emprendimiento
-          </Text>
+          </Subtitle>
 
           <PictureInput
+            defaultIcon="store"
             picture={picture}
             onChangePicture={handleChangePicture}
             useUrl={useUrlPicture}
@@ -324,11 +308,12 @@ export default () => {
               placeholder="Nombre"
             />
 
-            <TextArea
+            <TextField
               value={form.getField("description")}
               onChangeText={form.setField("description")}
               error={form.getError("description")}
               placeholder="Descripción"
+              multiline
             />
 
             <TextField
@@ -377,8 +362,6 @@ export default () => {
             setMultimedia={setMultimedia}
           />
 
-          <Divider style={{ width: "90%" }} />
-
           <Button
             onPress={handleSignUp}
             disabled={isSignUpLoading}
@@ -393,9 +376,9 @@ export default () => {
 
           <Divider style={{ width: "90%" }} />
 
-          <Text style={styles.thirdText}>
+          <Subtitle>
             También puedes registrarte con
-          </Text>
+          </Subtitle>
 
           <GoogleSignInButton
             text="Registrate con Google"

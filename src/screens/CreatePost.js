@@ -9,9 +9,10 @@ import uuid from 'react-native-uuid'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Button from '../components/Button'
 import TextField from '../components/TextField'
-import TextArea from '../components/TextArea'
 import MultimediaAdder from '../components/MultimediaAdder'
 import VividIconButton from '../components/VividIconButton'
+import Title from '../components/Title'
+import Subtitle from '../components/Subtitle'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -19,19 +20,6 @@ import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native'
 import { Chip, Divider } from 'react-native-paper'
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 35,
-    color: "#344340",
-    fontWeight: "bold",
-    display: "flex",
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 20,
-    color: "gray",
-    display: "flex",
-    textAlign: "center",
-  },
   container: {
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -95,11 +83,12 @@ const GeneralInformationSection = ({ form }) => {
         placeholder="Título"
       />
 
-      <TextArea
+      <TextField
         value={form.getField("description")}
         onChangeText={form.setField("description")}
         error={form.getError("description")}
         placeholder="Descripción"
+        multiline
       />
     
       <TextField
@@ -141,7 +130,7 @@ const CategoriesSection = ({ categories, setCategories }) => {
     return (
       <Chip
         key={uuid.v4()}
-        icon="shape"
+        icon="pound"
         closeIcon="close"
         onClose={() => handleDeleteCategory(c)}
       >
@@ -152,9 +141,9 @@ const CategoriesSection = ({ categories, setCategories }) => {
 
   return (
     <View style={styles.categoriesSection}>
-      <Text style={styles.subtitle}>
+      <Subtitle>
         Añade categorías a tu producto
-      </Text>
+      </Subtitle>
 
       <View
         style={{
@@ -189,9 +178,9 @@ const CategoriesSection = ({ categories, setCategories }) => {
 const MultimediaSection = ({ multimedia, setMultimedia }) => {
   return (
     <View style={styles.multimediaSection}>
-      <Text style={styles.subtitle}>
+      <Subtitle>
         Añade fotos que describan a tu producto
-      </Text>
+      </Subtitle>
 
       <MultimediaAdder
         multimedia={multimedia}
@@ -275,9 +264,9 @@ export default () => {
       <KeyboardAwareScrollView>
         <Padder>
             <View style={styles.container}>
-              <Text style={styles.title}>
-                Haz una publicación
-              </Text>
+              <Title>
+                Publica tu producto
+              </Title>
 
               <GeneralInformationSection
                 form={form}

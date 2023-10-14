@@ -8,9 +8,16 @@ import { requestServer } from '../utilities/requests'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
 import Dialog from 'react-native-dialog'
-import { View } from 'react-native'
+import SecondaryTitle from '../components/SecondaryTitle'
+import { View, StyleSheet } from 'react-native'
 import { RowItem, TableView } from 'react-native-ios-kit'
-import { Text } from 'react-native-paper'
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    gap: 20
+  }
+})
 
 const changeEmail = async (storeId, email, password) => {
   const payload = {
@@ -121,6 +128,7 @@ const ChangeEmailDialog = ({ isVisible, onDismiss }) => {
       <Dialog.Button
         label="Cancelar"
         onPress={onDismiss}
+        color="red"
       />
 
       <Dialog.Button
@@ -185,6 +193,7 @@ const ChangePasswordDialog = ({ isVisible, onDismiss }) => {
       <Dialog.Button
         label="Cancelar"
         onPress={onDismiss}
+        color="red"
       />
 
       <Dialog.Button
@@ -220,6 +229,7 @@ const CloseSessionDialog = ({ isVisible, onDismiss }) => {
       <Dialog.Button
         label="Cancelar"
         onPress={onDismiss}
+        color="red"
       />
 
       <Dialog.Button
@@ -266,6 +276,7 @@ const DeleteAccountDialog = ({ isVisible, onDismiss }) => {
       <Dialog.Button
         label="Cancelar"
         onPress={onDismiss}
+        color="red"
       />
 
       <Dialog.Button
@@ -306,10 +317,10 @@ export default () => {
   }
 
   return (
-    <Padder>
-      <Text variant="titleLarge">
+    <Padder style={styles.container}>
+      <SecondaryTitle>
         Configuración
-      </Text>
+      </SecondaryTitle>
 
       <TableView header="Historial">
         <RowItem

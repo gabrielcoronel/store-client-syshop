@@ -1,5 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   padder: {
@@ -8,6 +9,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingLeft: 15,
     paddingRight: 15,
+    backgroundColor: configuration.BACKGROUND_COLOR
   }
 })
 

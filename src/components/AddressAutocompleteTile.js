@@ -1,7 +1,7 @@
 import { withTheme } from 'react-native-ios-kit'
 import { TouchableRipple, List } from 'react-native-paper'
 
-const AddressAutocompleteTile = ({ isSelected, address, onSelect, theme }) => {
+const AddressAutocompleteTile = ({ isAlternative, isSelected, address, onSelect, theme }) => {
   return (
     <TouchableRipple
       onPress={() => onSelect(address)}
@@ -12,14 +12,24 @@ const AddressAutocompleteTile = ({ isSelected, address, onSelect, theme }) => {
           {
             backgroundColor: theme.primaryColor,
           } :
-          null
+          (
+            isAlternative ?
+            null :
+            null
+          )
         }
         titleStyle={
           isSelected ?
           {
             color: "white"
           } :
-          null
+          (
+            isAlternative ?
+            {
+              color: "white"
+            } :
+            null
+          )
         }
         descriptionStyle={
           isSelected ?

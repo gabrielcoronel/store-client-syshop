@@ -1,12 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
-import { View } from 'react-native'
-import { List, Text } from 'react-native-paper'
+import { View, StyleSheet } from 'react-native'
+import { List } from 'react-native-paper'
 import DeliveryTile from '../components/DeliveryTile'
+import SecondaryTitle from '../components/SecondaryTitle'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white"
+  }
+})
 
 const fetchActiveDeliveries = async (storeId) => {
   const payload = {
@@ -72,10 +80,10 @@ export default () => {
 
   return (
     <Scroller>
-      <Padder>
-        <Text variant="titleLarge">
+      <Padder style={styles.container}>
+        <SecondaryTitle>
           Tus entregas
-        </Text>
+        </SecondaryTitle>
 
         <List.Section>
           <List.Subheader>

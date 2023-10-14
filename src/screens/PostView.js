@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatDate } from '../utilities/formatting'
-import TextArea from '../components/TextArea'
+import TextField from '../components/TextField'
 import ScrollView from '../components/ScrollView'
 import LoadingSpinner from '../components/LoadingSpinner'
 import CommentTile from '../components/CommentTile'
@@ -133,6 +133,7 @@ const CommentInput = ({ postId, storeId }) => {
         value={text}
         onChangeText={setText}
         placeholder="Escribe un comentario"
+        multiline
       />
 
       {
@@ -206,7 +207,7 @@ const PostView = ({ postId, theme }) => {
       <Chip
         key={category}
         mode="flat"
-        icon="shape"
+        icon="pound"
       >
         {category}
       </Chip>

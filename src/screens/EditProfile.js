@@ -6,7 +6,8 @@ import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
 import { makeNotEmptyChecker, checkPhoneNumber } from '../utilities/validators'
 import TextField from '../components/TextField'
-import TextArea from '../components/TextArea'
+import Title from '../components/Title'
+import Subtitle from '../components/Subtitle'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PictureInput from '../components/PictureInput'
 import MultimediaAdder from '../components/MultimediaAdder'
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     gap: 20
   },
   inputsContainer: {
-    gap: 15,
+    gap: 20,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -79,9 +80,9 @@ const updateStore = async (storeId, newStore, picture, multimedia) => {
 const MultimediaSection = ({ multimedia, setMultimedia }) => {
   return (
     <View style={styles.multimediaSection}>
-      <Text style={styles.subtitle}>
-        Edita las fotografías relacionadas a tu emprendimiento
-      </Text>
+      <Subtitle>
+        Edita las fotografías de tu emprendimiento
+      </Subtitle>
 
       <MultimediaAdder
         multimedia={multimedia}
@@ -172,9 +173,9 @@ export default () => {
   return (
     <Scroller>
       <Padder style={styles.container}>
-        <Text style={styles.title}>
-          Edita el perfil de emprendimiento
-        </Text>
+        <Title>
+          Edita tu perfil
+        </Title>
 
         <PictureInput
           picture={picture}
@@ -189,11 +190,12 @@ export default () => {
             placeholder="Nombre"
           />
 
-          <TextArea
+          <TextField
             value={form.getField("description")}
             onChangeText={form.setField("description")}
             error={form.getError("description")}
             placeholder="Descripción"
+            multiline
           />
 
           <TextField

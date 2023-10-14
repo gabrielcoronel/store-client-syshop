@@ -58,7 +58,7 @@ const SelectedCategoriesList = ({ categoriesNames, onDelete }) => {
         <Chip
           key={categoryName}
           onClose={() => onDelete(categoryName)}
-          icon="shape"
+          icon="pound"
           closeIcon="close"
         >
           {categoryName}

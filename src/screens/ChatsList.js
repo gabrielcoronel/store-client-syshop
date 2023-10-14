@@ -6,7 +6,15 @@ import ScrollView from '../components/ScrollView'
 import ChatTile from '../components/ChatTile'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
-import { Text } from 'react-native-paper'
+import SecondaryTitle from '../components/SecondaryTitle'
+import { StyleSheet } from 'react-native'
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    gap: 20
+  }
+})
 
 const fetchChats = async (storeId) => {
   const payload = {
@@ -41,10 +49,10 @@ export default () => {
   }
 
   return (
-    <Padder>
-      <Text variant="titleLarge">
+    <Padder style={styles.container}>
+      <SecondaryTitle>
         Tus mensajes
-      </Text>
+      </SecondaryTitle>
 
       <ScrollView
         data={chatsQuery.data}

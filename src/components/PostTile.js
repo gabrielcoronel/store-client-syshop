@@ -1,11 +1,17 @@
 import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
-import { View, Image } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 import { Card } from '@ui-kitten/components'
 import { Headline, Subhead, Caption1 } from 'react-native-ios-kit'
 import { Chip, IconButton } from 'react-native-paper'
+import configuration from '../configuration'
 
-const styles = {
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "silver"
+  },
   extraInformationView: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -33,7 +39,7 @@ const styles = {
     alignItems: "center",
     gap: 10
   }
-}
+})
 
 export default ({ post }) => {
   const navigation = useNavigation()
@@ -45,7 +51,7 @@ export default ({ post }) => {
           <Chip
             key={index}
             mode="flat"
-            icon="shape"
+            icon="pound"
           >
             {category}
           </Chip>
@@ -67,13 +73,15 @@ export default ({ post }) => {
 
   const header = (
     <View>
-      <Headline>
+      <Headline style={{ color: configuration.SECONDARY_COLOR }}>
         {post.title}
       </Headline>
 
       <Caption1>
         ₡{post.price}
-        •
+      </Caption1>
+
+      <Caption1>
         {
           post.amount === 1 ?
           "Una unidad disponible" :
@@ -87,6 +95,7 @@ export default ({ post }) => {
     <Card
       onPress={navigateToPostView}
       header={header}
+      style={styles.card}
     >
       <Image
         source={{
@@ -104,14 +113,16 @@ export default ({ post }) => {
           {categoriesChips}
         </View>
         
-        <Caption1>
+        <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
           {likesText}
         </Caption1>
       </View>
 
       <View style={styles.buttonsView}>
         <IconButton
-          icon="store"
+          icon="store-outline"
+          iconColor={configuration.ACCENT_COLOR_1}
+          style={{ backgroundColor: "white" }}
           onPress={navigateToStoreView}
         />
       </View>

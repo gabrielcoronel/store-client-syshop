@@ -1,16 +1,18 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { View, Image, Text, StyleSheet } from 'react-native'
 import Button from '../components/Button'
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context'
+import configuration from '../configuration'
+import SyShopLogo from '../../assets/syshop-logo.png'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: 'black'
+    paddingTop: 100,
+    backgroundColor: configuration.BACKGROUND_COLOR
   },
   title: {
     fontSize: 35,
@@ -26,6 +28,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   buttonsContainer: {
+    margin: 20,
     width: "100%",
     gap: 20,
     paddingHorizontal: 20
@@ -37,12 +40,14 @@ export default () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.title}>¡Empieza a vender!</Text>
-        <Text style={styles.subtitle}>
-          ¡Inicia sesión o regístrate para vender los árticulos de tu emprendimiento en cuestión de minutos!
-        </Text>
-      </View>
+      <Image
+        source={SyShopLogo}
+        style={{ width: 200, height: 200 }}
+      />
+
+      <Text style={styles.title}>
+        ¡Empieza a vender!
+      </Text>
 
       <View style={styles.buttonsContainer}>
         <Button

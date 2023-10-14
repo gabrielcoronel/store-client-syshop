@@ -3,18 +3,22 @@ import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
+import { formatLocation } from '../utilities/formatting'
 import LocationSelector from '../components/LocationSelector'
+import LoadingSpinner from '../components/LoadingSpinner'
 import Button from '../components/Button'
 import Padder from '../components/Padder'
+import Title from '../components/Title'
+import Subtitle from '../components/Subtitle'
 import { View, Alert, StyleSheet } from 'react-native'
-import { Title2 } from 'react-native-ios-kit'
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 30
+    gap: 40
   }
 })
 
@@ -61,9 +65,19 @@ export default () => {
   return (
     <Padder>
       <View style={styles.container}>
-        <Title2>
+        <Title>
           Selecciona un nuevo domicilio
-        </Title2>
+        </Title>
+
+        {
+          location !== null ?
+          (
+            <Subtitle> 
+              {formatLocation(location)}
+            </Subtitle> 
+          ) :
+          null
+        }
 
         <LocationSelector
           onSelect={setLocation}
@@ -74,7 +88,11 @@ export default () => {
           disabled={location === null}
           onPress={handleUpdateLocation}
         >
-          Confirmar
+          {
+            updateLocationMutation.isLoading ?
+            <LoadingSpinner /> :
+            "Confirmar"
+          }
         </Button>
       </View>
     </Padder>

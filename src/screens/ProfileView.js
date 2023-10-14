@@ -3,15 +3,27 @@ import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
-import ScrollView from '../components/ScrollView'
 import Scroller from '../components/Scroller'
 import LoadingSpinner from '../components/LoadingSpinner'
-import PostTile from '../components/PostTile'
+import SecondaryTitle from '../components/SecondaryTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View } from 'react-native'
-import { Body, Caption1, Title2 } from 'react-native-ios-kit'
-import { Appbar, Divider } from 'react-native-paper'
+import { View, StyleSheet, Dimensions } from 'react-native'
+import { Body, Caption1 } from 'react-native-ios-kit'
+import { Divider, FAB } from 'react-native-paper'
 import { ImageSlider } from 'react-native-image-slider-banner'
+import configuration from '../configuration'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white"
+  },
+  fab: {
+    position: "absolute",
+    top: Dimensions.get("screen").height * 0.8,
+    left: Dimensions.get("screen").width * 0.8
+  }
+})
 
 const fetchStore = async (storeId) => {
   const payload = {
@@ -25,25 +37,8 @@ const fetchStore = async (storeId) => {
   return store
 }
 
-const fetchStorePosts = async (storeId) => {
-  const payload = {
-    store_id: storeId
-  }
-  const posts = await requestServer(
-    "/posts_service/get_store_posts",
-    payload
-  )
-
-  return posts
-}
-
 const StoreView = () => {
-  const navigation = useNavigation()
   const [session, _] = useSession()
-
-  const navigateToEditProfile = () => {
-    navigation.navigate("EditProfile")
-  }
 
   const storeQuery = useQuery({
     queryKey: ["storeProfileView"],
@@ -71,87 +66,56 @@ const StoreView = () => {
   })
 
   return (
-    <View>
-      <Appbar.Header
-        mode="center-aligned"
-        statusBarHeight={0}
-      >
-        <Appbar.Content title={name} />
-
-        <Appbar.Action
-          icon="pencil"
-          onPress={navigateToEditProfile}
-        />
-      </Appbar.Header>
-
+    <View style={styles.storeView}>
       <ImageSlider
         data={imageSliderData}
         autoPlay={false}
       />
 
-      <View style={{ padding: 15 }}>
-        <Caption1
-          style={{ color: "gray" }}
-        >
-          {`${follower_count} ${follower_count > 1 ? 'followers' : 'follower'}`}
-        </Caption1>
-
-        <Caption1
-          style={{ color: "gray" }}
-        >
-          {formatLocation(location)}
-        </Caption1>
+      <View style={{ padding: 10, gap: 15 }}>
+        <SecondaryTitle>
+          {name}
+        </SecondaryTitle>
 
         <Body>
           {description}
         </Body>
+
+        <Divider style={{ width: "90%" }}/>
+
+        <Caption1
+          style={{ color: configuration.ACCENT_COLOR_1 }}
+        >
+          {`${follower_count} ${follower_count !== 1 ? 'seguidores' : 'seguidor'}`}
+        </Caption1>
+
+        <Caption1
+          style={{ color: configuration.ACCENT_COLOR_2 }}
+        >
+          {formatLocation(location)}
+        </Caption1>
       </View>
-    </View>
-  )
-}
-
-const PostsList = () => {
-  const [session, _] = useSession()
-
-  const storePostsQuery = useQuery({
-    queryKey: ["storePostsProfileView"],
-    queryFn: () => fetchStorePosts(session.data.storeId)
-  })
-
-  if (storePostsQuery.isLoading || session.isLoading) {
-    return (
-      <LoadingSpinner inScreen />
-    )
-  }
-
-  return (
-    <View style={{ flex: 1, paddingTop: 20, paddingLeft: 15, paddingRight: 15 }}>
-      <View style={{ paddingBottom: 15 }}>
-        <Title2>
-          Publicaciones
-        </Title2>
-      </View>
-
-      <ScrollView
-        data={storePostsQuery.data}
-        keyExtractor={(post) => post.post_id}
-        renderItem={({ item }) => <PostTile post={item} />}
-        emptyIcon="basket"
-        emptyMessage="No has hecho ninguna publicación"
-      />
     </View>
   )
 }
 
 export default () => {
+  const navigation = useNavigation()
+
+  const navigateToEditProfile = () => {
+    navigation.navigate("EditProfile")
+  }
+
   return (
     <Scroller>
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
         <StoreView />
 
-        <Divider />
-
-        <PostsList />
+        <FAB
+          icon="pencil"
+          onPress={navigateToEditProfile}
+          style={styles.fab}
+        />
       </SafeAreaView>
     </Scroller>
   )

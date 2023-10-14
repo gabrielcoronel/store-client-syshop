@@ -11,7 +11,8 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, TouchableOpacity, StyleSheet} from 'react-native'
 import { List, IconButton, Avatar } from 'react-native-paper'
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   headerLoadingView: {
@@ -21,12 +22,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 })
-
-const generateId = () => {
-  const id = Date.now().toString()
-
-  return id
-}
 
 const giftMessage = (message) => {
   const text =
@@ -169,7 +164,7 @@ export default () => {
     })
 
     const giftedMessage = {
-      _id: generateId(),
+      _id: uuidv4(),
       image: formatBase64String(picture),
       createdAt: new Date(),
       user: {
@@ -190,6 +185,19 @@ export default () => {
     queryClient.refetchQueries({
       queryKey: ["chatMessages", chat.chat_id]
     })
+  }
+
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: configuration.BACKGROUND_COLOR
+          }
+        }}
+      />
+    )
   }
 
   const messagesQuery = useQuery({
@@ -230,6 +238,7 @@ export default () => {
         }}
 
         placeholder='Mensaje...'
+        renderBubble={renderBubble}
         renderActions={() => <IconButton icon="camera-outline" onPress={handlePictureMessageChoosen}/>}
         renderLoading={() => <LoadingSpinner inScreen /> }
 

@@ -18,14 +18,19 @@ import {
 import { View, StyleSheet, Dimensions } from 'react-native'
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    paddingBottom: 0,
+  },
   fab: {
     position: "absolute",
-    top: Dimensions.get("screen").height * 0.75,
+    top: Dimensions.get("screen").height * 0.8,
     left: Dimensions.get("screen").width * 0.8
   },
   fab2: {
     position: "absolute",
-    top: Dimensions.get("screen").height * 0.65,
+    top: Dimensions.get("screen").height * 0.7,
     left: Dimensions.get("screen").width * 0.8
   },
   searchBarModal: {
@@ -114,7 +119,7 @@ export default () => {
 
   return (
     <Fragment>
-      <Padder>
+      <Padder style={styles.container}>
         <PostsList />
 
         <Portal>
