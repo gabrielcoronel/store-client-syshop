@@ -10,6 +10,8 @@ import SearchInput from '../components/SearchInput'
 import Slider from '../components/Slider'
 import Empty from '../components/Empty'
 import Padder from '../components/Padder'
+import VirtualizedView from '../components/VirtualizedView'
+import SecondaryTitle from '../components/SecondaryTitle'
 import SegmentedControl from '@react-native-community/segmented-control'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
@@ -17,16 +19,30 @@ import {
     StyleSheet,
     ScrollView as ReactNativeScrollView
 } from 'react-native'
-import { Title2, Caption1 } from 'react-native-ios-kit'
+import { Caption1 } from 'react-native-ios-kit'
 import { Chip, Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
+    container: {
+      backgroundColor: "white",
+    },
+    content: {
+      backgroundColor: "white",
+      justifyContent: "flex-start",
+      gap: 15
+    },
     horizontalScrollView: {
+        backgroundColor: "white",
         gap: 10
     },
     postsResultsContainer: {
       flex: 1,
       gap: 15
+    },
+    postsResultsFilters: {
+      gap: 15,
+      padding: 5
     }
 })
 
@@ -76,20 +92,16 @@ const PriceRangeSlider = ({
 }) => {
   return (
     <View>
-      <Caption1>
-        Rango de precio
-      </Caption1>
-
       <View style={{
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center"
       }}>
-        <Caption1>
+        <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
           ₡0
         </Caption1>
 
-        <Caption1>
+        <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
           ₡{limitPrice}
         </Caption1>
       </View>
@@ -131,7 +143,7 @@ const PostsResultsFilters = ({ limitPrice, filters, onChangeFilters }) => {
     }
 
     return (
-      <View style={{ gap: 16 }}>
+      <View style={styles.postsResultsFilters}>
         <SegmentedControl
           values={["precio", "fecha de publicación"]}
           selectedIndex={sortingPropertyIndex}
@@ -270,7 +282,7 @@ const PostsResults = ({ searchedText, categoriesNames }) => {
                 onChangeFilters={handleChangeFilters}
             />
 
-            <Divider style={{ width: "90%" }} />
+            <Divider />
 
             <View style={{ flex: 1 }}>
               {
@@ -295,22 +307,22 @@ export default () => {
     const { text, categoriesNames } = route.params
 
     return (
-      <SafeAreaView>
-        <SearchInput
-          value={text}
-          showCancel={false}
-          disabled
-        />
-
-        <Padder>
-          <SearchedCategoriesScrollView
-              categoriesNames={categoriesNames}
+      <VirtualizedView>
+        <SafeAreaView style={styles.container}>
+          <SearchInput
+            value={text}
+            showCancel={false}
+            disabled
           />
 
-          <View style={{ flex: 1, gap: 16 }}>
-            <Title2>
+          <Padder style={styles.content}>
+            <SearchedCategoriesScrollView
+                categoriesNames={categoriesNames}
+            />
+
+            <SecondaryTitle>
                 Tiendas
-            </Title2>
+            </SecondaryTitle>
 
             <StoresResultsScrollView
                 searchedText={text}
@@ -318,16 +330,16 @@ export default () => {
 
             <Divider />
 
-            <Title2>
+            <SecondaryTitle>
                 Publicaciones
-            </Title2>
+            </SecondaryTitle>
 
             <PostsResults
                 searchedText={text}
                 categoriesNames={categoriesNames}
             />
-          </View>
-        </Padder>
-      </SafeAreaView>
+          </Padder>
+        </SafeAreaView>
+      </VirtualizedView>
     )
 }

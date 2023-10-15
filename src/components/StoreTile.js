@@ -2,7 +2,8 @@ import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
 import { View, Image } from 'react-native'
 import { Card } from '@ui-kitten/components'
-import { Caption1 } from 'react-native-ios-kit'
+import { Caption1, Footnote } from 'react-native-ios-kit'
+import configuration from '../configuration'
 
 export default ({ store }) => {
   const navigation = useNavigation()
@@ -18,11 +19,11 @@ export default ({ store }) => {
 
   const footer = (
     <View>
-      <Caption1>
+      <Footnote style={{ width: 100, color: configuration.SECONDARY_COLOR }}>
         {store.name}
-      </Caption1>
+      </Footnote>
 
-      <Caption1>
+      <Caption1 style={{ width: 100, color: "silver" }}>
         {store.description}
       </Caption1>
     </View>
@@ -36,7 +37,8 @@ export default ({ store }) => {
       <Image
         source={{
           uri: formatBase64String(store.picture),
-          height: 100
+          height: 100,
+          width: 100
         }}
       />
     </Card>

@@ -18,7 +18,7 @@ const addressToLocation = (address) => {
   return location
 }
 
-export default ({ onSelect }) => {
+export default ({ isAlternative, onSelect }) => {
   const [searchedText, setSearchedText] = useState("")
 
   const handleUpdateSearch = (newSearchedText) => {
@@ -58,6 +58,7 @@ export default ({ onSelect }) => {
               renderItem={({ item }) => {
                 return (
                   <AddressAutocompleteTile
+                    isAlternative={isAlternative}
                     address={item}
                     onSelect={handleSelect}
                   /> 

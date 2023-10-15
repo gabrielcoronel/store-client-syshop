@@ -80,6 +80,7 @@ export default () => {
         }
 
         <LocationSelector
+          isAlternative
           onSelect={setLocation}
         />
 

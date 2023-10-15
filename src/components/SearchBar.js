@@ -4,7 +4,12 @@ import { requestServer } from '../utilities/requests'
 import { selectPictureFromGallery } from '../utilities/camera'
 import SearchInput from './SearchInput'
 import LoadingSpinner from './LoadingSpinner'
-import { View, StyleSheet, Dimensions } from 'react-native'
+import {
+  View,
+  ScrollView as ReactNativeScrollView,
+  StyleSheet,
+  Dimensions
+} from 'react-native'
 import { TableView, RowItem } from 'react-native-ios-kit'
 import { IconButton, Chip } from 'react-native-paper'
 
@@ -19,12 +24,8 @@ const styles = StyleSheet.create({
   },
   selectedCategoriesList: {
     backgroundColor: "white",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    alignSelf: "flex-start",
-    gap: 4,
-    padding: 10,
+    gap: 10,
+    padding: 8,
     width: "100%"
   }
 })
@@ -67,9 +68,12 @@ const SelectedCategoriesList = ({ categoriesNames, onDelete }) => {
     })
 
   return (
-    <View style={styles.selectedCategoriesList}>
+    <ReactNativeScrollView
+      horizontal
+      style={styles.selectedCategoriesList}
+    >
       {chips}
-    </View>
+    </ReactNativeScrollView>
   )
 }
 

@@ -40,7 +40,7 @@ const AddressAutocompleteTile = ({ isAlternative, isSelected, address, onSelect,
         }
         key={address.place_id}
         title={address.formatted}
-        left={(props) => <List.Icon {...props} icon="map-marker" />}
+        left={(props) => <List.Icon {...props} icon="map-marker" color={isAlternative ? "white" : undefined}/>}
       />
     </TouchableRipple>
   )

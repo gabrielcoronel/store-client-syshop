@@ -8,8 +8,8 @@ import SecondaryTitle from '../components/SecondaryTitle'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { Body, Caption1 } from 'react-native-ios-kit'
-import { Divider, Avatar, FAB, IconButton, TouchableRipple } from 'react-native-paper'
+import { Body, Caption1, Footnote } from 'react-native-ios-kit'
+import { Divider, Avatar, FAB, TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -27,15 +27,16 @@ const styles = StyleSheet.create({
   informationEntry: {
     flexDirection: "row",
     width: "100%",
-    justifyContent: "space-between",
-    alignItems: "center"
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 15
   },
   link: {
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     gap: 10,
-    padding: 10,
+    padding: 8,
     width: "100%"
   },
   fab: {
@@ -63,7 +64,7 @@ const InformationEntry = ({ icon, text }) => {
       <MaterialCommunityIcons
         name={icon}
         size={30}
-        color={configuration.ACCENT_COLOR_1}
+        color="silver"
       />
 
       <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
@@ -145,9 +146,9 @@ const StoreView = () => {
             {name}
           </SecondaryTitle>
 
-          <Body>
+          <Footnote>
             {description}
-          </Body>
+          </Footnote>
         </View>
 
         <Divider style={{ width: "90%" }}/>
