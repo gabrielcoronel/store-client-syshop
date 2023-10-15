@@ -14,13 +14,16 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ({ error, ...textInputProps }) => {
+export default ({ error, light, style, ...textInputProps }) => {
   return (
     <View>
       <TextInput
         {...textInputProps}
-        style={styles.textInput}
-        placeholderTextColor="white"
+        style={{
+          ...styles.textInput,
+          ...style
+        }}
+        placeholderTextColor={light ? "black" : "white"}
       />
 
       {

@@ -1,12 +1,17 @@
 import { formatDate, formatBase64String } from '../utilities/formatting'
-import { RowItem } from 'react-native-ios-kit'
+import { List, Avatar } from 'react-native-paper'
+import configuration from '../configuration'
 
 export default ({ comment }) => {
   return (
-    <RowItem
+    <List.Item
+      titleStyle={{
+        color: configuration.SECONDARY_COLOR
+      }}
       title={`${comment.user_name} (${formatDate(comment.publication_date)})`}
-      subtitle={comment.text}
-      icon={{ uri: formatBase64String(comment.user_picture) }} 
+      description={comment.text}
+      left={(props) => <Avatar.Image {...props} source={{ uri: formatBase64String(comment.user_picture)}} />}
+      titleNumberOfLines={3}
     />
   )
 }

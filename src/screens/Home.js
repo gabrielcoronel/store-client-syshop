@@ -67,7 +67,7 @@ const PostsList = () => {
     disabled: session.isLoading
   })
 
-  if (postsQuery.isLoading || session.isLoading) {
+  if (postsQuery.isFetching || session.isLoading) {
     return (
       <LoadingSpinner inScreen />
     )
