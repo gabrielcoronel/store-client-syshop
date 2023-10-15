@@ -3,20 +3,40 @@ import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
-import Scroller from '../components/Scroller'
 import LoadingSpinner from '../components/LoadingSpinner'
 import SecondaryTitle from '../components/SecondaryTitle'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import { Body, Caption1 } from 'react-native-ios-kit'
-import { Divider, FAB } from 'react-native-paper'
-import { ImageSlider } from 'react-native-image-slider-banner'
+import { Divider, Avatar, FAB, IconButton, TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white"
+  },
+  storeView: {
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 20,
+    padding: 20
+  },
+  informationEntry: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  link: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 10,
+    padding: 10,
+    width: "100%"
   },
   fab: {
     position: "absolute",
@@ -37,8 +57,59 @@ const fetchStore = async (storeId) => {
   return store
 }
 
+const InformationEntry = ({ icon, text }) => {
+  return (
+    <View style={styles.informationEntry}>
+      <MaterialCommunityIcons
+        name={icon}
+        size={30}
+        color={configuration.ACCENT_COLOR_1}
+      />
+
+      <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
+        {text}
+      </Caption1>
+    </View>
+  )
+}
+
+const Link = ({ onPress, text }) => {
+  return (
+    <TouchableRipple
+      onPress={onPress}
+    >
+      <View
+        style={styles.link}
+      >
+        <Body>
+          {text}
+        </Body>
+
+        <MaterialCommunityIcons
+          name="chevron-right"
+          size={30}
+        />
+      </View>
+    </TouchableRipple>
+  )
+}
+
 const StoreView = () => {
+  const navigation = useNavigation()
   const [session, _] = useSession()
+
+  const navigateToMultimediaView = (multimedia) => {
+    navigation.navigate(
+      "MultimediaView",
+      {
+        multimedia
+      }
+    )
+  }
+
+  const navigateToHome = () => {
+    navigation.navigate("Home")
+  }
 
   const storeQuery = useQuery({
     queryKey: ["storeProfileView"],
@@ -56,45 +127,52 @@ const StoreView = () => {
     name,
     description,
     multimedia,
+    picture,
     location,
     follower_count
   } = storeQuery.data
-  const imageSliderData = multimedia.map((image) => {
-    return {
-      img: formatBase64String(image)
-    }
-  })
 
   return (
     <View style={styles.storeView}>
-      <ImageSlider
-        data={imageSliderData}
-        autoPlay={false}
+      <Avatar.Image
+        source={{ uri: formatBase64String(picture) }}
+        size={80}
       />
 
-      <View style={{ padding: 10, gap: 15 }}>
-        <SecondaryTitle>
-          {name}
-        </SecondaryTitle>
 
-        <Body>
-          {description}
-        </Body>
+        <View style={{ width: "100%", alignItems: "flex-start" }}>
+          <SecondaryTitle>
+            {name}
+          </SecondaryTitle>
+
+          <Body>
+            {description}
+          </Body>
+        </View>
+
+        <Divider style={{ width: "90%" }}/>
+        
+        <InformationEntry
+          icon="account"
+          text={`${follower_count} ${follower_count !== 1 ? 'seguidores' : 'seguidor'}`}
+        />
+
+        <InformationEntry
+          icon="map-marker"
+          text={formatLocation(location)}
+        />
 
         <Divider style={{ width: "90%" }}/>
 
-        <Caption1
-          style={{ color: configuration.ACCENT_COLOR_1 }}
-        >
-          {`${follower_count} ${follower_count !== 1 ? 'seguidores' : 'seguidor'}`}
-        </Caption1>
+        <Link
+          text="Ver imágenes"
+          onPress={() => navigateToMultimediaView(multimedia)}
+        />
 
-        <Caption1
-          style={{ color: configuration.ACCENT_COLOR_2 }}
-        >
-          {formatLocation(location)}
-        </Caption1>
-      </View>
+        <Link
+          text="Ver publicaciones"
+          onPress={navigateToHome}
+        />
     </View>
   )
 }
@@ -107,16 +185,14 @@ export default () => {
   }
 
   return (
-    <Scroller>
-      <SafeAreaView style={styles.container}>
-        <StoreView />
+    <SafeAreaView style={styles.container}>
+      <StoreView />
 
-        <FAB
-          icon="pencil"
-          onPress={navigateToEditProfile}
-          style={styles.fab}
-        />
-      </SafeAreaView>
-    </Scroller>
+      <FAB
+        icon="pencil"
+        onPress={navigateToEditProfile}
+        style={styles.fab}
+      />
+    </SafeAreaView>
   )
 }

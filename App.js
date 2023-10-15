@@ -31,6 +31,7 @@ import ProfileView from './src/screens/ProfileView'
 import StoreView from './src/screens/StoreView'
 import EditLocation from './src/screens/EditLocation'
 import CreatePost from './src/screens/CreatePost'
+import MultimediaView from './src/screens/MultimediaView'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -267,6 +268,12 @@ const Main = () => {
                         name="EditLocation"
                       >
                         {() => <EditLocation />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="MultimediaView"
+                      >
+                        {() => <MultimediaView />}
                       </Stack.Screen>
 
                       <Stack.Screen
