@@ -1,29 +1,46 @@
+import { Fragment } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
 import LoadingSpinner from '../components/LoadingSpinner'
-import SecondaryTitle from '../components/SecondaryTitle'
 import FloatingActionButton from '../components/FloatingActionButton'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { Caption1, Footnote } from 'react-native-ios-kit'
-import { Divider, Avatar, Text, TouchableRipple } from 'react-native-paper'
+import { Caption1 } from 'react-native-ios-kit'
+import { Avatar, Text, TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  pictureContainer: {
+    borderRadius: 30,
+    height: "35%",
+    width: "100%",
+    backgroundColor: configuration.BACKGROUND_COLOR,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10
+  },
+  descriptionContainer: {
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "silver",
+    padding: 15,
+    width: "80%",
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: "32.5%",
+    left: "10%"
+  },
+  extraInformationContainer: {
+    width: "100%",
     backgroundColor: "white"
   },
-  storeView: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    gap: 20,
-    padding: 20
+  linksContainer: {
+    width: "100%"
   },
   informationEntry: {
     flexDirection: "row",
@@ -97,9 +114,54 @@ const Link = ({ text, onPress }) => {
   )
 }
 
-const StoreView = () => {
+const TopContainer = ({ picture, name }) => {
+  return (
+    <View style={styles.pictureContainer}>
+      <Avatar.Image
+        source={{ uri: formatBase64String(picture) }}
+        size={80}
+      />
+
+      <Text variant="titleLarge">
+        {name}
+      </Text>
+    </View>
+  )
+}
+
+const DescriptionContainer = ({ description }) => {
+  return (
+    <View style={styles.descriptionContainer}>
+      <Text variant="bodySmall">
+        {description}
+      </Text>
+    </View>
+  )
+}
+
+const ExtraInformationContainer = ({ followerCount, location, phoneNumber }) => {
+  return (
+    <View style={styles.extraInformationContainer}>
+      <InformationEntry
+        icon="account"
+        text={`${followerCount} ${followerCount !== 1 ? 'seguidores' : 'seguidor'}`}
+      />
+
+      <InformationEntry
+        icon="map-marker"
+        text={formatLocation(location)}
+      />
+
+      <InformationEntry
+        icon="phone"
+        text={phoneNumber}
+      />
+    </View>
+  )
+}
+
+const LinksContainer = ({ multimedia }) => {
   const navigation = useNavigation()
-  const [session, _] = useSession()
 
   const navigateToMultimediaView = (multimedia) => {
     navigation.navigate(
@@ -113,6 +175,24 @@ const StoreView = () => {
   const navigateToHome = () => {
     navigation.navigate("Home")
   }
+
+  return (
+    <View style={styles.linksContainer}>
+      <Link
+        text="Ver imágenes"
+        onPress={() => navigateToMultimediaView(multimedia)}
+      />
+
+      <Link
+        text="Ver publicaciones"
+        onPress={navigateToHome}
+      />
+    </View>
+  )
+}
+
+const StoreView = () => {
+  const [session, _] = useSession()
 
   const storeQuery = useQuery({
     queryKey: ["storeProfileView"],
@@ -137,50 +217,27 @@ const StoreView = () => {
   } = storeQuery.data
 
   return (
-    <View style={styles.storeView}>
-        <Avatar.Image
-          source={{ uri: formatBase64String(picture) }}
-          size={80}
+    <View>
+      <TopContainer
+        picture={picture}
+        name={name}
+      />
+
+      <DescriptionContainer
+        description={description}
+      />
+
+      <View style={{ backgroundColor: "white" }}>
+        <ExtraInformationContainer
+          followerCount={follower_count}
+          location={location}
+          phoneNumber={phone_number}
         />
 
-        <View style={{ width: "100%", alignItems: "flex-start" }}>
-          <SecondaryTitle>
-            {name}
-          </SecondaryTitle>
-
-          <Footnote>
-            {description}
-          </Footnote>
-        </View>
-
-        <Divider />
-        
-        <InformationEntry
-          icon="account"
-          text={`${follower_count} ${follower_count !== 1 ? 'seguidores' : 'seguidor'}`}
+        <LinksContainer
+          multimedia={multimedia}
         />
-
-        <InformationEntry
-          icon="map-marker"
-          text={formatLocation(location)}
-        />
-
-        <InformationEntry
-          icon="phone"
-          text={phone_number}
-        />
-
-        <Divider />
-
-        <Link
-          text="Ver imágenes"
-          onPress={() => navigateToMultimediaView(multimedia)}
-        />
-
-        <Link
-          text="Ver publicaciones"
-          onPress={navigateToHome}
-        />
+      </View>
     </View>
   )
 }
@@ -193,7 +250,7 @@ export default () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Fragment>
       <StoreView />
 
       <FloatingActionButton
@@ -201,6 +258,6 @@ export default () => {
         onPress={navigateToEditProfile}
         style={styles.fab}
       />
-    </SafeAreaView>
+    </Fragment>
   )
 }

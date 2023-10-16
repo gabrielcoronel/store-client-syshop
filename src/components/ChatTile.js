@@ -26,6 +26,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     marginLeft: 12,
     marginRight: 12,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 8
   },
   subCardView: {
     height: 50,
@@ -89,7 +94,7 @@ export default ({ chat }) => {
               style={{
                 marginTop: 4,
                 borderWidth: 0,
-                width: '85%',
+                width: "100%",
               }}
             >
               <Text

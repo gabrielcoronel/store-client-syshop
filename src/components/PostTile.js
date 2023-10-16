@@ -15,9 +15,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     padding: 15,
-    gap: 10
+    gap: 10,
+    shadowColor: "silver",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 8
   },
   informationContainer: {
+    width: "50%",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "flex-start",

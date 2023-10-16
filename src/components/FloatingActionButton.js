@@ -6,10 +6,10 @@ export default ({ style, ...fabProps }) => {
     <FAB
       {...fabProps}
       customSize={45}
-      color={configuration.ACCENT_COLOR_1}
+      color="white"
       style={{
         ...style,
-        backgroundColor: configuration.BACKGROUND_COLOR
+        backgroundColor: configuration.ACCENT_COLOR_1
       }}
     />
   )
