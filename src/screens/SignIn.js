@@ -201,7 +201,7 @@ export default () => {
           }
         </Button>
 
-        <Divider style={{ width: "90%" }} />
+        <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
         <Subtitle>
           O también

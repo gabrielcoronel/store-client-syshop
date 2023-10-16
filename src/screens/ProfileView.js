@@ -5,11 +5,12 @@ import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
 import LoadingSpinner from '../components/LoadingSpinner'
 import SecondaryTitle from '../components/SecondaryTitle'
+import FloatingActionButton from '../components/FloatingActionButton'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { Body, Caption1, Footnote } from 'react-native-ios-kit'
-import { Divider, Avatar, FAB, TouchableRipple } from 'react-native-paper'
+import { Caption1, Footnote, Subhead } from 'react-native-ios-kit'
+import { Divider, Avatar, TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     top: Dimensions.get("screen").height * 0.8,
-    left: Dimensions.get("screen").width * 0.8
+    left: Dimensions.get("screen").width * 0.85
   }
 })
 
@@ -82,13 +83,14 @@ const Link = ({ onPress, text }) => {
       <View
         style={styles.link}
       >
-        <Body>
+        <Subhead style={{ color: configuration.BACKGROUND_COLOR }}>
           {text}
-        </Body>
+        </Subhead>
 
         <MaterialCommunityIcons
           name="chevron-right"
           size={30}
+          color={configuration.BACKGROUND_COLOR}
         />
       </View>
     </TouchableRipple>
@@ -127,6 +129,7 @@ const StoreView = () => {
   const {
     name,
     description,
+    phone_number,
     multimedia,
     picture,
     location,
@@ -135,11 +138,10 @@ const StoreView = () => {
 
   return (
     <View style={styles.storeView}>
-      <Avatar.Image
-        source={{ uri: formatBase64String(picture) }}
-        size={80}
-      />
-
+        <Avatar.Image
+          source={{ uri: formatBase64String(picture) }}
+          size={80}
+        />
 
         <View style={{ width: "100%", alignItems: "flex-start" }}>
           <SecondaryTitle>
@@ -151,7 +153,7 @@ const StoreView = () => {
           </Footnote>
         </View>
 
-        <Divider style={{ width: "90%" }}/>
+        <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
         
         <InformationEntry
           icon="account"
@@ -163,7 +165,12 @@ const StoreView = () => {
           text={formatLocation(location)}
         />
 
-        <Divider style={{ width: "90%" }}/>
+        <InformationEntry
+          icon="phone"
+          text={phone_number}
+        />
+
+        <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
 
         <Link
           text="Ver imágenes"
@@ -189,7 +196,7 @@ export default () => {
     <SafeAreaView style={styles.container}>
       <StoreView />
 
-      <FAB
+      <FloatingActionButton
         icon="pencil"
         onPress={navigateToEditProfile}
         style={styles.fab}

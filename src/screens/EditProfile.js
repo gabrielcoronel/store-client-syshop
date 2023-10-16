@@ -14,8 +14,9 @@ import MultimediaAdder from '../components/MultimediaAdder'
 import Button from '../components/Button'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
-import { View, Text, Alert, StyleSheet } from 'react-native'
+import { View, Alert, StyleSheet } from 'react-native'
 import { Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
@@ -207,7 +208,7 @@ export default () => {
           />
         </View>
 
-        <Divider style={{ width: "90%" }}/>
+        <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }}/>
 
         <MultimediaSection
           multimedia={multimedia}

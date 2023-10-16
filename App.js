@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useSession } from './src/context'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useFonts } from 'expo-font'
 import * as eva from '@eva-design/eva'
 import configuration from './src/configuration'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -154,11 +155,14 @@ const BottomTabNavigator = () => {
 }
 
 const Main = () => {
+  const [loaded] = useFonts({
+    Galada: require("./assets/fonts/Galada-Regular.ttf")
+  })
   const [session, _] = useSession()
 
   console.log(session)
 
-  if (session.isLoading) {
+  if (session.isLoading || (!loaded)) {
     return (
       <LoadingSpinner inScreen />
     )

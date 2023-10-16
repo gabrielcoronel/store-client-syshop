@@ -24,7 +24,6 @@ import Scroller from '../components/Scroller'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, Alert, StyleSheet } from 'react-native'
 import { Subhead } from 'react-native-ios-kit'
-import { Text, Divider } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -348,14 +347,14 @@ export default () => {
             }
           </View>
 
-          <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
           <LocationSection
             location={location}
             onSelect={setLocation}
           />
 
-          <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
           <MultimediaSection
             multimedia={multimedia}
@@ -374,7 +373,7 @@ export default () => {
             }
           </Button>
 
-          <Divider style={{ width: "90%" }} />
+          <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
           <Subtitle>
             También puedes registrarte con

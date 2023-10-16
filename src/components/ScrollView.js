@@ -1,11 +1,12 @@
 import Empty from './Empty'
 import { View, FlatList } from 'react-native'
 import { Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const Separator = () => {
   return (
     <View style={{ paddingVertical: 8 }}>
-      <Divider />
+      <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
     </View>
   )
 }

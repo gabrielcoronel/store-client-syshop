@@ -9,13 +9,22 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
 import Dialog from 'react-native-dialog'
 import SecondaryTitle from '../components/SecondaryTitle'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { View, StyleSheet } from 'react-native'
-import { RowItem, TableView } from 'react-native-ios-kit'
+import { List, TouchableRipple, Text, Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     gap: 20
+  },
+  settingEntry: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    padding: 10
   }
 })
 
@@ -62,6 +71,29 @@ const deleteStore = async (storeId) => {
   const _ = await requestServer(
     "/users_service/delete_user",
     payload
+  )
+}
+
+const SettingEntry = ({ setting, isDangerous, onPress }) => {
+  return (
+    <TouchableRipple
+      onPress={onPress}
+    >
+      <View style={styles.settingEntry}>
+        <Text
+          variant="bodyMedium"
+          style={isDangerous ? { color: "red" } : { color: configuration.SECONDARY_COLOR }}
+        >
+          {setting}
+        </Text>
+
+        <MaterialCommunityIcons
+          name="chevron-right"
+          size={24}
+          color={isDangerous ? "red" : configuration.SECONDARY_COLOR}
+        />
+      </View>
+    </TouchableRipple>
   )
 }
 
@@ -300,10 +332,6 @@ export default () => {
     event.preventDefault()
   })
 
-  const navigateToEditLocation = () => {
-    navigation.navigate("EditLocation")
-  }
-
   const storeQuery = useQuery({
     queryKey: ["storeSettings"],
     queryFn: () => fetchStore(session.data.storeId),
@@ -322,17 +350,17 @@ export default () => {
         Configuración
       </SecondaryTitle>
 
-      <TableView header="Historial">
-        <RowItem
-          title="Tus ventas"
+      <List.Section>
+        <SettingEntry
+          setting="Tus ventas"
           onPress={() => navigation.navigate("SalesList")}
         />
-      </TableView>
 
-      <TableView header="Cuenta">
-        <RowItem
-          title="Editar domicilio"
-          onPress={navigateToEditLocation}
+        <Divider />
+
+        <SettingEntry
+          setting="Editar domicilio"
+          onPress={() => navigation.navigate("EditLocation")}
         />
 
         <View>
@@ -340,13 +368,13 @@ export default () => {
             storeQuery.data.account_type === "PlainAccount" ?
             (
               <View>
-                <RowItem
-                  title="Cambiar correo electrónico"
+                <SettingEntry
+                  setting="Cambiar correo electrónico"
                   onPress={() => setIsChangeEmailDialogVisible(true)}
                 />
 
-                <RowItem
-                  title="Cambiar contraseña"
+                <SettingEntry
+                  setting="Cambiar contraseña"
                   onPress={() => setIsChangePasswordDialogVisible(true)}
                 />
               </View>
@@ -355,16 +383,18 @@ export default () => {
           }
         </View>
 
-        <RowItem
-          title="Cerrar sesión"
+        <SettingEntry
+          setting="Cerrar sesión"
           onPress={() => setIsCloseSessionDialogVisible(true)}
+          isDangerous
         />
 
-        <RowItem
-          title="Eliminar cuenta"
+        <SettingEntry
+          setting="Eliminar cuenta"
           onPress={() => setIsDeleteAccountDialogVisible(true)}
+          isDangerous
         />
-      </TableView>
+      </List.Section>
 
       <ChangeEmailDialog
         isVisible={isChangeEmailDialogVisible}

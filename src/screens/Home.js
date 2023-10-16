@@ -7,31 +7,34 @@ import ScrollView from '../components/ScrollView'
 import PostTile from '../components/PostTile'
 import SearchBar from '../components/SearchBar'
 import LoadingSpinner from '../components/LoadingSpinner'
-import Padder from '../components/Padder'
+import HomeHeader from '../components/HomeHeader'
+import FloatingActionButton from '../components/FloatingActionButton'
 import { Fragment } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import {
   Portal,
   Modal,
-  Surface,
-  FAB
+  Surface
 } from 'react-native-paper'
 import { View, StyleSheet, Dimensions } from 'react-native'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingBottom: 0,
+    paddingHorizontal: 15,
+    gap: 15,
   },
   fab: {
     position: "absolute",
     top: Dimensions.get("screen").height * 0.8,
-    left: Dimensions.get("screen").width * 0.8
+    left: Dimensions.get("screen").width * 0.85
   },
   fab2: {
     position: "absolute",
-    top: Dimensions.get("screen").height * 0.7,
-    left: Dimensions.get("screen").width * 0.8
+    top: Dimensions.get("screen").height * 0.72,
+    left: Dimensions.get("screen").width * 0.85
   },
   searchBarModal: {
     position: "absolute",
@@ -119,7 +122,9 @@ export default () => {
 
   return (
     <Fragment>
-      <Padder style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <HomeHeader text="Tus publicaciones" />
+
         <PostsList />
 
         <Portal>
@@ -137,15 +142,15 @@ export default () => {
             </Surface>
           </Modal>
         </Portal>
-      </Padder>
+      </SafeAreaView>
 
-      <FAB
+      <FloatingActionButton
         icon="plus"
         onPress={navigateToCreatePost}
         style={styles.fab2}
       />
 
-      <FAB
+      <FloatingActionButton
         icon="magnify"
         onPress={() => setIsModalVisible(true)}
         style={styles.fab}

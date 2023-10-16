@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import { TableView, RowItem } from 'react-native-ios-kit'
 import { IconButton, Chip } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white"
+    backgroundColor: configuration.BACKGROUND_COLOR
   },
   selectedCategoriesList: {
     backgroundColor: "white",
@@ -61,6 +62,8 @@ const SelectedCategoriesList = ({ categoriesNames, onDelete }) => {
           onClose={() => onDelete(categoryName)}
           icon="pound"
           closeIcon="close"
+          style={{ backgroundColor: configuration.BACKGROUND_COLOR }}
+          textStyle={{ color: "white" }}
         >
           {categoryName}
         </Chip>
@@ -138,7 +141,7 @@ export default ({ onSearchSubmit, onPictureTaken, ...searchInputProps }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: configuration.BACKGROUND_COLOR }}>
           <SearchInput
             placeholder="Buscar..."
             value={text}
@@ -150,6 +153,7 @@ export default ({ onSearchSubmit, onPictureTaken, ...searchInputProps }) => {
 
         <IconButton
           icon="camera"
+          iconColor="white"
           onPress={handleTakePicture}
         /> 
       </View>

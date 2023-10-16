@@ -1,8 +1,10 @@
-import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { View, Image, Text, StyleSheet } from 'react-native'
 import Button from '../components/Button'
+import Title from '../components/Title'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, Image, StyleSheet } from 'react-native'
+import { Text } from 'react-native-paper'
 import configuration from '../configuration'
 import SyShopLogo from '../../assets/syshop-logo.png'
 
@@ -14,18 +16,11 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     backgroundColor: configuration.BACKGROUND_COLOR
   },
-  title: {
-    fontSize: 35,
-    color: '#ffffff',
-    fontWeight: 'bold',
-    marginBottom: 15,
-    textAlign: 'center'
-  },
-  subtitle: {
-    fontSize: 20,
-    color: 'gray',
-    marginBottom: 40,
-    textAlign: 'center'
+  informationEntry: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8
   },
   buttonsContainer: {
     margin: 20,
@@ -34,6 +29,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
 });
+
+const InformationEntry = ({ icon, text }) => {
+  return (
+    <View style={styles.informationEntry}>
+      <MaterialCommunityIcons
+        name={icon}
+        size={24}
+        color={configuration.ACCENT_COLOR_1}
+      />
+
+      <Text variant="bodySmall" style={{ color: "white" }}>
+        {text}
+      </Text>
+    </View>
+  )
+}
 
 export default () => {
   const navigation = useNavigation();
@@ -45,9 +56,26 @@ export default () => {
         style={{ width: 200, height: 200 }}
       />
 
-      <Text style={styles.title}>
+      <Title>
         ¡Empieza a vender!
-      </Text>
+      </Title>
+
+      <View style={{ gap: 8, alignItems: "flex-start", padding: 20 }}>
+        <InformationEntry
+          icon="store"
+          text="Coloca tu emprendimiento en línea"
+        />
+
+        <InformationEntry
+          icon="bullhorn-variant"
+          text="Conecta con tu público meta"
+        />
+
+        <InformationEntry
+          icon="clipboard-check"
+          text="Gestiona pagos y entregas fácilmente"
+        />
+      </View>
 
       <View style={styles.buttonsContainer}>
         <Button

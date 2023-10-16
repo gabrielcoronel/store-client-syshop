@@ -235,6 +235,8 @@ const PostView = ({ postId }) => {
         key={category}
         mode="flat"
         icon="pound"
+        style={{ backgroundColor: configuration.BACKGROUND_COLOR }}
+        textStyle={{ color: "white" }}
       >
         {category}
       </Chip>
@@ -314,7 +316,7 @@ export default () => {
         <SafeAreaView style={styles.container}>
           <PostView postId={postId} />
 
-          <Divider />
+          <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
 
           <CommentsScrollView postId={postId} />
         </SafeAreaView>

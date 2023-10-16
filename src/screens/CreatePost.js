@@ -16,8 +16,9 @@ import Subtitle from '../components/Subtitle'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native'
+import { View, ScrollView, Alert, StyleSheet } from 'react-native'
 import { Chip, Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
@@ -133,6 +134,8 @@ const CategoriesSection = ({ categories, setCategories }) => {
         icon="pound"
         closeIcon="close"
         onClose={() => handleDeleteCategory(c)}
+        style={{ backgroundColor: configuration.BACKGROUND_COLOR }}
+        textStyle={{ color: "white" }}
       >
         {c}
       </Chip>
@@ -272,21 +275,19 @@ export default () => {
                 form={form}
               />
 
-              <Divider style={{ width: "90%" }} />
+              <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
               <CategoriesSection
                 categories={categories}
                 setCategories={setCategories}
               />
 
-              <Divider style={{ width: "90%" }} />
+              <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
               <MultimediaSection
                 multimedia={multimedia}
                 setMultimedia={setMultimedia}
               />
-
-              <Divider style={{ width: "90%" }} />
 
               <Button
                 onPress={handleSubmit}

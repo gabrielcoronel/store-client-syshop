@@ -1,9 +1,17 @@
 import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
-import { View, Image } from 'react-native'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { View, Image, StyleSheet } from 'react-native'
 import { Card } from '@ui-kitten/components'
-import { Caption1, Footnote } from 'react-native-ios-kit'
+import { Headline, Caption1, Subhead } from 'react-native-ios-kit'
 import configuration from '../configuration'
+
+const styles = StyleSheet.create({
+  card: {
+    borderWidth: 1,
+    borderColor: configuration.SECONDARY_COLOR
+  }
+})
 
 export default ({ store }) => {
   const navigation = useNavigation()
@@ -17,30 +25,42 @@ export default ({ store }) => {
     )
   }
 
-  const footer = (
+  const header = (
     <View>
-      <Footnote style={{ width: 100, color: configuration.SECONDARY_COLOR }}>
+      <Headline style={{ color: configuration.SECONDARY_COLOR }}>
         {store.name}
-      </Footnote>
-
-      <Caption1 style={{ width: 100, color: "silver" }}>
-        {store.description}
-      </Caption1>
+      </Headline>
     </View>
   )
 
   return (
     <Card
-      footer={footer}
+      header={header}
       onPress={navigateToStoreView}
+      style={styles.card}
     >
       <Image
         source={{
           uri: formatBase64String(store.picture),
-          height: 100,
-          width: 100
+          height: 100
         }}
       />
+
+      <Subhead>
+        {store.description}
+      </Subhead>
+
+      <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", gap: 3 }}>
+          <MaterialCommunityIcons
+            name='account'
+            color={configuration.ACCENT_COLOR_1}
+            size={24}
+          />
+
+          <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
+            {store.follower_count}
+          </Caption1>
+      </View>
     </Card>
   )
 }

@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { View, Image, StyleSheet } from 'react-native'
 import { Card } from '@ui-kitten/components'
 import { Headline, Subhead, Caption1 } from 'react-native-ios-kit'
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "silver"
+    borderColor: configuration.BACKGROUND_COLOR
   },
   extraInformationView: {
     flexDirection: "row",
@@ -52,12 +53,13 @@ export default ({ post }) => {
             key={index}
             mode="flat"
             icon="pound"
+            style={{ backgroundColor: configuration.BACKGROUND_COLOR }}
+            textStyle={{ color: "white" }}
           >
             {category}
           </Chip>
         )
       })
-  const likesText = `${post.likes} ${post.likes === 1 ? "like" : "likes"}`
 
   const navigateToPostView = () => {
     navigation.navigate("PostView", {
@@ -77,8 +79,8 @@ export default ({ post }) => {
         {post.title}
       </Headline>
 
-      <Caption1>
-        ₡{post.price}
+      <Caption1 style={{ fontWeight: "bold", color: "green" }}>
+        ₡{post.price}.00
       </Caption1>
 
       <Caption1>
@@ -113,9 +115,17 @@ export default ({ post }) => {
           {categoriesChips}
         </View>
         
-        <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
-          {likesText}
-        </Caption1>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+          <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
+            {post.likes}
+          </Caption1>
+
+          <MaterialCommunityIcons
+            name='heart'
+            color={configuration.ACCENT_COLOR_1}
+            size={24}
+          />
+        </View>
       </View>
 
       <View style={styles.buttonsView}>
