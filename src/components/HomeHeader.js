@@ -5,9 +5,8 @@ import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   header: {
-    height: 70,
     width: "100%",
-    padding: 15,
+    padding: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -18,8 +17,8 @@ const styles = StyleSheet.create({
     color: configuration.BACKGROUND_COLOR
   },
   image: {
-    height: 70,
-    width: 70
+    height: 65,
+    width: 65
   }
 })
 
@@ -27,7 +26,7 @@ export default ({ text }) => {
   return (
     <View style={styles.header}>
       <View style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
-        <Text variant="bodyLarge" style={styles.title}>
+        <Text variant="titleMedium" style={styles.title}>
           SyShop
         </Text>
 

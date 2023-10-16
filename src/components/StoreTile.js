@@ -2,14 +2,18 @@ import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { View, Image, StyleSheet } from 'react-native'
-import { Card } from '@ui-kitten/components'
-import { Headline, Caption1, Subhead } from 'react-native-ios-kit'
+import { Caption1, Subhead } from 'react-native-ios-kit'
+import { TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
-  card: {
-    borderWidth: 1,
-    borderColor: configuration.SECONDARY_COLOR
+  tile: {
+    borderRadius: 15,
+    backgroundColor: configuration.BACKGROUND_COLOR
+  },
+  informationContainer: {
+    padding: 18,
+    gap: 8
   }
 })
 
@@ -25,42 +29,41 @@ export default ({ store }) => {
     )
   }
 
-  const header = (
-    <View>
-      <Headline style={{ color: configuration.SECONDARY_COLOR }}>
-        {store.name}
-      </Headline>
-    </View>
-  )
-
   return (
-    <Card
-      header={header}
+    <TouchableRipple
       onPress={navigateToStoreView}
-      style={styles.card}
+      style={{ borderRadius: 15 }}
     >
-      <Image
-        source={{
-          uri: formatBase64String(store.picture),
-          height: 100
-        }}
-      />
+      <View style={styles.tile}>
+        <Image
+          source={{
+            uri: formatBase64String(store.picture),
+            height: 100
+          }}
+        />
 
-      <Subhead>
-        {store.description}
-      </Subhead>
+        <View style={styles.informationContainer}>
+          <Subhead style={{ color: "white" }}>
+            {store.name}
+          </Subhead>
 
-      <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", gap: 3 }}>
-          <MaterialCommunityIcons
-            name='account'
-            color={configuration.ACCENT_COLOR_1}
-            size={24}
-          />
-
-          <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
-            {store.follower_count}
+          <Caption1 style={{ color: "white" }}>
+            {store.description}
           </Caption1>
+
+          <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", gap: 3 }}>
+            <MaterialCommunityIcons
+              name='account'
+              color={configuration.ACCENT_COLOR_1}
+              size={24}
+            />
+
+            <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
+              {store.follower_count}
+            </Caption1>
+          </View>
+        </View>
       </View>
-    </Card>
+    </TouchableRipple>
   )
 }

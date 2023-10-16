@@ -9,8 +9,8 @@ import FloatingActionButton from '../components/FloatingActionButton'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { Caption1, Footnote, Subhead } from 'react-native-ios-kit'
-import { Divider, Avatar, TouchableRipple } from 'react-native-paper'
+import { Caption1, Footnote } from 'react-native-ios-kit'
+import { Divider, Avatar, Text, TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -34,11 +34,10 @@ const styles = StyleSheet.create({
   },
   link: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
-    gap: 10,
-    padding: 8,
-    width: "100%"
+    width: "100%",
+    padding: 10
   },
   fab: {
     position: "absolute",
@@ -75,22 +74,23 @@ const InformationEntry = ({ icon, text }) => {
   )
 }
 
-const Link = ({ onPress, text }) => {
+const Link = ({ text, onPress }) => {
   return (
     <TouchableRipple
       onPress={onPress}
     >
-      <View
-        style={styles.link}
-      >
-        <Subhead style={{ color: configuration.BACKGROUND_COLOR }}>
+      <View style={styles.link}>
+        <Text
+          variant="bodyMedium"
+          style={{ color: configuration.SECONDARY_COLOR }}
+        >
           {text}
-        </Subhead>
+        </Text>
 
         <MaterialCommunityIcons
           name="chevron-right"
-          size={30}
-          color={configuration.BACKGROUND_COLOR}
+          size={24}
+          color={configuration.SECONDARY_COLOR}
         />
       </View>
     </TouchableRipple>
@@ -153,7 +153,7 @@ const StoreView = () => {
           </Footnote>
         </View>
 
-        <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
+        <Divider />
         
         <InformationEntry
           icon="account"
@@ -170,7 +170,7 @@ const StoreView = () => {
           text={phone_number}
         />
 
-        <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
+        <Divider />
 
         <Link
           text="Ver imágenes"

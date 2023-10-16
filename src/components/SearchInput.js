@@ -5,7 +5,7 @@ export default ({ ...searchBarProps }) => {
   return (
     <SearchBar
       cancelButtonProps={{ color: "white", fontSize: 20 }}
-      cancelButtonTitle='cancel'
+      cancelButtonTitle='cancelar'
       inputContainerStyle={{ height: 30 }}
       containerStyle={{ backgroundColor: configuration.BACKGROUND_COLOR }}
       platform="ios"
