@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler'
-import { Suspense } from 'react'
+import { useEffect, Suspense } from 'react'
 import { PaperProvider } from 'react-native-paper'
 import { ThemeProvider as IosKitProvider } from 'react-native-ios-kit'
 import { ApplicationProvider as UiKittenProvider } from '@ui-kitten/components'
@@ -11,6 +11,7 @@ import { useSession } from './src/context'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useFonts } from 'expo-font'
+import { setCustomText } from 'react-native-global-props'
 import * as eva from '@eva-design/eva'
 import configuration from './src/configuration'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -33,6 +34,8 @@ import StoreView from './src/screens/StoreView'
 import EditLocation from './src/screens/EditLocation'
 import CreatePost from './src/screens/CreatePost'
 import MultimediaView from './src/screens/MultimediaView'
+import EditPost from './src/screens/EditPost'
+import StorePosts from './src/screens/StorePosts'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -86,6 +89,12 @@ const theme = {
     "surfaceDisabled": "rgba(27, 27, 31, 0.12)",
     "onSurfaceDisabled": "rgba(27, 27, 31, 0.38)",
     "backdrop": "rgba(46, 48, 56, 0.4)"
+  }
+}
+
+const defaultTextProps = {
+  style: {
+    fontFamily: "Roboto"
   }
 }
 
@@ -156,9 +165,19 @@ const BottomTabNavigator = () => {
 
 const Main = () => {
   const [loaded] = useFonts({
-    Galada: require("./assets/fonts/Galada-Regular.ttf")
+    Galada: require("./assets/fonts/Galada-Regular.ttf"),
+    Roboto: require("./assets/fonts/Roboto-Regular.ttf")
   })
   const [session, _] = useSession()
+
+  useEffect(() => {
+    console.log("loaded")
+
+    if (loaded) {
+      setCustomText(defaultTextProps)
+      console.log("loaded true")
+    }
+  }, [loaded])
 
   console.log(session)
 
@@ -278,6 +297,18 @@ const Main = () => {
                         name="MultimediaView"
                       >
                         {() => <MultimediaView />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="EditPost"
+                      >
+                        {() => <EditPost />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="StorePosts"
+                      >
+                        {() => <StorePosts />}
                       </Stack.Screen>
 
                       <Stack.Screen

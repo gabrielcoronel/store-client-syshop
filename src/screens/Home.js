@@ -9,7 +9,6 @@ import SearchBar from '../components/SearchBar'
 import LoadingSpinner from '../components/LoadingSpinner'
 import HomeHeader from '../components/HomeHeader'
 import FloatingActionButton from '../components/FloatingActionButton'
-import { Fragment } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
   Portal,
@@ -17,14 +16,12 @@ import {
   Surface
 } from 'react-native-paper'
 import { View, StyleSheet, Dimensions } from 'react-native'
-import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingHorizontal: 15,
-    gap: 15,
+    paddingHorizontal: 15
   },
   fab: {
     position: "absolute",
@@ -42,11 +39,6 @@ const styles = StyleSheet.create({
     left: 0,
     flex: 1
   },
-  postsListContainer: {
-    justifyContent: "space-evenly",
-    gap: 16,
-    padding: 16
-  }
 })
 
 const fetchPosts = async (storeId) => {
@@ -81,7 +73,7 @@ const PostsList = () => {
       <ScrollView
         data={postsQuery.data}
         keyExtractor={(post) => post.post_id}
-        renderItem={({ item }) => <PostTile post={item} />}
+        renderItem={({ item }) => <PostTile post={item} isOwnPost />}
         emptyIcon="basket-plus"
         emptyMessage="No has realizado ninguna publicación"
       />
@@ -121,7 +113,7 @@ export default () => {
   }
 
   return (
-    <Fragment>
+    <View style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <HomeHeader text="Tus publicaciones" />
 
@@ -155,6 +147,6 @@ export default () => {
         onPress={() => setIsModalVisible(true)}
         style={styles.fab}
       />
-    </Fragment>
+    </View>
   )
 }

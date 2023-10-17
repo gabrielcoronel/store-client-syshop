@@ -3,7 +3,7 @@ import { View, FlatList } from 'react-native'
 
 const Separator = () => {
   return (
-    <View style={{ paddingVertical: 8 }}>
+    <View style={{ paddingVertical: 8, backgroundColor: "white" }}>
     </View>
   )
 }

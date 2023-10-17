@@ -35,19 +35,18 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ({ post }) => {
+export default ({ post, isOwnPost }) => {
   const navigation = useNavigation()
 
   const navigateToPostView = () => {
     navigation.navigate("PostView", {
-      postId: post.post_id
+      postId: post.post_id,
+      isOwnPost
     })
   }
 
-  const navigateToStoreView = () => {
-    navigation.navigate("StoreView", {
-      storeId: post.store_id
-    })
+  const navigateToProfileView = () => {
+    navigation.navigate("ProfileView")
   }
 
   return (
@@ -105,7 +104,7 @@ export default ({ post }) => {
               icon="store-outline"
               iconColor={configuration.ACCENT_COLOR_1}
               style={{ backgroundColor: "white" }}
-              onPress={navigateToStoreView}
+              onPress={navigateToProfileView}
             />
           </View>
         </View>

@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
   informationContainer: {
     padding: 18,
     gap: 8
+  },
+  image: {
+    borderRadius: 15
   }
 })
 
@@ -40,6 +43,7 @@ export default ({ store }) => {
             uri: formatBase64String(store.picture),
             height: 100
           }}
+          style={styles.image}
         />
 
         <View style={styles.informationContainer}>

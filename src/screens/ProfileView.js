@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
@@ -13,14 +12,22 @@ import { Avatar, Text, TouchableRipple } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
-  pictureContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: "white"
+  },
+  storeView: {
+    flex: 1,
+    alignItems: "center"
+  },
+  topContainer: {
     borderRadius: 30,
-    height: "35%",
+    height: "30%",
     width: "100%",
     backgroundColor: configuration.BACKGROUND_COLOR,
     justifyContent: "center",
     alignItems: "center",
-    gap: 10
+    gap: 10,
   },
   descriptionContainer: {
     borderRadius: 15,
@@ -31,23 +38,25 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute",
-    top: "32.5%",
-    left: "10%"
+    position: "relative",
+    bottom: 25
   },
   extraInformationContainer: {
     width: "100%",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    paddingHorizontal: 10,
   },
   linksContainer: {
-    width: "100%"
+    width: "100%",
+    paddingHorizontal: 10,
   },
   informationEntry: {
     flexDirection: "row",
     width: "100%",
     justifyContent: "flex-start",
     alignItems: "center",
-    gap: 15
+    gap: 15,
+    padding: 5
   },
   link: {
     flexDirection: "row",
@@ -84,7 +93,7 @@ const InformationEntry = ({ icon, text }) => {
         color="silver"
       />
 
-      <Caption1 style={{ color: configuration.ACCENT_COLOR_1 }}>
+      <Caption1 style={{ color: configuration.ACCENT_COLOR_1, flexShrink: 1 }}>
         {text}
       </Caption1>
     </View>
@@ -116,13 +125,16 @@ const Link = ({ text, onPress }) => {
 
 const TopContainer = ({ picture, name }) => {
   return (
-    <View style={styles.pictureContainer}>
+    <View style={styles.topContainer}>
       <Avatar.Image
         source={{ uri: formatBase64String(picture) }}
         size={80}
       />
 
-      <Text variant="titleLarge">
+      <Text
+        variant="titleLarge"
+        style={{ color: "white" }}
+      >
         {name}
       </Text>
     </View>
@@ -132,7 +144,10 @@ const TopContainer = ({ picture, name }) => {
 const DescriptionContainer = ({ description }) => {
   return (
     <View style={styles.descriptionContainer}>
-      <Text variant="bodySmall">
+      <Text
+        variant="bodySmall"
+        color={{ color: configuration.SECONDARY_COLOR }}
+      >
         {description}
       </Text>
     </View>
@@ -217,7 +232,7 @@ const StoreView = () => {
   } = storeQuery.data
 
   return (
-    <View>
+    <View style={styles.storeView}>
       <TopContainer
         picture={picture}
         name={name}
@@ -227,17 +242,15 @@ const StoreView = () => {
         description={description}
       />
 
-      <View style={{ backgroundColor: "white" }}>
-        <ExtraInformationContainer
-          followerCount={follower_count}
-          location={location}
-          phoneNumber={phone_number}
-        />
+      <ExtraInformationContainer
+        followerCount={follower_count}
+        location={location}
+        phoneNumber={phone_number}
+      />
 
-        <LinksContainer
-          multimedia={multimedia}
-        />
-      </View>
+      <LinksContainer
+        multimedia={multimedia}
+      />
     </View>
   )
 }
@@ -250,7 +263,7 @@ export default () => {
   }
 
   return (
-    <Fragment>
+    <View style={styles.container}>
       <StoreView />
 
       <FloatingActionButton
@@ -258,6 +271,6 @@ export default () => {
         onPress={navigateToEditProfile}
         style={styles.fab}
       />
-    </Fragment>
+    </View>
   )
 }

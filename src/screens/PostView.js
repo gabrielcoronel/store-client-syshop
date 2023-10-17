@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
-import { useQueryClient } from '@tanstack/react-query'
+import { Fragment, useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
@@ -9,9 +8,9 @@ import TextField from '../components/TextField'
 import Empty from '../components/Empty'
 import LoadingSpinner from '../components/LoadingSpinner'
 import CommentTile from '../components/CommentTile'
-import Scroller from '../components/Scroller'
 import SecondaryTitle from '../components/SecondaryTitle'
 import VividIconButton from '../components/VividIconButton'
+import Dialog from 'react-native-dialog'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { ImageSlider } from 'react-native-image-slider-banner'
@@ -100,6 +99,16 @@ const addPostComment = async (postId, storeId, text) => {
   }
   const _ = await requestServer(
     "/comments_service/add_comment",
+    payload
+  )
+}
+
+const deletePost = async (postId) => {
+  const payload = {
+    post_id: postId
+  }
+  const _ = await requestServer(
+    "/posts_service/delete_post",
     payload
   )
 }
@@ -209,12 +218,72 @@ const CommentsScrollView = ({ postId }) => {
   )
 }
 
-const PostView = ({ postId }) => {
+const DeletePostDialog = ({ postId, isVisible, onDismiss }) => {
+  const queryClient = useQueryClient()
   const navigation = useNavigation()
+
+  const handleDeletePost = () => {
+    deletePostMutation.mutate({
+      postId
+    })
+  }
+
+  const handleDeletePostSuccess = () => {
+    queryClient.refetchQueries({
+      queryKey: ["createdPosts"]
+    })
+
+    navigation.goBack()
+
+    onDismiss()
+  }
+
+  const deletePostMutation = useMutation(
+    ({ postId }) => deletePost(postId),
+    {
+      onSuccess: handleDeletePostSuccess
+    }
+  )
+
+  return (
+    <Dialog.Container visible={isVisible} onBackdropPress={onDismiss}>
+      <Dialog.Title>
+        Elimina tu publicación
+      </Dialog.Title>
+
+      <Dialog.Description>
+        Estás apunto de eliminar una de tus publicaciones,
+        después de esto no hay manera de recuperar la publicación
+      </Dialog.Description>
+
+      <Dialog.Button
+        label="Cancelar"
+        onPress={onDismiss}
+        color="red"
+      />
+
+      <Dialog.Button
+        label="Eliminar"
+        onPress={handleDeletePost}
+      />
+    </Dialog.Container>
+  )
+}
+
+const PostView = ({ postId, isOwnPost }) => {
+  const navigation = useNavigation()
+
+  const [isDeletePostDialogVisible, setIsDeletePostDialogVisible] = useState(false)
 
   const navigateToStoreView = () => {
     navigation.navigate("StoreView", {
       storeId: postQuery.data.store_id
+    })
+  }
+
+  const navigateToEditPost = () => {
+    navigation.navigate("EditPost", {
+      postId
     })
   }
 
@@ -294,6 +363,28 @@ const PostView = ({ postId }) => {
         </ReactNativeScrollview>
 
         <View style={styles.buttonsView}>
+          {
+            isOwnPost ?
+            (
+              <Fragment>
+                <IconButton
+                  icon="delete"
+                  iconColor={configuration.ACCENT_COLOR_1}
+                  style={{ backgroundColor: "white" }}
+                  onPress={() => setIsDeletePostDialogVisible(true)}
+                />
+
+                <IconButton
+                  icon="pencil"
+                  iconColor={configuration.ACCENT_COLOR_1}
+                  style={{ backgroundColor: "white" }}
+                  onPress={navigateToEditPost}
+                />
+              </Fragment>
+            ) :
+            null
+          }
+
           <IconButton
             icon="store-outline"
             iconColor={configuration.ACCENT_COLOR_1}
@@ -302,6 +393,12 @@ const PostView = ({ postId }) => {
           />
         </View>
       </View>
+
+      <DeletePostDialog
+        postId={postId}
+        isVisible={isDeletePostDialogVisible}
+        onDismiss={() => setIsDeletePostDialogVisible(false)}
+      />
     </View>
   )
 }
@@ -309,12 +406,12 @@ const PostView = ({ postId }) => {
 export default () => {
   const route = useRoute()
 
-  const { postId } = route.params
+  const { postId, isOwnPost } = route.params
 
   return (
     <KeyboardAwareScrollView style={{ flex: 1, flexGrow: 1 }}>
         <SafeAreaView style={styles.container}>
-          <PostView postId={postId} />
+          <PostView postId={postId} isOwnPost={isOwnPost} />
 
           <Divider style={{ color: configuration.ACCENT_COLOR_1 }}/>
 
