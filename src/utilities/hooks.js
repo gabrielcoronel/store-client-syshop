@@ -48,6 +48,7 @@ export const useForm = (initialValues, errorHandlers) => {
     setField,
     getError,
     fields: fieldsState,
+    errors: errorsState,
     validate
   }
 }
