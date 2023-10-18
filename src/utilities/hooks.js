@@ -12,7 +12,7 @@ export const useForm = (initialValues, errorHandlers) => {
 
   const setField = (name) => {
     const setter = (value) => {
-      setFieldsState((f) => ({
+      setFieldsState(f => ({
         ...f,
         [name]: value
       }))
@@ -30,7 +30,7 @@ export const useForm = (initialValues, errorHandlers) => {
       const value = fieldsState[name]
       const error = errorHandlers[name](value)
 
-      setErrorsState((e) => ({
+      setErrorsState(e => ({
         ...e,
         [name]: error
       }))

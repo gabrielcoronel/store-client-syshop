@@ -5,9 +5,10 @@ import { Text, TouchableRipple, Avatar } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
+  ripple: {
+    height: 90,
+    width: "100%",
+    borderRadius: 15,
   },
   mainCardView: {
     height: 90,
@@ -69,6 +70,7 @@ export default ({ chat }) => {
   return (
     <TouchableRipple
       onPress={navigateToChat}
+      style={styles.ripple}
     >
       <View style={styles.mainCardView}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

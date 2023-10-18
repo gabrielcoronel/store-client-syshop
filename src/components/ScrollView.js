@@ -13,6 +13,7 @@ export default ({ data, emptyMessage, emptyIcon, ...flatListProps }) => {
     <FlatList
       data={data}
       {...flatListProps}
+      contentContainerStyle={{ backgroundColor: "white" }}
       ItemSeparatorComponent={<Separator />}
       ListEmptyComponent={<Empty icon={emptyIcon} message={emptyMessage} />}
     />

@@ -3,7 +3,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatBase64String, formatLocation } from '../utilities/formatting'
-import { default as startPhoneCall } from 'react-native-phone-call'
+import { call } from '../utilities/calls'
 import LoadingSpinner from '../components/LoadingSpinner'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { View, StyleSheet } from 'react-native'
@@ -209,25 +209,15 @@ const ActionsContainer = ({ store }) => {
         user: {
           user_id: store.user_id,
           name: store.name,
-          picture: store.picture
+          picture: store.picture,
+          phone_number: store.phone_number
         }
       }
     })
   }
 
-  const callStore = async () => {
-    try {
-      await startPhoneCall({
-        number: store.phone_number,
-        prompt: true,
-        skipCanOpen: true
-      })
-    } catch (error) {
-      Alert.alert(
-        "No se pudo realizar la llamada",
-        "Inténtalo más tarde"
-      )
-    }
+  const handleCallStore = async () => {
+    call(store.phone_number)
   }
 
   return (
@@ -243,7 +233,7 @@ const ActionsContainer = ({ store }) => {
         icon="phone"
         iconColor={configuration.ACCENT_COLOR_1}
         style={{ backgroundColor: "white" }}
-        onPress={callStore}
+        onPress={handleCallStore}
       />
     </View>
   )

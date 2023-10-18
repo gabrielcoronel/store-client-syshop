@@ -2,7 +2,7 @@ import { Text, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   subtitle: {
-    fontSize: 20,
+    fontSize: 17.5,
     color: "white",
     textAlign: "center"
   }

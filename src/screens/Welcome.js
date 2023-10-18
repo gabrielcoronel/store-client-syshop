@@ -39,7 +39,7 @@ const InformationEntry = ({ icon, text }) => {
         color={configuration.ACCENT_COLOR_1}
       />
 
-      <Text variant="bodySmall" style={{ color: "white" }}>
+      <Text variant="bodySmall" style={{ color: "white", fontFamily: "Roboto" }}>
         {text}
       </Text>
     </View>

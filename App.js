@@ -92,12 +92,6 @@ const theme = {
   }
 }
 
-const defaultTextProps = {
-  style: {
-    fontFamily: "Roboto"
-  }
-}
-
 const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
@@ -169,15 +163,6 @@ const Main = () => {
     Roboto: require("./assets/fonts/Roboto-Regular.ttf")
   })
   const [session, _] = useSession()
-
-  useEffect(() => {
-    console.log("loaded")
-
-    if (loaded) {
-      setCustomText(defaultTextProps)
-      console.log("loaded true")
-    }
-  }, [loaded])
 
   console.log(session)
 

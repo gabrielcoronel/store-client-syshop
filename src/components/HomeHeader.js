@@ -6,7 +6,6 @@ import configuration from '../configuration'
 const styles = StyleSheet.create({
   header: {
     width: "100%",
-    padding: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -14,6 +13,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Galada",
+    color: configuration.BACKGROUND_COLOR
+  },
+  text: {
+    fontFamily: "Roboto",
     color: configuration.BACKGROUND_COLOR
   },
   image: {
@@ -36,7 +39,7 @@ export default ({ text }) => {
         />
       </View>
 
-      <Text variant="bodyMedium" style={{ color: configuration.BACKGROUND_COLOR }}>
+      <Text variant="bodyMedium" style={styles.text}>
         {text}
       </Text>
     </View>

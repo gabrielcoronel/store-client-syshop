@@ -31,19 +31,20 @@ import configuration from '../configuration'
 const styles = StyleSheet.create({
   container: {
     gap: 20,
+    justifyContent: 'center',
     alignItems: "center",
     backgroundColor: configuration.BACKGROUND_COLOR
   },
   section: {
     gap: 20,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     width: "100%"
   },
   inputsContainer: {
     gap: 15,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 })
 

@@ -15,9 +15,10 @@ import Title from '../components/Title'
 import Subtitle from '../components/Subtitle'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
+import Stepper, { useStepper } from '../components/Stepper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, ScrollView, Alert, StyleSheet } from 'react-native'
-import { Chip, Divider } from 'react-native-paper'
+import { Chip } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -28,31 +29,14 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "100%"
   },
-  generalInformationSection: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 15,
-    width: "100%"
-  },
-  categoriesSection: {
-    padding: 20,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+  section: {
     gap: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
     width: "100%"
   },
   categoriesDisplay: {
     gap: 10
-  },
-  multimediaSection: {
-    padding: 20,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 20,
-    width: "100%"
   }
 })
 
@@ -74,9 +58,13 @@ const createPost = async (
   )
 }
 
-const GeneralInformationSection = ({ form }) => {
+const GeneralInformationSection = ({ form, onNext }) => {
   return (
-    <View style={styles.generalInformationSection}>
+    <View style={styles.section}>
+      <Subtitle>
+        Ingresa los datos de tu producto
+      </Subtitle>
+
       <TextField
         value={form.getField("title")}
         onChangeText={form.setField("title")}
@@ -107,11 +95,18 @@ const GeneralInformationSection = ({ form }) => {
         placeholder="Cantidad de unidades"
         keyboardType="numeric"
       />
+
+      <Button
+        onPress={onNext}
+        style={{ width: "70%" }}
+      >
+        Siguiente
+      </Button>
     </View>
   )
 }
 
-const CategoriesSection = ({ categories, setCategories }) => {
+const CategoriesSection = ({ categories, setCategories, onNext }) => {
   const [currentCategory, setCurrentCategory] = useState("")
 
   const handleAddCategory = () => {
@@ -143,7 +138,7 @@ const CategoriesSection = ({ categories, setCategories }) => {
   })
 
   return (
-    <View style={styles.categoriesSection}>
+    <View style={styles.section}>
       <Subtitle>
         Añade categorías a tu producto
       </Subtitle>
@@ -174,13 +169,20 @@ const CategoriesSection = ({ categories, setCategories }) => {
       >
         {categoriesChips}
       </ScrollView>
+
+      <Button
+        onPress={onNext}
+        style={{ width: "70%" }}
+      >
+        Siguiente
+      </Button>
     </View>
   )
 }
 
-const MultimediaSection = ({ multimedia, setMultimedia }) => {
+const MultimediaSection = ({ multimedia, setMultimedia, onNext }) => {
   return (
-    <View style={styles.multimediaSection}>
+    <View style={styles.section}>
       <Subtitle>
         Añade fotos que describan a tu producto
       </Subtitle>
@@ -189,6 +191,18 @@ const MultimediaSection = ({ multimedia, setMultimedia }) => {
         multimedia={multimedia}
         setMultimedia={setMultimedia}
       />
+
+      <Button
+        onPress={onNext}
+        disabled={isLoading}
+        style={{ width: "70%" }}
+      >
+        {
+          isLoading ?
+          <LoadingSpinner /> :
+          "Publicar"
+        }
+      </Button>
     </View>
   )
 }
@@ -198,6 +212,7 @@ export default () => {
   const queryClient = useQueryClient()
   const [session, _] = useSession()
 
+  const stepper = useStepper(3)
   const [categories, setCategories] = useState([])
   const [multimedia, setMultimedia] = useState([])
 
@@ -262,43 +277,54 @@ export default () => {
     }
   )
 
+  const getCurrentSection = () => {
+    switch (stepper.position) {
+      case 0:
+        return (
+          <GeneralInformationSection
+            form={form}
+            onNext={stepper.setNextPosition}
+          />
+        )
+
+      case 1:
+        return (
+          <CategoriesSection
+            categories={categories}
+            setCategories={setCategories}
+            onNext={stepper.setNextPosition}
+          />
+        )
+
+      case 2:
+        return (
+          <MultimediaSection
+            multimedia={multimedia}
+            setMultimedia={setMultimedia}
+            onNext={handleSubmit}
+            isLoading={createPostMutation.isLoading}
+          />
+        )
+    }
+  }
+
   return (
     <Scroller>
       <KeyboardAwareScrollView>
         <Padder>
             <View style={styles.container}>
               <Title>
-                Publica tu producto
+                Publica un producto
               </Title>
 
-              <GeneralInformationSection
-                form={form}
+              <Stepper
+                labels={["Información", "Categorías", "Imágenes"]}
+                stepCount={3}
+                currentPosition={stepper.position}
+                onPress={stepper.setPosition}
               />
 
-              <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
-
-              <CategoriesSection
-                categories={categories}
-                setCategories={setCategories}
-              />
-
-              <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
-
-              <MultimediaSection
-                multimedia={multimedia}
-                setMultimedia={setMultimedia}
-              />
-
-              <Button
-                onPress={handleSubmit}
-                style={{ width: "70%" }}
-              >
-                {
-                  createPostMutation.isLoading ?
-                  <LoadingSpinner /> :
-                  "Publicar"
-                }
-              </Button>
+              {getCurrentSection()}
             </View>
         </Padder>
       </KeyboardAwareScrollView>

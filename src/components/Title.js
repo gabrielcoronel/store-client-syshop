@@ -2,7 +2,7 @@ import { Text, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 35,
+    fontSize: 30,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",

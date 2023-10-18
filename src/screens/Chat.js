@@ -4,9 +4,10 @@ import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { useRoute } from '@react-navigation/native'
 import { requestServer } from '../utilities/requests'
+import { call } from '../utilities/calls'
 import { selectPictureFromGallery } from '../utilities/camera'
 import { formatBase64String } from '../utilities/formatting'
-import { v4 as uuidv4 } from 'uuid'
+import uuid from 'react-native-uuid'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, TouchableOpacity, StyleSheet} from 'react-native'
@@ -19,7 +20,8 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "white"
   }
 })
 
@@ -81,6 +83,10 @@ const Header = ({ chat, isLoading }) => {
     )
   }
 
+  const handleCallUser = async () => {
+    call(chat.user.phone_number)
+  }
+
   return (
     <TouchableOpacity onPress={navigateToStoreView}>
       {
@@ -96,6 +102,8 @@ const Header = ({ chat, isLoading }) => {
       }
 
       <List.Item
+        style={{ backgroundColor: "white" }}
+        titleStyle={{ color: configuration.SECONDARY_COLOR }}
         title={chat.user.name}
         left={(props) => {
           return (
@@ -105,6 +113,17 @@ const Header = ({ chat, isLoading }) => {
               source={{
                 uri: formatBase64String(chat.user.picture)
               }}
+            />
+          )
+        }}
+        right={(props) => {
+          return (
+            <IconButton
+              {...props}
+              icon="phone"
+              iconColor={configuration.ACCENT_COLOR_1}
+              style={{ backgroundColor: "white" }}
+              onPress={handleCallUser}
             />
           )
         }}
@@ -164,7 +183,7 @@ export default () => {
     })
 
     const giftedMessage = {
-      _id: uuidv4(),
+      _id: uuid.v4(),
       image: formatBase64String(picture),
       createdAt: new Date(),
       user: {
@@ -185,19 +204,6 @@ export default () => {
     queryClient.refetchQueries({
       queryKey: ["chatMessages", chat.chat_id]
     })
-  }
-
-  const renderBubble = (props) => {
-    return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          right: {
-            backgroundColor: configuration.BACKGROUND_COLOR
-          }
-        }}
-      />
-    )
   }
 
   const messagesQuery = useQuery({
@@ -223,6 +229,19 @@ export default () => {
     )
   }
 
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: configuration.BACKGROUND_COLOR
+          }
+        }}
+      />
+    )
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Header
@@ -239,7 +258,11 @@ export default () => {
 
         placeholder='Mensaje...'
         renderBubble={renderBubble}
-        renderActions={() => <IconButton icon="camera-outline" onPress={handlePictureMessageChoosen}/>}
+        renderActions={() => <IconButton
+          icon="camera-outline"
+          iconColor={configuration.SECONDARY_COLOR}
+          onPress={handlePictureMessageChoosen}
+        />}
         renderLoading={() => <LoadingSpinner inScreen /> }
 
         scrollToBottom

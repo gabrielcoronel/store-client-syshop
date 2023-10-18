@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { View, StyleSheet } from 'react-native'
@@ -59,7 +60,12 @@ const DeliveriesListItems = ({ deliveries }) => {
 }
 
 export default () => {
+  const navigation = useNavigation()
   const [session, _] = useSession()
+
+  navigation.addListener("beforeRemove", (event) => {
+    event.preventDefault()
+  })
 
   const activeDeliveriesQuery = useQuery({
     queryKey: ["activeDeliveries"],
@@ -93,7 +99,9 @@ export default () => {
           {
             activeDeliveriesQuery.isLoading ?
             <LoadingSpinner /> :
-            <DeliveriesListItems deliveries={activeDeliveriesQuery.data} />
+            <DeliveriesListItems
+              deliveries={activeDeliveriesQuery.data}
+            />
           }
 
           <List.Subheader>
