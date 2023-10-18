@@ -1,79 +1,68 @@
 import { useQuery } from '@tanstack/react-query'
 import { useRoute } from '@react-navigation/native'
-import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
-import { formatBase64String } from '../utilities/formatting'
 import ScrollView from '../components/ScrollView'
 import PostTile from '../components/PostTile'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Scroller from '../components/Scroller'
 import Padder from '../components/Padder'
-import { View, Image, StyleSheet } from 'react-native'
-import { Divider } from 'react-native-paper'
-import { Title2 } from 'react-native-ios-kit'
+import {
+  ScrollView as ReactNativeScrollView,
+  StyleSheet
+} from 'react-native'
+import { Chip, Divider } from 'react-native-paper'
+import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 20
-  },
-  pictureDisplay: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 20
-  },
-  pictureDisplayImage: {
-    borderRadius: 5
+    gap: 20,
+    backgroundColor: "white"
   }
 })
 
-const fetchPosts = async (picture) => {
+const fetchResult = async (picture) => {
   const payload = {
     picture
   }
-  const posts = await requestServer(
+  const result = await requestServer(
     "/posts_service/search_posts_by_image",
     payload
   )
 
-  return posts
+  return result
 }
 
-const PictureDisplay = ({ picture }) => {
-  return (
-    <View style={styles.pictureDisplay}>
-      <Title2>
-        Resultados de la búsqueda por imagen
-      </Title2>
+const KeywordsList = ({ keywords }) => {
+  const keywordsChips = keywords.map((keyword, index) => {
+    return (
+      <Chip
+        key={index}
+        icon="pound"
+        style={{ backgroundColor: configuration.BACKGROUND_COLOR }}
+        textStyle={{ color: "white" }}
+      >
+        {keyword}
+      </Chip>
+    )
+  })
 
-      <Image
-        style={styles.pictureDisplayImage}
-        source={{
-          uri: formatBase64String(picture),
-          height: 200,
-          width: 300
-        }}
-      />
-    </View>
+  return (
+    <ReactNativeScrollView
+      horizontal
+      contentContainerStyle={{ gap: 10 }}
+      style={{ flexGrow: 0 }}
+    >
+      {keywordsChips}
+    </ReactNativeScrollView>
   )
 }
 
-const PostsList = ({ picture }) => {
-  const postsQuery = useQuery({
-    queryKey: ["picturePostResults"],
-    queryFn: () => fetchPosts(picture)
-  })
-
-  if (postsQuery.isLoading) {
-    return (
-      <LoadingSpinner inScreen />
-    )
-  }
-
+const PostsList = ({ posts }) => {
   return (
     <ScrollView
-      data={postsQuery.data}
+      data={posts}
       keyExtractor={(post) => post.post_id}
       renderItem={({ item }) => <PostTile post={item} />}
       emptyIcon="basket"
@@ -87,14 +76,27 @@ export default () => {
 
   const { picture } = route.params
 
+  const resultQuery = useQuery({
+    queryKey: ["picturePostResults"],
+    queryFn: () => fetchResult(picture)
+  })
+
+  if (resultQuery.isLoading) {
+    return (
+      <LoadingSpinner inScreen />
+    )
+  }
+
+  console.log(resultQuery)
+
   return (
     <Scroller>
-      <Padder>
-        <PictureDisplay picture={picture} />
+      <Padder style={styles.container}>
+        <KeywordsList keywords={resultQuery.data.keywords} />
 
         <Divider style={{ width: "90%" }} />
 
-        <PostsList picture={picture} />
+        <PostsList posts={resultQuery.data.posts} />
       </Padder>
     </Scroller>
   )

@@ -281,6 +281,10 @@ const PostView = ({ postId, isOwnPost }) => {
     })
   }
 
+  const navigateToProfileView = () => {
+    navigation.navigate("ProfileView")
+  }
+
   const navigateToEditPost = () => {
     navigation.navigate("EditPost", {
       postId
@@ -389,7 +393,7 @@ const PostView = ({ postId, isOwnPost }) => {
             icon="store-outline"
             iconColor={configuration.ACCENT_COLOR_1}
             style={{ backgroundColor: "white" }}
-            onPress={navigateToStoreView}
+            onPress={isOwnPost ? navigateToProfileView : navigateToStoreView}
           />
         </View>
       </View>

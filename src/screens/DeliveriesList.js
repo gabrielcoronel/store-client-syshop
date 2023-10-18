@@ -93,7 +93,7 @@ export default () => {
 
         <List.Section>
           <List.Subheader>
-            Entregas inactivas
+            Entregas activas
           </List.Subheader>
 
           {

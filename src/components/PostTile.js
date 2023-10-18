@@ -45,6 +45,15 @@ export default ({ post, isOwnPost }) => {
     })
   }
 
+  const navigateToStoreView= () => {
+    navigation.navigate(
+      "StoreView",
+      {
+        storeId: post.store_id
+      }
+    )
+  }
+
   const navigateToProfileView = () => {
     navigation.navigate("ProfileView")
   }
@@ -104,7 +113,7 @@ export default ({ post, isOwnPost }) => {
               icon="store-outline"
               iconColor={configuration.ACCENT_COLOR_1}
               style={{ backgroundColor: "white" }}
-              onPress={navigateToProfileView}
+              onPress={isOwnPost ? navigateToProfileView : navigateToStoreView}
             />
           </View>
         </View>
