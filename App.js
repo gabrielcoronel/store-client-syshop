@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler'
-import { useEffect, Suspense } from 'react'
+import { Suspense } from 'react'
 import { PaperProvider } from 'react-native-paper'
 import { ThemeProvider as IosKitProvider } from 'react-native-ios-kit'
 import { ApplicationProvider as UiKittenProvider } from '@ui-kitten/components'
@@ -11,7 +11,6 @@ import { useSession } from './src/context'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useFonts } from 'expo-font'
-import { setCustomText } from 'react-native-global-props'
 import * as eva from '@eva-design/eva'
 import configuration from './src/configuration'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -36,6 +35,7 @@ import CreatePost from './src/screens/CreatePost'
 import MultimediaView from './src/screens/MultimediaView'
 import EditPost from './src/screens/EditPost'
 import StorePosts from './src/screens/StorePosts'
+import ChooseInstagramPosts from './src/screens/ChooseInstagramPosts'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -294,6 +294,12 @@ const Main = () => {
                         name="StorePosts"
                       >
                         {() => <StorePosts />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="ChooseInstagramPosts"
+                      >
+                        {() => <ChooseInstagramPosts />}
                       </Stack.Screen>
 
                       <Stack.Screen

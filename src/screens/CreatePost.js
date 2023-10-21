@@ -1,6 +1,7 @@
+import axios from 'axios'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { useForm } from '../utilities/hooks'
 import { useSession } from '../context'
 import { makeNotEmptyChecker } from '../utilities/validators'
@@ -15,10 +16,11 @@ import Title from '../components/Title'
 import Subtitle from '../components/Subtitle'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
+import InstagramSignInButton from '../components/InstagramSignInButton'
 import Stepper, { useStepper } from '../components/Stepper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, ScrollView, Alert, StyleSheet } from 'react-native'
-import { Chip } from 'react-native-paper'
+import { Chip, Divider } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -59,6 +61,17 @@ const createPost = async (
 }
 
 const GeneralInformationSection = ({ form, onNext }) => {
+  const navigation = useNavigation()
+
+  const navigateToChooseInstagramPosts = (instagramAccessData) => {
+    navigation.navigate(
+      "ChooseInstagramPosts",
+      {
+        instagramAccessData
+      }
+    )
+  }
+
   return (
     <View style={styles.section}>
       <Subtitle>
@@ -94,6 +107,17 @@ const GeneralInformationSection = ({ form, onNext }) => {
         error={form.getError("amount")}
         placeholder="Cantidad de unidades"
         keyboardType="numeric"
+      />
+
+      <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
+
+      <Subtitle>
+        También puedes registrarte con
+      </Subtitle>
+
+      <InstagramSignInButton
+        text="Publica un producto de Instagram"
+        onSignIn={navigateToChooseInstagramPosts}
       />
 
       <Button
@@ -210,7 +234,10 @@ const MultimediaSection = ({ multimedia, setMultimedia, onNext }) => {
 export default () => {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
+  const route = useRoute()
   const [session, _] = useSession()
+
+  const { instagramPost } = route.params
 
   const stepper = useStepper(3)
   const [categories, setCategories] = useState([])
@@ -227,6 +254,24 @@ export default () => {
     })
 
     navigation.goBack()
+  }
+
+  const fillUpFormWithInstagramData = async () => {
+    for (url of instagramPost.picturesUrls) {
+      const response = await axios.get(url, {
+        responseType: "arraybuffer"
+      })
+
+      const picture = Buffer.from(response.data, "binary").toString("base64")
+      const newMultimedia = [picture, ...multimedia]
+
+      setMultimedia(newMultimedia)
+    }
+
+    Alert.alert(
+      "Éxito",
+      "Las imágenes de tu producto fueron cargadas exitosamente desde Instagram"
+    )
   }
 
   const handleSubmit = () => {
@@ -276,6 +321,10 @@ export default () => {
       onSuccess: handleCreatePostSuccess
     }
   )
+
+  if (instagramPost !== undefined) {
+    fillUpFormWithInstagramData()
+  }
 
   const getCurrentSection = () => {
     switch (stepper.position) {
