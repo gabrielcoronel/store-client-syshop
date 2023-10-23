@@ -9,10 +9,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    paddingVertical: 5,
+    paddingLeft: 8,
+    paddingRight: 12
+  },
+  leftHeader: {
+    height: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   },
   title: {
-    fontFamily: "Galada",
+    fontFamily: "Cookie",
+    fontWeight: "bold",
     color: configuration.BACKGROUND_COLOR
   },
   text: {
@@ -28,15 +38,18 @@ const styles = StyleSheet.create({
 export default ({ text }) => {
   return (
     <View style={styles.header}>
-      <View style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}>
-        <Text variant="titleLarge" style={styles.title}>
-          SyShop
-        </Text>
-
+      <View style={styles.leftHeader}>
         <Image
           source={SyShopLogo}
           style={styles.image}
         />
+
+        <Text
+          variant="titleLarge"
+          style={styles.title}
+        >
+          SyShop
+        </Text>
       </View>
 
       <Text variant="bodyMedium" style={styles.text}>

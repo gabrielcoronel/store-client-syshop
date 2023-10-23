@@ -375,10 +375,6 @@ export default () => {
   const [isCloseSessionDialogVisible, setIsCloseSessionDialogVisible] = useState(false)
   const [isDeleteAccountDialogVisible, setIsDeleteAccountDialogVisible] = useState(false)
 
-  navigation.addListener("beforeRemove", (event) => {
-    event.preventDefault()
-  })
-
   const storeQuery = useQuery({
     queryKey: ["storeSettings"],
     queryFn: () => fetchStore(session.data.storeId),
@@ -408,6 +404,11 @@ export default () => {
         <SettingEntry
           setting="Editar domicilio"
           onPress={() => navigation.navigate("EditLocation")}
+        />
+
+        <SettingEntry
+          setting="Hacer un reporte"
+          onPress={() => navigation.navigate("CreateReport")}
         />
 
         <View>

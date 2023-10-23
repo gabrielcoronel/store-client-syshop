@@ -1,5 +1,17 @@
 import { Slider as ImportedSlider } from '@miblanchard/react-native-slider'
+import { StyleSheet } from 'react-native'
 import configuration from '../configuration'
+
+const styles = StyleSheet.create({
+  thumb: {
+    backgroundColor: "white",
+    shadowColor: "silver",
+    shadowOffset: { width: -1, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 8
+  }
+})
 
 export default ({
   minimumValue,
@@ -18,7 +30,7 @@ export default ({
       onValueChange={onChange}
       {...sliderProps}
 
-      thumbStyle={{ backgroundColor: configuration.SECONDARY_COLOR }}
+      thumbStyle={styles.thumb}
       trackStyle={{ backgroundColor: configuration.ACCENT_COLOR_1 }}
     />
   )

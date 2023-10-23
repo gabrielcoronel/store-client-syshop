@@ -11,10 +11,10 @@ export default ({ comment }) => {
       }}
       descriptionStyle={{
         color: "silver",
-        fontSize: 12
+        fontSize: 13
       }}
-      title={`${comment.user_name} (${formatDate(comment.publication_date)})`}
-      description={comment.text}
+      title={comment.text}
+      description={`${comment.user_name} (${formatDate(comment.publication_date)})`}
       left={(props) => <Avatar.Image
         {...props}
         source={{ uri: formatBase64String(comment.user_picture)}}

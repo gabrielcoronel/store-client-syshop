@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { requestServer } from '../utilities/requests'
 import { Alert } from 'react-native'
 import { List, TouchableRipple } from 'react-native-paper'
+import configuration from '../configuration'
 
 const activateDelivery = async (deliveryId) => {
   const payload = {
@@ -58,6 +59,7 @@ const TrackLocationIcon = ({ delivery, ...props }) => {
     >
       <List.Icon
         {...props}
+        color={configuration.ACCENT_COLOR_1}
         icon="map-marker"
       />
     </TouchableRipple>
@@ -115,6 +117,12 @@ export default ({ activable, delivery }) =>  {
       onPress={handleActivateDelivery}
     >
       <List.Item
+        titleStyle={{
+          color: configuration.SECONDARY_COLOR
+        }}
+        descriptionStyle={{
+          color: "silver"
+        }}
         title={`${amount} ${amount === 1 ? "unidad" : "unidades"} de '${title}'`}
         description={`${placeName}: ${uberState ? formatUberState(uberState) : "entrega sin asignar"}`}
         left={(props) => <TrackLocationIcon {...props} delivery={delivery} />}

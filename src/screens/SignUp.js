@@ -191,10 +191,6 @@ const GeneralInformationSection = ({
 
       <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
-      <Subtitle>
-        También puedes registrarte con
-      </Subtitle>
-
       <GoogleSignInButton
         text="Registrate con Google"
         onSignIn={fillUpFormWithGoogleData}

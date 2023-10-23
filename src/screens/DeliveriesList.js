@@ -1,18 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
-import { useNavigation } from '@react-navigation/native'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
-import { View, StyleSheet } from 'react-native'
-import { List } from 'react-native-paper'
+import ScrollView from '../components/ScrollView'
 import DeliveryTile from '../components/DeliveryTile'
 import SecondaryTitle from '../components/SecondaryTitle'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
-import Scroller from '../components/Scroller'
+import { View, StyleSheet } from 'react-native'
+import { List } from 'react-native-paper'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "white"
   }
 })
@@ -42,30 +40,18 @@ const fetchInactiveDeliveries = async (storeId) => {
 }
 
 const DeliveriesListItems = ({ deliveries }) => {
-  const deliviriesListItems = deliveries.map((delivery) => {
-    return (
-      <DeliveryTile
-        key={delivery.delivery_id}
-        delivery={delivery}
-        activable
-      />
-    )
-  })
-
   return (
-    <View>
-      {deliviriesListItems}
-    </View>
+    <ScrollView
+      neverEmpty
+      data={deliveries}
+      keyExtractor={(delivery) => delivery.delivery_id}
+      renderItem={({ item }) => <DeliveryTile delivery={item} />}
+    />
   )
 }
 
 export default () => {
-  const navigation = useNavigation()
   const [session, _] = useSession()
-
-  navigation.addListener("beforeRemove", (event) => {
-    event.preventDefault()
-  })
 
   const activeDeliveriesQuery = useQuery({
     queryKey: ["activeDeliveries"],
@@ -85,39 +71,37 @@ export default () => {
   }
 
   return (
-    <Scroller>
-      <Padder style={styles.container}>
-        <SecondaryTitle>
-          Tus entregas
-        </SecondaryTitle>
+    <Padder style={styles.container}>
+      <SecondaryTitle>
+        Tus entregas
+      </SecondaryTitle>
 
-        <List.Section>
-          <List.Subheader>
-            Entregas activas
-          </List.Subheader>
+      <List.Section style={{ flex: 1 }}>
+        <List.Subheader style={{ color: "green" }}>
+          Entregas activas
+        </List.Subheader>
 
-          {
-            activeDeliveriesQuery.isLoading ?
-            <LoadingSpinner /> :
-            <DeliveriesListItems
-              deliveries={activeDeliveriesQuery.data}
-            />
-          }
+        {
+          activeDeliveriesQuery.isLoading ?
+          <LoadingSpinner /> :
+          <DeliveriesListItems
+            deliveries={activeDeliveriesQuery.data}
+          />
+        }
 
-          <List.Subheader>
-            Entregas inactivas
-          </List.Subheader>
+        <List.Subheader style={{ color: "red" }}>
+          Entregas inactivas
+        </List.Subheader>
 
-          {
-            inactiveDeliveriesQuery.isLoading ?
-            <LoadingSpinner /> :
-            <DeliveriesListItems
-              activable
-              deliveries={inactiveDeliveriesQuery.data}
-            />
-          }
-        </List.Section>
-      </Padder>
-    </Scroller>
+        {
+          inactiveDeliveriesQuery.isLoading ?
+          <LoadingSpinner /> :
+          <DeliveriesListItems
+            activable
+            deliveries={inactiveDeliveriesQuery.data}
+          />
+        }
+      </List.Section>
+    </Padder>
   )
 }

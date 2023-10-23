@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
-import { View, StyleSheet } from 'react-native'
-import { Text, TouchableRipple, Avatar } from 'react-native-paper'
+import { View, TouchableWithoutFeedback, StyleSheet } from 'react-native'
+import { Text, Avatar } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -68,7 +68,7 @@ export default ({ chat }) => {
   }
 
   return (
-    <TouchableRipple
+    <TouchableWithoutFeedback
       onPress={navigateToChat}
       style={styles.ripple}
     >
@@ -111,6 +111,6 @@ export default ({ chat }) => {
           </View>
         </View>
       </View>
-    </TouchableRipple>
+    </TouchableWithoutFeedback>
   )
 }

@@ -4,6 +4,7 @@ import { requestServer } from '../utilities/requests'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ScrollView from '../components/ScrollView'
 import PostTile from '../components/PostTile'
+import SecondaryTitle from '../components/SecondaryTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native'
 
@@ -11,7 +12,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 15
+    padding: 15,
+    gap: 15
   }
 })
 
@@ -45,6 +47,10 @@ export default () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <SecondaryTitle>
+        Publicaciones
+      </SecondaryTitle>
+
       <ScrollView
         data={storePostsQuery.data}
         keyExtractor={(post) => post.post_id}

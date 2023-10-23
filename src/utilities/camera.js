@@ -9,10 +9,6 @@ export const selectPictureFromGallery = async () => {
     })
 
     if (result.canceled) {
-      Alert.alert(
-        "Cancelaste la selección de la fotografía"
-      )
-
       return null
     }
 

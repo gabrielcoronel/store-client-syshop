@@ -1,7 +1,8 @@
 import { useRoute } from '@react-navigation/native'
 import { formatBase64String } from '../utilities/formatting'
+import SecondaryTitle from '../components/SecondaryTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Image, StyleSheet } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   container: {
@@ -28,12 +29,19 @@ export default ({}) => {
           height: 200,
           width: 300
         }}
+        style={{ resizeMode: "contain" }}
       />
     )
   })
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start" }}>
+        <SecondaryTitle>
+          Imágenes
+        </SecondaryTitle>
+      </View>
+
       {images}
     </SafeAreaView>
   )

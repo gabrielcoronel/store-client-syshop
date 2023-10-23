@@ -49,7 +49,11 @@ export default ({ isAlternative, onSelect }) => {
 
       {
         getAddressesMutation.isLoading ?
-        <LoadingSpinner /> :
+        (
+          <View style={{ padding: 8 }}>
+            <LoadingSpinner />
+          </View>
+        ) :
         (
           <View style={{ width: "100%" }}>
             <FlatList

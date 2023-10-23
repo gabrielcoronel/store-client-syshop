@@ -36,6 +36,7 @@ import MultimediaView from './src/screens/MultimediaView'
 import EditPost from './src/screens/EditPost'
 import StorePosts from './src/screens/StorePosts'
 import ChooseInstagramPosts from './src/screens/ChooseInstagramPosts'
+import CreateReport from './src/screens/CreateReport'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -159,8 +160,8 @@ const BottomTabNavigator = () => {
 
 const Main = () => {
   const [loaded] = useFonts({
-    Galada: require("./assets/fonts/Galada-Regular.ttf"),
-    Roboto: require("./assets/fonts/Roboto-Regular.ttf")
+    Roboto: require("./assets/fonts/Roboto-Regular.ttf"),
+    Cookie: require("./assets/fonts/Cookie-Regular.ttf")
   })
   const [session, _] = useSession()
 
@@ -300,6 +301,12 @@ const Main = () => {
                         name="ChooseInstagramPosts"
                       >
                         {() => <ChooseInstagramPosts />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="CreateReport"
+                      >
+                        {() => <CreateReport />}
                       </Stack.Screen>
 
                       <Stack.Screen

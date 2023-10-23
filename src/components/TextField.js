@@ -3,6 +3,10 @@ import { HelperText } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
   textInput: {
     padding: 15,
     width: 275,
@@ -14,16 +18,18 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ({ error, light, style, ...textInputProps }) => {
+export default ({ error, light, style, multiline, ...textInputProps }) => {
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         {...textInputProps}
         style={{
           ...styles.textInput,
-          ...style
+          ...style,
+          ...(multiline ? { paddingVertical: 20 } : {})
         }}
-        placeholderTextColor={light ? "black" : "white"}
+        placeholderTextColor="silver"
+        multiline={multiline}
       />
 
       {
