@@ -204,7 +204,7 @@ const CategoriesSection = ({ categories, setCategories, onNext }) => {
   )
 }
 
-const MultimediaSection = ({ multimedia, setMultimedia, onNext }) => {
+const MultimediaSection = ({ multimedia, setMultimedia, onNext, isLoading }) => {
   return (
     <View style={styles.section}>
       <Subtitle>
@@ -237,7 +237,7 @@ export default () => {
   const route = useRoute()
   const [session, _] = useSession()
 
-  const { instagramPost } = route.params
+  const instagramPost = route.params?.instagramPost
 
   const stepper = useStepper(3)
   const [categories, setCategories] = useState([])
@@ -265,12 +265,13 @@ export default () => {
       const picture = Buffer.from(response.data, "binary").toString("base64")
       const newMultimedia = [picture, ...multimedia]
 
-      setMultimedia(newMultimedia)
+      setMultimedia(_ => newMultimedia)
+      form.setField("description")(instagramPost.description)
     }
 
     Alert.alert(
       "Éxito",
-      "Las imágenes de tu producto fueron cargadas exitosamente desde Instagram"
+      "Algunos datos de tu producto fueron cargados exitosamente desde Instagram"
     )
   }
 

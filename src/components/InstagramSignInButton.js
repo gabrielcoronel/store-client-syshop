@@ -55,7 +55,7 @@ const getAccessData = async (authorizationCode) => {
 }
 
 export default ({ text, onSignIn }) => {
-  const instagramLoginRef = useRef
+  const instagramLoginRef = useRef()
 
   const handlePress = () => {
     instagramLoginRef.current.show()
@@ -92,7 +92,7 @@ export default ({ text, onSignIn }) => {
         ref={instagramLoginRef}
         appId={configuration.INSTAGRAM_APPLICATION_ID}
         appSecret={configuration.INSTAGRAM_APPLICATION_SECRET}
-        redirectUrl=""
+        redirectUrl="www.google.com"
         scopes={["user_profile", "user_media"]}
         onLoginSuccess={handleSuccess}
         onLoginFailure={handleFailure}
