@@ -59,6 +59,19 @@ const fetchMessages = async (chatId) => {
   return messages
 }
 
+const fetchChat = async (senderId, receiverId) => {
+  const payload = {
+    sender_id: senderId,
+    receiver_id: receiverId
+  }
+  const optionChat = await requestServer(
+    "/chat_service/get_chat_by_sender_and_receiver",
+    payload
+  )
+
+  return optionChat
+}
+
 const addMessage = async (message, senderId, receiverId) => {
   const payload = {
     sender_id: senderId,
@@ -141,6 +154,7 @@ export default () => {
   const { chat } = route.params
 
   const [messages, setMessages] = useState([])
+  const [thisChatId, setThisChatId] = useState(chat.chat_id)
 
 
   const addMessageToState = (message) => {
@@ -202,17 +216,30 @@ export default () => {
     setMessages(giftedFetchedMessages)
   }
 
-  const handleMutationSuccess = () => {
+  const handleMutationSuccess = async () => {
+    if (!thisChatId) {
+      const newChat = await fetchChat(
+        session.data.storeId, chat.user.user_id
+      )
+
+      setThisChatId(_ => newChat.chat_id)
+      setIsNew(_ => false)
+    }
+
     queryClient.refetchQueries({
-      queryKey: ["chatMessages", chat.chat_id]
+      queryKey: ["chatMessages", thisChatId]
+    })
+
+    queryClient.refetchQueries({
+      queryKey: ["listOfChats"]
     })
   }
 
   const messagesQuery = useQuery({
-    queryKey: ["chatMessages", chat.chat_id],
-    queryFn: () => fetchMessages(chat.chat_id),
+    queryKey: ["chatMessages", thisChatId],
+    queryFn: () => fetchMessages(thisChatId),
     onSuccess: handleLoadMessages,
-    enabled: chat.chat_id !== undefined
+    enabled: thisChatId !== undefined
   })
   const addMessageMutation = useMutation(
     ({ message, senderId, receiverId }) => addMessage(
