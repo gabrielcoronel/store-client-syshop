@@ -9,9 +9,23 @@ const activateDelivery = async (deliveryId) => {
   const payload = {
     delivery_id: deliveryId
   }
+  const handleError = (data) => {
+    if (data.message === "UBER_ERROR") {
+      Alert.alert(
+        "Error de Uber",
+        "Hubo un error con el servicio de Uber, inténtalo más tarde"
+      )
+
+      return true
+    }
+
+    return false
+  }
+
   const _ = await requestServer(
     "/deliveries_service/activate_delivery",
-    payload
+    payload,
+    handleError
   )
 }
 
@@ -76,7 +90,8 @@ export default ({ activable, delivery }) =>  {
       [
         {
           text: "Cancelar",
-          onPress: null
+          onPress: null,
+          style: "cancel"
         },
         {
           text: "Activar",

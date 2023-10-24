@@ -111,12 +111,8 @@ const GeneralInformationSection = ({ form, onNext }) => {
 
       <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
 
-      <Subtitle>
-        También puedes registrarte con
-      </Subtitle>
-
       <InstagramSignInButton
-        text="Publica un producto de Instagram"
+        text="Usa Instagram"
         onSignIn={navigateToChooseInstagramPosts}
       />
 

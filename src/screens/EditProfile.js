@@ -15,6 +15,7 @@ import Button from '../components/Button'
 import Padder from '../components/Padder'
 import Scroller from '../components/Scroller'
 import Stepper, { useStepper } from '../components/Stepper'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, Alert, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -65,50 +66,52 @@ const updateStore = async (storeId, newStore, picture, multimedia) => {
 
 const GeneralInformationSection = ({ form, picture, setPicture, onNext }) => {
   return (
-    <View style={styles.section}>
-      <PictureInput
-        picture={picture}
-        onChangePicture={setPicture}
-      />
-
-      <View style={styles.inputsContainer}>
-        <TextField
-          value={form.getField("name")}
-          onChangeText={form.setField("name")}
-          error={form.getError("name")}
-          placeholder="Nombre"
+    <KeyboardAwareScrollView>
+      <View style={styles.section}>
+        <PictureInput
+          picture={picture}
+          onChangePicture={setPicture}
         />
 
-        <TextField
-          value={form.getField("description")}
-          onChangeText={form.setField("description")}
-          error={form.getError("description")}
-          placeholder="Descripción"
-          multiline
-        />
+        <View style={styles.inputsContainer}>
+          <TextField
+            value={form.getField("name")}
+            onChangeText={form.setField("name")}
+            error={form.getError("name")}
+            placeholder="Nombre"
+          />
 
-        <TextField
-          value={form.getField("phone_number")}
-          onChangeText={form.setField("phone_number")}
-          error={form.getError("phone_number")}
-          placeholder="Número telefónico"
-          keyboardType="numeric"
-        />
+          <TextField
+            value={form.getField("description")}
+            onChangeText={form.setField("description")}
+            error={form.getError("description")}
+            placeholder="Descripción"
+            multiline
+          />
+
+          <TextField
+            value={form.getField("phone_number")}
+            onChangeText={form.setField("phone_number")}
+            error={form.getError("phone_number")}
+            placeholder="Número telefónico"
+            keyboardType="numeric"
+          />
+        </View>
+
+        <Button
+          onPress={onNext}
+          style={{ width: "70%" }}
+        >
+          Siguiente
+        </Button>
       </View>
-
-      <Button
-        onPress={onNext}
-        style={{ width: "70%" }}
-      >
-        Siguiente
-      </Button>
-    </View>
+    </KeyboardAwareScrollView>
   )
 }
 
 const MultimediaSection = ({ multimedia, setMultimedia, onNext, isLoading }) => {
   return (
-    <View style={styles.multimediaSection}>
+    <View style={styles.section}>
       <Subtitle>
         Edita las fotografías de tu emprendimiento
       </Subtitle>
@@ -124,7 +127,7 @@ const MultimediaSection = ({ multimedia, setMultimedia, onNext, isLoading }) => 
         style={{ width: "70%" }}
       >
         {
-          updateStoreMutation.isLoading ?
+          isLoading ?
           <LoadingSpinner /> :
           "Confirmar"
         }

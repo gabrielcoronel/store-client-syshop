@@ -6,7 +6,7 @@ import DeliveryTile from '../components/DeliveryTile'
 import SecondaryTitle from '../components/SecondaryTitle'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Padder from '../components/Padder'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { List } from 'react-native-paper'
 
 const styles = StyleSheet.create({
@@ -39,13 +39,13 @@ const fetchInactiveDeliveries = async (storeId) => {
   return inactiveDeliveries
 }
 
-const DeliveriesListItems = ({ deliveries }) => {
+const DeliveriesListItems = ({ deliveries, activable }) => {
   return (
     <ScrollView
       neverEmpty
       data={deliveries}
       keyExtractor={(delivery) => delivery.delivery_id}
-      renderItem={({ item }) => <DeliveryTile delivery={item} />}
+      renderItem={({ item }) => <DeliveryTile activable={activable} delivery={item} />}
     />
   )
 }
@@ -82,7 +82,7 @@ export default () => {
         </List.Subheader>
 
         {
-          activeDeliveriesQuery.isLoading ?
+          activeDeliveriesQuery.isFetching ?
           <LoadingSpinner /> :
           <DeliveriesListItems
             deliveries={activeDeliveriesQuery.data}
@@ -94,7 +94,7 @@ export default () => {
         </List.Subheader>
 
         {
-          inactiveDeliveriesQuery.isLoading ?
+          inactiveDeliveriesQuery.isFetching ?
           <LoadingSpinner /> :
           <DeliveriesListItems
             activable

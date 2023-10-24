@@ -27,5 +27,9 @@ export const autocompleteAddress = async (text) => {
   const { data } = await axios.get(geoapifyUrl + queryString)
   const { results } = data
 
-  return results
+  const filteredResults = results.filter((address) => {
+    return (address.name && address.address_line1 && address.city && (address.state || address.province) && address.postcode && address.lat && address.lon)
+  })
+
+  return filteredResults
 }

@@ -13,6 +13,8 @@ const addressToLocation = (address) => {
     city: address.city,
     state: address.state ?? address.province,
     zip_code: address.postcode,
+    latitude: address.lat,
+    longitude: address.lon
   }
 
   return location
