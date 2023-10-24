@@ -63,15 +63,6 @@ const createPost = async (
 const GeneralInformationSection = ({ form, onNext }) => {
   const navigation = useNavigation()
 
-  const navigateToChooseInstagramPosts = (instagramAccessData) => {
-    navigation.navigate(
-      "ChooseInstagramPosts",
-      {
-        instagramAccessData
-      }
-    )
-  }
-
   return (
     <View style={styles.section}>
       <Subtitle>
@@ -110,11 +101,6 @@ const GeneralInformationSection = ({ form, onNext }) => {
       />
 
       <Divider style={{ width: "90%", color: configuration.ACCENT_COLOR_1 }} />
-
-      <InstagramSignInButton
-        text="Usa Instagram"
-        onSignIn={navigateToChooseInstagramPosts}
-      />
 
       <Button
         onPress={onNext}
