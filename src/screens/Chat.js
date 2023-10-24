@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
-import { useSession } from '../context'
+import { useSession, useWebsocket } from '../context'
 import { useRoute } from '@react-navigation/native'
 import { requestServer } from '../utilities/requests'
 import { call } from '../utilities/calls'
@@ -136,10 +136,12 @@ export default () => {
   const route = useRoute()
   const queryClient = useQueryClient()
   const [session, _] = useSession()
+  const [websocket, __] = useWebsocket()
 
   const { chat } = route.params
 
   const [messages, setMessages] = useState([])
+
 
   const addMessageToState = (message) => {
     setMessages((previousMessages) => {
@@ -222,6 +224,18 @@ export default () => {
       onSuccess: handleMutationSuccess
     }
   )
+
+  useEffect(() => {
+    websocket.addEventListener("message", (event) => {
+      if (event.type == "chat.message.added") {
+        messagesQuery.refetch()
+      }
+    })
+
+    return () => {
+      websocket.removeEventListener("message")
+    }
+  }, [])
 
   if (session.isLoading) {
     return (

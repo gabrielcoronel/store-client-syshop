@@ -1,10 +1,11 @@
-import { useAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { atomWithStorage, createJSONStorage, loadable } from 'jotai/utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const storage = createJSONStorage(() => AsyncStorage)
 const sessionAtom = atomWithStorage("session", null, storage)
 const loadableSessionAtom = loadable(sessionAtom)
+const websocketAtom = atom(null)
 
 export const useSession = () => {
   const [session] = useAtom(loadableSessionAtom)
@@ -16,6 +17,12 @@ export const useSession = () => {
   }
 
   return [fineSession, setSession]
+}
+
+export const useWebsocket = () => {
+  const [websocket, setWebsocket] = useAtom(websocketAtom)
+
+  return [websocket, setWebsocket]
 }
 
 export const isUserLoggedIn = async () => {
