@@ -174,6 +174,19 @@ const DescriptionContainer = ({ description }) => {
 }
 
 const ExtraInformationContainer = ({ followerCount, location, phoneNumber }) => {
+  const navigation = useNavigation()
+
+  const navigateToMap = () => {
+    navigation.navigate(
+      "Map",
+      {
+        placeName: location.place_name,
+        latitude: location.latitude,
+        longitude: location.longitude
+      }
+    )
+  }
+
   return (
     <View style={styles.extraInformationContainer}>
       <InformationEntry
@@ -181,10 +194,14 @@ const ExtraInformationContainer = ({ followerCount, location, phoneNumber }) => 
         text={`${followerCount} ${followerCount !== 1 ? 'seguidores' : 'seguidor'}`}
       />
 
-      <InformationEntry
-        icon="map-marker"
-        text={formatLocation(location)}
-      />
+      <TouchableRipple
+        onPress={navigateToMap}
+      >
+        <InformationEntry
+          icon="map-marker"
+          text={formatLocation(location)}
+        />
+      </TouchableRipple>
 
       <InformationEntry
         icon="phone"

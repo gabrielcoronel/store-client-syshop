@@ -37,6 +37,7 @@ import EditPost from './src/screens/EditPost'
 import StorePosts from './src/screens/StorePosts'
 import ChooseInstagramPosts from './src/screens/ChooseInstagramPosts'
 import CreateReport from './src/screens/CreateReport'
+import Map from './src/screens/Map'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -327,6 +328,12 @@ const Main = () => {
                         name="CreatePost"
                       >
                         {() => <CreatePost />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="Map"
+                      >
+                        {() => <Map />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   </NavigationContainer>
