@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler'
-import { useEffect, Suspense } from 'react'
+import { Suspense } from 'react'
 import { PaperProvider } from 'react-native-paper'
 import { ThemeProvider as IosKitProvider } from 'react-native-ios-kit'
 import { ApplicationProvider as UiKittenProvider } from '@ui-kitten/components'
@@ -7,7 +7,7 @@ import { StripeProvider } from '@stripe/stripe-react-native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useSession, useWebsocket } from './src/context'
+import { useSession } from './src/context'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useFonts } from 'expo-font'
@@ -48,13 +48,6 @@ const queryClient = new QueryClient({
 })
 const Stack = createStackNavigator()
 const BottomTab = createBottomTabNavigator()
-
-const createWebsocket = () => {
-  const url = `ws:${configuration.API_URL.split(":", 1)}/event_dispatcher_service/subscribe_to_event_dispatcher`
-  const websocket = new WebSocket(url)
-
-  return websocket
-}
 
 const theme = {
   "colors": {
@@ -172,13 +165,6 @@ const Main = () => {
     Cookie: require("./assets/fonts/Cookie-Regular.ttf")
   })
   const [session, _] = useSession()
-  const [__, setWebsocket] = useWebsocket()
-
-  useEffect(() => {
-    const websocket = createWebsocket()
-
-    setWebsocket(websocket)
-  }, [])
 
   console.log(session)
 
