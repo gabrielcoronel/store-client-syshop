@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
 import { formatLocation } from '../utilities/formatting'
@@ -34,6 +34,7 @@ const updateLocation = async (location, storeId) => {
 }
 
 export default () => {
+  const queryClient = useQueryClient()
   const navigation = useNavigation()
   const [session, _] = useSession()
 
@@ -47,6 +48,10 @@ export default () => {
   }
 
   const handleUpdateLocationSuccess = () => {
+    queryClient.refetchQueries({
+      queryKey: ["storeProfileView"]
+    })
+
     Alert.alert(
       "Éxito",
       "El domicilio de tu emprendimiento se actualizó con éxito"

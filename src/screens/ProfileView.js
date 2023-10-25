@@ -232,7 +232,7 @@ const StoreView = () => {
     disabled: session.isLoading
   })
 
-  if (storeQuery.isLoading || session.isLoading) {
+  if (storeQuery.isFetching || session.isLoading) {
     return (
       <LoadingSpinner inScreen />
     )

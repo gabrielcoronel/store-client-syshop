@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { requestServer } from '../utilities/requests'
 import ScrollView from '../components/ScrollView'
 import PostTile from '../components/PostTile'
@@ -7,6 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import Scroller from '../components/Scroller'
 import Padder from '../components/Padder'
 import {
+  Alert,
   ScrollView as ReactNativeScrollView,
   StyleSheet
 } from 'react-native'
@@ -73,6 +74,7 @@ const PostsList = ({ posts }) => {
 
 export default () => {
   const route = useRoute()
+  const navigation = useNavigation()
 
   const { picture } = route.params
 
@@ -87,7 +89,16 @@ export default () => {
     )
   }
 
-  console.log(resultQuery)
+  if (resultQuery.data === undefined) {
+    Alert.alert(
+      "Imagen muy pesada",
+      "La imagen que ingresaste es muy pesada y no se pudo realizar la búsqueda"
+    )
+
+    navigation.goBack()
+
+    return
+  }
 
   return (
     <Scroller>

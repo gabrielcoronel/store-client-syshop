@@ -17,14 +17,20 @@ import MultimediaAdder from '../components/MultimediaAdder'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Stepper, { useStepper } from '../components/Stepper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { View, Alert, StyleSheet } from 'react-native'
+import {
+  View,
+  Alert,
+  StyleSheet,
+  ScrollView as ReactNativeScrollView
+} from 'react-native'
 import { Chip } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "column",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     gap: 20,
     width: "100%"
@@ -35,6 +41,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: "100%"
   },
+  categoriesDisplay: {
+    padding: 10,
+    gap: 10
+  }
 })
 
 const fetchPost = async (postId) => {
@@ -133,7 +143,7 @@ const CategoriesSection = ({ categories, setCategories, onNext }) => {
         icon="pound"
         closeIcon="close"
         onClose={() => handleDeleteCategory(c)}
-        style={{ backgroundColor: configuration.BACKGROUND_COLOR }}
+        style={{ backgroundColor: configuration.ACCENT_COLOR_1 }}
         textStyle={{ color: "white" }}
       >
         {c}
@@ -167,12 +177,12 @@ const CategoriesSection = ({ categories, setCategories, onNext }) => {
         />
       </View>
 
-      <ScrollView
+      <ReactNativeScrollView
         horizontal
         contentContainerStyle={styles.categoriesDisplay}
       >
         {categoriesChips}
-      </ScrollView>
+      </ReactNativeScrollView>
 
       <Button
         onPress={onNext}
@@ -252,6 +262,8 @@ export default () => {
         "Ingresa información necesaria para actualizar los datos"
       )
 
+      stepper.setPosition(0)
+
       return
     }
 
@@ -330,7 +342,7 @@ export default () => {
 
   return (
     <Scroller>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
         <Padder>
           <View style={styles.container}>
             <Title>

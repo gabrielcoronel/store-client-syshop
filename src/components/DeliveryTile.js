@@ -29,29 +29,6 @@ const activateDelivery = async (deliveryId) => {
   )
 }
 
-const formatUberState = (uberState) => {
-  switch (uberState) {
-    case "pending":
-      return "buscando un repartidor"
-
-    case "pickup":
-      return "recogiendo el producto"
-
-    case "pickup_complete":
-      return "producto recogido"
-
-    case "dropoff":
-      return "entregando el producto"
-
-    case "delivered":
-      return "producto entregado"
-
-    case "delivered":
-    case "returned":
-      return "entrega cancelada"
-  }
-}
-
 const TrackLocationIcon = ({ delivery, ...props }) => {
   const uberTrackingUrl = delivery.uber_tracking_url
 
@@ -123,7 +100,6 @@ export default ({ activable, delivery }) =>  {
 
   const title = delivery.post.title
   const amount = delivery.sale.amount
-  const uberState = delivery.uber_state
   const placeName = delivery.location.place_name
 
   return (
@@ -139,7 +115,7 @@ export default ({ activable, delivery }) =>  {
           color: "silver"
         }}
         title={`${amount} ${amount === 1 ? "unidad" : "unidades"} de '${title}'`}
-        description={`${placeName}: ${uberState ? formatUberState(uberState) : "entrega sin asignar"}`}
+        description={placeName}
         left={(props) => <TrackLocationIcon {...props} delivery={delivery} />}
       />
     </TouchableRipple>

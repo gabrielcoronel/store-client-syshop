@@ -44,7 +44,7 @@ export default () => {
   const handleSubmitReport = () => {
     createReportMutation.mutate({
       content,
-      userId: session.data.customerId
+      userId: session.data.storeId
     })
   }
 
