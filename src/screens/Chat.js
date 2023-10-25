@@ -153,7 +153,6 @@ export default () => {
   const { chat } = route.params
 
   const [messages, setMessages] = useState([])
-  const [thisChatId, setThisChatId] = useState(chat.chat_id)
 
   const addMessageToState = (message) => {
     setMessages((previousMessages) => {
@@ -215,20 +214,11 @@ export default () => {
   }
 
   const handleMutationSuccess = async () => {
-    if (!thisChatId) {
-      const newChat = await fetchChat(
-        session.data.storeId, chat.user.user_id
-      )
-
-      setThisChatId(_ => newChat.chat_id)
-      setIsNew(_ => false)
-
-      return
+    if (chat.chat_id === undefined) {
+      queryClient.refetchQueries({
+        queryKey: ["chatMessages", chat.chat_id]
+      })
     }
-
-    queryClient.refetchQueries({
-      queryKey: ["chatMessages", thisChatId]
-    })
 
     queryClient.refetchQueries({
       queryKey: ["listOfChats"]
@@ -236,10 +226,10 @@ export default () => {
   }
 
   const messagesQuery = useQuery({
-    queryKey: ["chatMessages", thisChatId],
-    queryFn: () => fetchMessages(thisChatId),
+    queryKey: ["chatMessages", chat.chat_id],
+    queryFn: () => fetchMessages(chat.chat_id),
     onSuccess: handleLoadMessages,
-    enabled: thisChatId !== undefined
+    enabled: chat.chat_id !== undefined
   })
   const addMessageMutation = useMutation(
     ({ message, senderId, receiverId }) => addMessage(
@@ -251,16 +241,6 @@ export default () => {
       onSuccess: handleMutationSuccess
     }
   )
-
-  useEffect(() => {
-    queryClient.refetchQueries({
-      queryKey: ["chatMessages", thisChatId]
-    })
-
-    queryClient.refetchQueries({
-      queryKey: ["listOfChats"]
-    })
-  }, [thisChatId])
 
   if (session.isLoading) {
     return (
