@@ -281,13 +281,13 @@ export default () => {
   const [multimedia, setMultimedia] = useState([])
 
   const handleSignUp = () => {
-    if (!form.validate() || location === null) {
+    if (!form.validate() || picture === null || location === null) {
       Alert.alert(
         "Información incompleta",
         "Ingresa la información necesaria para registrarte"
       )
 
-      if (!form.validate()) {
+      if (!form.validate() || picture === null) {
         stepper.setPosition(0)
       } else if (location === null) {
         stepper.setPosition(1)

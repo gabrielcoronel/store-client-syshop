@@ -10,16 +10,19 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ({ icon, message }) => {
+export default ({ isDark, icon, message }) => {
   return (
     <View style={styles.emptyComponent}>
       <IconButton
         disabled
+        color={isDark ? "white" : undefined}
         icon={icon}
         size={50}
       />
 
-      <Body>
+      <Body
+        style={isDark ? { color: "white" } : undefined}
+      >
         {message}
       </Body>
     </View>

@@ -8,13 +8,13 @@ const Separator = () => {
   )
 }
 
-export default ({ data, neverEmpty, emptyMessage, emptyIcon, ...flatListProps }) => {
+export default ({ data, neverEmpty, isDark, emptyMessage, emptyIcon, ...flatListProps }) => {
   return (
     <FlatList
       data={data}
       {...flatListProps}
       ItemSeparatorComponent={<Separator />}
-      ListEmptyComponent={neverEmpty ? undefined : <Empty icon={emptyIcon} message={emptyMessage} />}
+      ListEmptyComponent={neverEmpty ? undefined : <Empty isDark={isDark} icon={emptyIcon} message={emptyMessage} />}
     />
   )
 }
