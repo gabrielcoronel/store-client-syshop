@@ -61,8 +61,6 @@ const createPost = async (
 }
 
 const GeneralInformationSection = ({ form, onNext }) => {
-  const navigation = useNavigation()
-
   return (
     <View style={styles.section}>
       <Subtitle>
@@ -88,7 +86,7 @@ const GeneralInformationSection = ({ form, onNext }) => {
         value={form.getField("price")}
         onChangeText={form.setField("price")}
         error={form.getError("price")}
-        placeholder="Precio"
+        placeholder="Precio (mínimo 350 colones)"
         keyboardType="numeric"
       />
 
@@ -278,14 +276,14 @@ export default () => {
     {
       title: "",
       description: "",
-      amount: "1",
-      price: "301"
+      amount: "",
+      price: ""
     },
     {
       title: makeNotEmptyChecker("Título vacío"),
       description: () => null,
-      amount: (value) => value <= 0 ? "Cantidad de unidades inválida" : null,
-      price: (value) => value <= 300 ? "El precio tiene que ser mayor a ₡300" : null
+      amount: (value) => Number(value) <= 0 ? "Cantidad de unidades inválida" : null,
+      price: (value) => Number(value) <= 300 ? "El precio tiene que ser mayor a ₡300" : null
     }
   )
   const createPostMutation = useMutation(
