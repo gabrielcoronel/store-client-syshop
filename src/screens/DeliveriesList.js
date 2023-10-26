@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from '../context'
 import { requestServer } from '../utilities/requests'
@@ -39,19 +40,29 @@ const fetchInactiveDeliveries = async (storeId) => {
   return inactiveDeliveries
 }
 
-const DeliveriesListItems = ({ deliveries, activable }) => {
+const DeliveriesListItems = ({ deliveries, activable, onActivate, onFinish }) => {
   return (
     <ScrollView
       neverEmpty
       data={deliveries}
       keyExtractor={(delivery) => delivery.delivery_id}
-      renderItem={({ item }) => <DeliveryTile activable={activable} delivery={item} />}
+      renderItem={({ item }) => <DeliveryTile onFinish={onFinish} onActivate={onActivate} activable={activable} delivery={item} />}
     />
   )
 }
 
 export default () => {
   const [session, _] = useSession()
+
+  const [isActivateDeliveryLoading, setIsActivateDeliveryLoading] = useState(false)
+
+  const handleActivateDelivery = () => {
+    setIsActivateDeliveryLoading(true)
+  }
+
+  const handleFinishDelivery = () => {
+    setIsActivateDeliveryLoading(false)
+  }
 
   const activeDeliveriesQuery = useQuery({
     queryKey: ["activeDeliveries"],
@@ -82,7 +93,7 @@ export default () => {
         </List.Subheader>
 
         {
-          activeDeliveriesQuery.isFetching ?
+          activeDeliveriesQuery.isFetching || isActivateDeliveryLoading ?
           <LoadingSpinner /> :
           <DeliveriesListItems
             deliveries={activeDeliveriesQuery.data}
@@ -94,10 +105,12 @@ export default () => {
         </List.Subheader>
 
         {
-          inactiveDeliveriesQuery.isFetching ?
+          inactiveDeliveriesQuery.isFetching || isActivateDeliveryLoading ?
           <LoadingSpinner /> :
           <DeliveriesListItems
             activable
+            onActivate={handleActivateDelivery}
+            onFinish={handleFinishDelivery}
             deliveries={inactiveDeliveriesQuery.data}
           />
         }

@@ -57,7 +57,7 @@ const TrackLocationIcon = ({ delivery, ...props }) => {
   )
 }
 
-export default ({ activable, delivery }) =>  {
+export default ({ activable, delivery, onActivate, onFinish }) =>  {
   const queryClient = useQueryClient()
 
   const handleActivateDelivery = () => {
@@ -76,6 +76,8 @@ export default ({ activable, delivery }) =>  {
             activateDeliveryMutation.mutate({
               deliveryId: delivery.delivery_id
             })
+
+            onActivate()
           }
         }
       ]
@@ -88,7 +90,10 @@ export default ({ activable, delivery }) =>  {
     })
 
     queryClient.refetchQueries({
-      queryKey: ["inactiveDeliveries"] })
+      queryKey: ["inactiveDeliveries"]
+    })
+
+    onFinish()
   }
 
   const activateDeliveryMutation = useMutation(
