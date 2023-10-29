@@ -49,8 +49,6 @@ export default () => {
     
     const value = entry[2]
 
-    console.log(label)
-
     return {
       value,
       label
