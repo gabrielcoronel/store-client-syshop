@@ -1,7 +1,7 @@
 import { default as startPhoneCall } from 'react-native-phone-call'
 import { Alert } from 'react-native'
 
-export const call = async (phoneNumber) => {
+const doCall = async (phoneNumber) => {
   try {
     await startPhoneCall({
       number: phoneNumber,
@@ -14,4 +14,22 @@ export const call = async (phoneNumber) => {
       "Inténtalo más tarde"
     )
   }
+}
+
+export const call = async (phoneNumber) => {
+  Alert.alert(
+    "Llamada con costo adicional",
+    "Estás apunto de realizar una llamada externa a SyShop mediante tu servicio de telefonía, esto podría incluir un costo adicional",
+    [
+      {
+        text: "Cancelar",
+        onPress: null,
+        style: "cancel"
+      },
+      {
+        text: "Llamar",
+        onPress: async () => await doCall(phoneNumber)
+      }
+    ]
+  )
 }

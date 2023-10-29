@@ -38,6 +38,8 @@ import StorePosts from './src/screens/StorePosts'
 import ChooseInstagramPosts from './src/screens/ChooseInstagramPosts'
 import CreateReport from './src/screens/CreateReport'
 import Map from './src/screens/Map'
+import SalesReport from './src/screens/SalesReport'
+import SalesChart from './src/screens/SalesChart'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -314,6 +316,18 @@ const Main = () => {
                         name="CreatePost"
                       >
                         {() => <CreatePost />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="SalesReport"
+                      >
+                        {() => <SalesReport />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="SalesChart"
+                      >
+                        {() => <SalesChart />}
                       </Stack.Screen>
 
                       <Stack.Screen

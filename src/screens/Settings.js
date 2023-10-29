@@ -185,6 +185,11 @@ export default () => {
           onPress={() => navigation.navigate("SalesList")}
         />
 
+        <SettingEntry
+          setting="Reporte de ventas"
+          onPress={() => navigation.navigate("SalesReport")}
+        />
+
         <Divider />
 
         <SettingEntry

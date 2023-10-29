@@ -20,7 +20,7 @@ import InstagramSignInButton from '../components/InstagramSignInButton'
 import Stepper, { useStepper } from '../components/Stepper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { View, ScrollView, Alert, StyleSheet } from 'react-native'
-import { Chip, Divider } from 'react-native-paper'
+import { Chip, HelperText, Divider } from 'react-native-paper'
 import configuration from '../configuration'
 
 const styles = StyleSheet.create({
@@ -81,14 +81,20 @@ const GeneralInformationSection = ({ form, onNext }) => {
         placeholder="Descripción"
         multiline
       />
-    
-      <TextField
-        value={form.getField("price")}
-        onChangeText={form.setField("price")}
-        error={form.getError("price")}
-        placeholder="Precio (mínimo 350 colones)"
-        keyboardType="numeric"
-      />
+
+      <View>
+        <TextField
+          value={form.getField("price")}
+          onChangeText={form.setField("price")}
+          error={form.getError("price")}
+          placeholder="Precio (mínimo 350 colones)"
+          keyboardType="numeric"
+        />
+
+        <HelperText type="info" style={{ color: "white" }}>
+          Comisión del 3% de Stripe
+        </HelperText>
+      </View>
 
       <TextField
         value={form.getField("amount")}
