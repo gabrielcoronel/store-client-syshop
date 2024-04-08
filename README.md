@@ -1,3 +1,4 @@
 # SyShop 
 
-Apliación para vendedores de SyShop.
+Interfaz de usuario para vendedores de SyShop.
+
