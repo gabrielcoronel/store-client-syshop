@@ -10,7 +10,7 @@ import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: "black",
     gap: 20
   }
 })
