@@ -1,6 +1,6 @@
 # SyShop 
 
-Interfaz de usuario para vendedores de SyShop.
+Cliente para vendedores de SyShop.
 
 
 
